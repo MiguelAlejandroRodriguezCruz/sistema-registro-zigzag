@@ -1,4 +1,6 @@
-export function ReservasEncabezado() {
+import React from 'react';
+
+function ReservasEncabezado() {
     const recargarPagina = () => {
         window.location.reload();
     };
@@ -22,3 +24,4 @@ export function ReservasEncabezado() {
         </div>
     );
 }
+export default ReservasEncabezado;

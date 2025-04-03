@@ -1,12 +1,12 @@
-import { ReservasEncabezado } from "./Reservasencabezado";
 
+import React from 'react';
+import ReservasEncabezado from './ReservasEncabezado';
 
-export function ReservasGenerales() {
+function ReservasGenerales() {
     return (
         <div>
             {/* Header */}
             <ReservasEncabezado/>
-
             {/* Cuerpo */}
             <div className="p-3">
                 jejeje
@@ -14,3 +14,4 @@ export function ReservasGenerales() {
         </div>
     );
 }
+export default ReservasGenerales;
