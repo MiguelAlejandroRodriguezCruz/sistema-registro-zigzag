@@ -13,8 +13,8 @@ const EntradasConfirmadas = ({ onClose, onProcesar }) => {
             <p><strong>Fecha:</strong> 12-05-2025</p>
             <p><strong>Hora:</strong> 12:00 PM</p>
           </div>
-          <button className="btn btn-danger mt-2" onClick={onProcesar}>Procesar entradas</button>
-          <button className="btn btn-secondary mt-2" onClick={onClose}>Cerrar</button>
+          <button className="btn btn-danger px-4" onClick={onProcesar}>Procesar entradas</button>
+          <button className="btn btn-secondary px-4" onClick={onClose}>Cerrar</button>
         </div>
       );
   };

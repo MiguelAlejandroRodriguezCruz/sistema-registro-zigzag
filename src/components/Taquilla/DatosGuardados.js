@@ -1,6 +1,6 @@
 import React from "react";
-"../../style/App.css";
-import exito from "../images/exito.png";
+import"../../style/App.css";
+import exito from "../../images/exito.png";
 
 const SuccessMessage = ({ onClose }) => {
   return (

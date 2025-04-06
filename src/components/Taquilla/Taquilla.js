@@ -3,6 +3,7 @@ import "../../style/App.css";
 import logo from "../../images/zig_zag_logo.png";
 import EntradasConfirmadas from "./EntradasConfirmadas";
 import FormularioDatos from "./FormularioDatos";
+import DatosGuardados from "./DatosGuardados";
 
 const Taquilla = () => {
   const [showEntradasConfirmadas, setEntradasConfirmadas] = useState(false);
@@ -18,6 +19,11 @@ const Taquilla = () => {
   const handleProcesarEntradas = () => {
     setEntradasConfirmadas(false);
     setShowFormulario(true);
+  };
+
+  const handleGuardarFormulario = () => {
+    setShowFormulario(false);
+    setShowDatosGuardados(true);
   };
 
   return (
@@ -73,7 +79,19 @@ const Taquilla = () => {
       {showFormulario && (
         <div className="modal-overlay d-flex justify-content-center align-items-center">
           <div className="modal-content-custom">
-            <FormularioDatos onClose={() => setShowFormulario(false)} />
+            <FormularioDatos
+              onClose={() => setShowFormulario(false)}
+              onShowDatosGuardados={handleGuardarFormulario}
+            />
+          </div>
+        </div>
+      )}
+      
+      {/* Modal: DatosGuardados*/}
+      {showDatosGuardados && (
+        <div className="modal-overlay">
+          <div className="modal-content-custom">
+            <DatosGuardados onClose={() => setShowDatosGuardados(false)} />
           </div>
         </div>
       )}
