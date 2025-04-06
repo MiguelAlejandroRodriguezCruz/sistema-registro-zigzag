@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import ReservasEncabezado from './ReservasEncabezado';
-import { ReservasTabs } from './ReservasTabs';
-import { ReservasLista } from './ReservasLista';
+import ReservasEncabezado from './ReservasAdmin/ReservasEncabezado';
+import { ReservasTabs } from './ReservasAdmin/ReservasTabs';
+import { ReservasLista } from './ReservasAdmin/ReservasLista';
 
 // Simulación de datos base
 const reservasOriginales = [
