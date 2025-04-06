@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
+
 
 function ReservasEncabezado() {
     const recargarPagina = () => {
@@ -6,22 +8,28 @@ function ReservasEncabezado() {
     };
 
     return (
-        <div className="bg-primary p-3 shadow">
-            <div className="d-flex justify-content-start">
-                
-                <img
-                    src="/logo512.png" // Si la imagen está en public/
-                    alt="Logo de la aplicación"
-                    className="me-3"
-                    style={{ height: "50px", cursor: "pointer" }}
-                    onClick={recargarPagina}
-                />
-            </div>
-
-            <div className="d-flex justify-content-between">
-                <h1 className="text-white">Solicitud de Reservas</h1>
+        <div className="p-1 shadow">
+            <div className="container-fluid">
+                <div className="row bg-white p-2 ">
+                    <div className="col d-flex align-items-center">
+                        <img
+                            src="/logo512.png"
+                            alt="Logo de la aplicación"
+                            className="me-3"
+                            style={{ height: "50px", cursor: "pointer" }}
+                            onClick={recargarPagina}
+                        />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col text-center bg-danger py-2 ">
+                        <h1 className="text-white m-0">Solicitud de Reservas</h1>
+                    </div>
+                </div>
             </div>
         </div>
     );
 }
+
 export default ReservasEncabezado;
+
