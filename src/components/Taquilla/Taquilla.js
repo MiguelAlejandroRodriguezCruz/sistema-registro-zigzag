@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../style/App.css";
-import logo from "../images/zig_zag_logo.png";
+import "../../style/App.css";
+import logo from "../../images/zig_zag_logo.png";
 import EntradasConfirmadas from "./EntradasConfirmadas";
 import FormularioDatos from "./FormularioDatos";
 

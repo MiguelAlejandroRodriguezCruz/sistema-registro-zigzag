@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Inicio from '../components/Inicio'
 import ReservasGenerales  from '../components/ReservasGenerales';
-import Taquilla from '../components/Taquilla';
+import Taquilla from '../components/Taquilla/Taquilla';
 
 const AppRoutes = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);

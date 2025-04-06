@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/App.css";
+"../../style/App.css";
 import exito from "../images/exito.png";
 
 const SuccessMessage = ({ onClose }) => {
