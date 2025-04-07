@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+/*Calendario*/
+.react-calendar {
+  width: 100%;
+  border: none;
+  font-family: Arial, sans-serif;
+}
