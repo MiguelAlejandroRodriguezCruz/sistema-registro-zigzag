@@ -1,7 +1,7 @@
 import { ReservaCard } from "./ReservaCard";
 
 export function ReservasLista({ reservas, pestanaActiva, actualizarEstadoReserva }) {
-    const reservasFiltradas = reservas.filter(reserva => reserva.estado === pestanaActiva);
+    const reservasFiltradas = reservas.filter(reserva => reserva.estatus === pestanaActiva);
 
     return (
         <>
