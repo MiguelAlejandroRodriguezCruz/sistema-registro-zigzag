@@ -3,103 +3,75 @@ import ReservasEncabezado from './ReservasAdmin/ReservasEncabezado';
 import { ReservasTabs } from './ReservasAdmin/ReservasTabs';
 import { ReservasLista } from './ReservasAdmin/ReservasLista';
 
-// Simulación de datos base
-const reservasOriginales = [
-    {
-        id: 1,
-        institucion: "Colegio A",
-        solicitante: "Juan Pérez",
-        alumnos: 25,
-        fecha: "2025-04-15",
-        horario: "10:00 - 12:00",
-        direccion: "Calle Falsa 123",
-        edad: "8-10",
-        transporte: true,
-        contacto: "123456789",
-        email: "juan@colegioa.com",
-        estado: "nuevas"
-    },
-    {
-        id: 2,
-        institucion: "Escuela B",
-        solicitante: "Ana López",
-        alumnos: 30,
-        fecha: "2025-04-20",
-        horario: "13:00 - 15:00",
-        direccion: "Av. Siempre Viva 742",
-        edad: "10-12",
-        transporte: false,
-        contacto: "987654321",
-        email: "ana@escuelab.com",
-        estado: "nuevas"
-    },
-    {
-        id: 4,
-        institucion: "Colegio Es",
-        solicitante: "Juan Pérez",
-        alumnos: 25,
-        fecha: "2025-04-15",
-        horario: "10:00 - 12:00",
-        direccion: "Calle Falsa 123",
-        edad: "8-10",
-        transporte: true,
-        contacto: "123456789",
-        email: "juan@colegioa.com",
-        estado: "nuevas"
-    },
-    {
-        id: 5,
-        institucion: "Colegio D",
-        solicitante: "Juan Pérez",
-        alumnos: 25,
-        fecha: "2025-04-15",
-        horario: "10:00 - 12:00",
-        direccion: "Calle Falsa 123",
-        edad: "8-10",
-        transporte: true,
-        contacto: "123456789",
-        email: "juan@colegioa.com",
-        estado: "nuevas"
-    }
-];
+
 
 
 
 function ReservasGenerales() {
     const [reservas, setReservas] = useState([]);
-    const [pestanaActiva, setPestanaActiva] = useState("pendientes");
+    const [pestanaActiva, setPestanaActiva] = useState("nuevo");
 
-    // Cargar desde localStorage o usar las originales
+    // Cargar reservas desde el backend
     useEffect(() => {
-        const reservasCargadas = reservasOriginales.map(r => {
-            const guardada = localStorage.getItem(`reserva-${r.id}`);
-            return guardada ? JSON.parse(guardada) : r;
-        });
-        setReservas(reservasCargadas);
+        fetch('http://localhost:3001/visitantes')
+            .then(response => response.json())
+            .then(data => {
+                setReservas(data);
+            })
+            .catch(error => {
+                console.error("Error al cargar reservas:", error);
+            });
     }, []);
 
     const actualizarEstadoReserva = (id, nuevoEstado) => {
-        const nuevasReservas = reservas.map(reserva =>
-            reserva.id === id ? { ...reserva, estado: nuevoEstado } : reserva
-        );
-
-        // Guardar en localStorage
-        const actualizada = nuevasReservas.find(r => r.id === id);
-        localStorage.setItem(`reserva-${id}`, JSON.stringify(actualizada));
-
-        setReservas(nuevasReservas);
+        fetch(`http://localhost:3001/visitantes/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ estatus: nuevoEstado }),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error al actualizar el estatus");
+                }
+                // Actualizamos el estado local solo si el backend responde correctamente
+                setReservas(prev =>
+                    prev.map(reserva =>
+                        reserva.id === id ? { ...reserva, estatus: nuevoEstado } : reserva
+                    )
+                );
+            })
+            .catch(error => {
+                console.error("Error en actualizarEstadoReserva:", error);
+            });
     };
+
 
     const resetearReservas = () => {
-        Object.keys(localStorage).forEach(key => {
-            if (key.startsWith("reserva-")) {
-                localStorage.removeItem(key);
-            }
-        });
-        setReservas(reservasOriginales);
+        // Enviar petición PUT para actualizar el estatus de todas las reservas a "nuevo"
+        fetch('http://localhost:3001/visitantes', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ estatus: "nuevo" }),  // Establecer el estatus de todas las reservas como "nuevo"
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Error al actualizar el estatus de todas las reservas");
+                }
+                // Si la actualización es exitosa, actualizamos el estado local
+                setReservas(prev => prev.map(reserva => ({ ...reserva, estatus: "nuevo" })));
+            })
+            .catch(error => {
+                console.error("Error en resetearReservas:", error);
+            });
     };
 
-    const reservasFiltradas = reservas.filter(r => r.estado === pestanaActiva);
+
+
+    const reservasFiltradas = reservas.filter(r => r.estatus === pestanaActiva);
 
 
     return (

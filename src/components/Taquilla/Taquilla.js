@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../style/App.css";
 import logo from "../../images/zig_zag_logo.png";
 import EntradasConfirmadas from "./EntradasConfirmadas";
@@ -9,12 +9,21 @@ const Taquilla = () => {
   const [showEntradasConfirmadas, setEntradasConfirmadas] = useState(false);
   const [showFormulario, setShowFormulario] = useState(false);
   const [showDatosGuardados, setShowDatosGuardados] = useState(false);
+  const [records, setRecords] = useState([]); // State para almacenar las reservas filtradas
 
-  const records = [
-    { fecha: "2022-01-23", hora: "11:00 AM", institucion: "ejemplo", encargado: "Enrique", ninos: 1, adultos: 2, descuento: "10%", precio: "$" },
-    { fecha: "2022-01-09", hora: "02:00 PM", institucion: "ejemplo", encargado: "Jose", ninos: 3, adultos: 4, descuento: "15%", precio: "$" },
-    { fecha: "2022-02-11", hora: "05:00 PM", institucion: "ejemplo", encargado: "Manuel", ninos: 5, adultos: 6, descuento: "20%", precio: "$" },
-  ];
+  useEffect(() => {
+    // Hacer la solicitud GET para obtener los registros de la API
+    fetch("http://localhost:3001/visitantes") // Ajusta la URL de la API si es necesario
+      .then((response) => response.json())
+      .then((data) => {
+        // Filtrar los registros donde el estatus es "aprobadas"
+        const aprobadas = data.filter((registro) => registro.estatus === "aprobadas");
+        setRecords(aprobadas); // Actualizar el estado con los registros filtrados
+      })
+      .catch((error) => {
+        console.error("Error al cargar los registros:", error);
+      });
+  }, []);
 
   const handleProcesarEntradas = () => {
     setEntradasConfirmadas(false);
@@ -49,14 +58,14 @@ const Taquilla = () => {
           <tbody>
             {records.map((record, index) => (
               <tr key={index}>
-                <td>{record.fecha}</td>
-                <td>{record.hora}</td>
-                <td>{record.institucion}</td>
-                <td>{record.encargado}</td>
-                <td>{record.ninos}</td>
-                <td>{record.adultos}</td>
+                <td>{new Date(record.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
+                <td>{record.horario}</td>
+                <td>{record.nombreOrg}</td>
+                <td>{record.nombreSoli}</td>
+                <td>{record.noVisitantesA}</td>
+                <td>{record.noVisitantesD}</td>
                 <td>{record.descuento}</td>
-                <td>{record.precio}</td>
+                <td>{record.precioEntrada}</td>
               </tr>
             ))}
           </tbody>
@@ -86,7 +95,7 @@ const Taquilla = () => {
           </div>
         </div>
       )}
-      
+
       {/* Modal: DatosGuardados*/}
       {showDatosGuardados && (
         <div className="modal-overlay">

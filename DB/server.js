@@ -10,8 +10,9 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',      // Usuario por defecto en XAMPP
-    password: '1234',      // Contraseña vacía por defecto
-    database: 'zigzag' // Nombre de la base de datos
+    password: '1234',      // Contraseña 
+    database: 'zigzag', // Nombre de la base de datos
+    port: 3307
 });
 
 // Verificar la conexión
@@ -51,14 +52,15 @@ app.post('/visitantes', (req, res) => {
             nombreSoli, nombreOrg, noVisitantesA, noVisitantesD,
             telefono, direccion, colonia, municipio, autobus,
             correo, tipoRecorrido, gradoEscolar, autorizaFotos,
-            fecha, horario, medioEnterado, comentarios, precioEntrada
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            fecha, horario, medioEnterado, comentarios, precioEntrada, estatus
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
         datos.nombreSoli, datos.nombreOrg, datos.noVisitantesA, datos.noVisitantesD,
         datos.telefono, datos.direccion, datos.colonia, datos.municipio, datos.autobus,
         datos.correo, datos.tipoRecorrido, datos.gradoEscolar, datos.autorizaFotos,
-        datos.fecha, datos.horario, datos.medioEnterado, datos.comentarios, datos.precioEntrada
+        datos.fecha, datos.horario, datos.medioEnterado, datos.comentarios, datos.precioEntrada,
+        datos.estatus
     ];
 
     db.query(query, values, (err, result) => {
@@ -106,6 +108,30 @@ app.put('/visitantes/:id', (req, res) => {
     });
 });
 
+// Provicional xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+// Ruta para actualizar el estatus de todas las reservas
+app.put('/visitantes', (req, res) => {
+    const { estatus } = req.body;
+
+    // Asegúrate de que el campo "estatus" se haya enviado
+    if (!estatus) {
+        return res.status(400).json({ mensaje: "El estatus es requerido" });
+    }
+
+    // Consulta para actualizar todas las reservas
+    const query = 'UPDATE visitantesinstitucion SET estatus = ?';
+    const values = [estatus];
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Error al actualizar el estatus de todas las reservas:', err.message);
+            return res.status(500).send(err.message);
+        }
+        res.json({ mensaje: "Estatus de todas las reservas actualizado correctamente" });
+    });
+});
+
+
 // Ruta para eliminar los visitantes de institución
 app.delete('/visitantes/:id', (req, res) => {
     const id = req.params.id;
@@ -137,12 +163,12 @@ app.post('/visitantes-independientes', (req, res) => {
     const datos = req.body;
     const query = `
         INSERT INTO visitantesidependientes (
-            nombre, fecha, hora, telefono, correo, medioEnterado, monto, codigo
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            nombre, fecha, hora, telefono, correo, medioEnterado, monto, codigo, estatus
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
         datos.nombre, datos.fecha, datos.hora, datos.telefono,
-        datos.correo, datos.medioEnterado, datos.monto, datos.codigo
+        datos.correo, datos.medioEnterado, datos.monto, datos.codigo, datos.estatus
     ];
 
     db.query(query, values, (err, result) => {

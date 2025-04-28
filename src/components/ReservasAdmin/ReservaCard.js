@@ -14,14 +14,14 @@ export function ReservaCard({ reserva, actualizarEstadoReserva }) {
 
             <div className="row">
                 <div className="col">
-                    <p>👥 {reserva.alumnos} alumnos</p>
-                    <p>📅 Fecha: {reserva.fecha}</p>
+                    <p>👥 {reserva.noVisitantesA} alumnos</p>
+                    <p>📅 Fecha: {new Date(reserva.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
                     <p>⏰ Horario: {reserva.horario}</p>
                 </div>
                 <div className="col">
                     <p><b>Dirección:</b> {reserva.direccion}</p>
                     <p><b>Edad de los alumnos:</b> {reserva.edad}</p>
-                    <p>🚍 {reserva.transporte ? "Requiere transporte" : "No requiere transporte"}</p>
+                    <p>🚍 {reserva.autobus ? "Requiere transporte" : "No requiere transporte"}</p>
                 </div>
 
                 <div className="col d-flex flex-column align-items-end">
@@ -68,8 +68,8 @@ export function ReservaCard({ reserva, actualizarEstadoReserva }) {
             </div>
 
             <div className="d-flex justify-content-between">
-                <p>📞 {reserva.contacto}</p>
-                <p>✉️ {reserva.email}</p>
+                <p>📞 {reserva.telefono}</p>
+                <p>✉️ {reserva.correo}</p>
                 <button type="button" className="btn btn-outline-primary">
                     Modificar Reserva
                 </button>
