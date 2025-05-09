@@ -26,9 +26,9 @@ const FormularioVisitas = () => {
   });
 
   const fechasOcupadas = [
-    new Date(2025, 3, 18),
-    new Date(2025, 3, 20),
-    new Date(2025, 3, 25)
+    new Date(2025, 4, 18),
+    new Date(2025, 4, 26),
+    new Date(2025, 4, 30)
   ];
 
   const fechaMaxima = new Date();
