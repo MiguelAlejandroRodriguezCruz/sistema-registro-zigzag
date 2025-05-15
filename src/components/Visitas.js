@@ -118,11 +118,12 @@ const FormularioVisitas = () => {
 
   return (
     <div className="container mt-4">
+      <img src="/logo.svg" alt="Logo Zig-Zag" className="logo-zigzag me-3" />
       <h2 className="text-center fw-bold">VISITAS</h2>
 
       <div className="row align-items-start mb-4">
         <div className="col-md-6">
-          <p>
+          <p style={{ fontSize: "28px" }}>
             ¡Agenda tu próxima visita al museo! <br />
             Selecciona en el calendario la fecha tentativa de tu visita.
           </p>
@@ -169,7 +170,7 @@ const FormularioVisitas = () => {
       <div className="row">
         <div className="col-md-6">
           {/* Campos de formulario */}
-          <label className="form-label">Nombre del solicitante</label>
+          <label style={{fontSize: "19px"}} className="form-label">Nombre del solicitante</label>
           <input
             type="text"
             name="nombreSoli"
@@ -178,7 +179,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">Nombre de la escuela/organización</label>
+          <label style={{fontSize: "19px"}} className="form-label">Nombre de la escuela/organización</label>
           <input
             type="text"
             name="nombreOrg"
@@ -187,7 +188,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">No. de visitantes (alumnos)</label>
+          <label style={{fontSize: "19px"}} className="form-label">No. de visitantes (alumnos)</label>
           <input
             type="number"
             name="noVisitantesA"
@@ -196,7 +197,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">No. de visitantes (docentes)</label>
+          <label style={{fontSize: "19px"}} className="form-label">No. de visitantes (docentes)</label>
           <input
             type="number"
             name="noVisitantesD"
@@ -205,7 +206,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">Teléfono</label>
+          <label style={{fontSize: "19px"}} className="form-label">Teléfono</label>
           <input
             type="tel"
             name="telefono"
@@ -214,7 +215,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">Dirección</label>
+          <label style={{fontSize: "19px"}} className="form-label">Dirección</label>
           <input
             type="text"
             name="direccion"
@@ -223,7 +224,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">Colonia/Localidad</label>
+          <label style={{fontSize: "19px"}} className="form-label">Colonia/Localidad</label>
           <input
             type="text"
             name="colonia"
@@ -232,7 +233,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">¿Requiere de servicio de autobús?</label>
+          <label style={{fontSize: "19px"}} className="form-label">¿Requiere de servicio de autobús?</label>
           <div className="mb-2">
             <div className="form-check form-check-inline">
               <input
@@ -242,7 +243,7 @@ const FormularioVisitas = () => {
                 value="Si"
                 onChange={manejarCambio}
               />
-              <label className="form-check-label">Sí</label>
+              <label style={{fontSize: "16px"}} className="form-check-label">Sí</label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -252,11 +253,11 @@ const FormularioVisitas = () => {
                 value="No"
                 onChange={manejarCambio}
               />
-              <label className="form-check-label">No</label>
+              <label style={{fontSize: "16px"}} className="form-check-label">No</label>
             </div>
           </div>
 
-          <label className="form-label">¿Por cuál medio se enteró?</label>
+          <label style={{fontSize: "19px"}} className="form-label">¿Por cuál medio se enteró?</label>
           <select
             name="medioEnterado"
             className="form-select mb-2"
@@ -270,7 +271,7 @@ const FormularioVisitas = () => {
         </div>
 
         <div className="col-md-6">
-          <label className="form-label">Municipio</label>
+          <label style={{fontSize: "19px"}} className="form-label">Municipio</label>
           <input
             type="text"
             name="municipio"
@@ -279,7 +280,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">Correo Electrónico</label>
+          <label style={{fontSize: "19px"}} className="form-label">Correo Electrónico</label>
           <input
             type="email"
             name="correo"
@@ -288,7 +289,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">Tipo de recorrido requerido</label>
+          <label style={{fontSize: "19px"}} className="form-label">Tipo de recorrido requerido</label>
           <select
             name="tipoRecorrido"
             className="form-select mb-2"
@@ -300,7 +301,7 @@ const FormularioVisitas = () => {
             <option>Presencial</option>
           </select>
 
-          <label className="form-label">Grado Escolar</label>
+          <label style={{fontSize: "19px"}} className="form-label">Grado Escolar</label>
           <input
             type="text"
             name="gradoEscolar"
@@ -309,7 +310,7 @@ const FormularioVisitas = () => {
             onChange={manejarCambio}
           />
 
-          <label className="form-label">Horario disponible</label>
+          <label style={{fontSize: "19px"}} className="form-label">Horario disponible</label>
           <select
             name="horario"
             className="form-select mb-2"
@@ -321,7 +322,7 @@ const FormularioVisitas = () => {
             <option>03:00</option>
           </select>
 
-          <label className="form-label">¿Autoriza fotos y videos?</label>
+          <label style={{fontSize: "19px"}} className="form-label">¿Autoriza fotos y videos?</label>
           <div className="mb-2">
             <div className="form-check form-check-inline">
               <input
@@ -331,7 +332,7 @@ const FormularioVisitas = () => {
                 value="Si"
                 onChange={manejarCambio}
               />
-              <label className="form-check-label">Sí</label>
+              <label style={{fontSize: "16px"}} className="form-check-label">Sí</label>
             </div>
             <div className="form-check form-check-inline">
               <input
@@ -341,11 +342,11 @@ const FormularioVisitas = () => {
                 value="No"
                 onChange={manejarCambio}
               />
-              <label className="form-check-label">No</label>
+              <label style={{fontSize: "16px"}} className="form-check-label">No</label>
             </div>
           </div>
 
-          <label className="form-label">Comentarios</label>
+          <label style={{fontSize: "19px"}} className="form-label">Comentarios</label>
           <textarea
             name="comentarios"
             className="form-control mb-2"

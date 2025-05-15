@@ -56,6 +56,15 @@
     color: white;
 }
 
+body {
+    background: linear-gradient(to bottom, #ffffff, #CEEBBD);
+  }
+
+.logo-zigzag {
+    height: 70px;
+    width: auto;
+}
+
 
 
 /*---------------------------------- Reservas Generales ---------------------------------- */
