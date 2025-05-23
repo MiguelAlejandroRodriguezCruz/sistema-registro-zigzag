@@ -95,6 +95,7 @@ const Taquilla = () => {
         <div className="modal-overlay d-flex justify-content-center align-items-center">
           <div className="modal-content-custom">
             <FormularioDatos
+              idRegistro={registroSeleccionado?.id}
               onClose={() => setShowFormulario(false)}
               onShowDatosGuardados={handleGuardarFormulario}
             />

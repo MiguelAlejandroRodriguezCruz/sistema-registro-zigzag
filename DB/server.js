@@ -10,9 +10,9 @@ app.use(express.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',      // Usuario por defecto en XAMPP
-    password: '1234',      // Contraseña 
+    password: '',      // Contraseña 
     database: 'zigzag', // Nombre de la base de datos
-    port: 3307
+    port: 3306
 });
 
 // Verificar la conexión
@@ -230,6 +230,48 @@ app.delete('/visitantes-independientes/:id', (req, res) => {
     });
 });
 
+//Ruta para visualizar registro de visitantes
+app.get('/registro', (req, res) => {
+    const query = 'SELECT * FROM registrovisitas';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error en la consulta:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.json(results);
+    });
+});
+
+// Ruta para agregar registro de visitantes
+app.post('/registro-visitantes', (req, res) => {
+    const datos = req.body;
+    const query = `
+        INSERT INTO registrovisitas (
+            id_institucion, niños5a10, niños10a15, niños15a18, niñas5a10,
+            niñas10a15, niñas15a18, hombres20a30, hombres30a40, hombres40omas,
+            mujeres20a30, mujeres30a40, mujeres40omas, maestros20a30,
+            maestros30a40, maestros40omas
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const values = [
+        datos.idRegistro, datos. niños5a10, datos.niños10a15, datos.niños15a18, datos.niñas5a10,
+        datos.niñas10a15, datos.niñas15a18, datos.hombres20a30, datos.hombres30a40, datos.hombres40omas,
+        datos.mujeres20a30, datos.mujeres30a40, datos.mujeres40omas, datos.maestros20a30,
+        datos.maestros30a40, datos.maestros40omas
+    ];
+
+    console.log(datos.idRegistro)
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Error al guardar el registro:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.status(201).json({ idInsertado: result.insertId });
+    });
+});
 
 // Iniciar el servidor
 app.listen(port, () => {
