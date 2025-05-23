@@ -10,6 +10,7 @@ const Taquilla = () => {
   const [showFormulario, setShowFormulario] = useState(false);
   const [showDatosGuardados, setShowDatosGuardados] = useState(false);
   const [records, setRecords] = useState([]); // State para almacenar las reservas filtradas
+  const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
 
   useEffect(() => {
     // Hacer la solicitud GET para obtener los registros de la API
@@ -24,6 +25,11 @@ const Taquilla = () => {
         console.error("Error al cargar los registros:", error);
       });
   }, []);
+
+  const handleRowClick = (record) => {
+    setRegistroSeleccionado(record); // Guarda el registro seleccionado
+    setShowFormulario(true);         // Muestra el modal
+  };
 
   const handleProcesarEntradas = () => {
     setEntradasConfirmadas(false);
@@ -57,7 +63,7 @@ const Taquilla = () => {
           </thead>
           <tbody>
             {records.map((record, index) => (
-              <tr key={index}>
+              <tr key={index} style={{ cursor: "pointer" }} onClick={() => handleRowClick(record)}>
                 <td>{new Date(record.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
                 <td>{record.horario}</td>
                 <td>{record.nombreOrg}</td>
@@ -89,6 +95,7 @@ const Taquilla = () => {
         <div className="modal-overlay d-flex justify-content-center align-items-center">
           <div className="modal-content-custom">
             <FormularioDatos
+              idRegistro={registroSeleccionado?.id}
               onClose={() => setShowFormulario(false)}
               onShowDatosGuardados={handleGuardarFormulario}
             />
