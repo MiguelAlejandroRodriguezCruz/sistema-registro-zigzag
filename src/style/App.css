@@ -65,6 +65,254 @@ body {
     width: auto;
 }
 
+/*---------------------------------- Lista Eventos ---------------------------------- */
+.eventos-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.eventos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #33a532;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.logo {
+  height: 60px;
+}
+
+.reservas-link {
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.agregar-evento {
+  text-align: right;
+  margin: 10px 0;
+}
+
+.evento-card {
+  background-color: #f1f1f1;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.evento-banner {
+  flex: 1;
+}
+
+.imagenes-banner img {
+  width: 60px;
+  height: 60px;
+  margin: 5px;
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.evento-descripcion {
+  flex: 2;
+  padding-left: 20px;
+}
+
+.editar-evento {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+
+.disfrutar {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.descripcion {
+  font-size: 14px;
+  color: #333;
+}
+
+.duracion {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+/*---------------------------------- Eventos Visitantes ---------------------------------- */
+.eventos-container.azul {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.eventos-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.eventos-header.azul {
+  display: flex;
+  background-color: #0b5ed7; /* Azul */
+  
+}
+
+.logo {
+  height: 60px;
+}
+
+.evento-card {
+  background-color: #f1f1f1;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.evento-banner {
+  flex: 1;
+}
+
+.imagenes-banner img {
+  width: 60px;
+  height: 60px;
+  margin: 5px;
+  background-color: #ccc;
+  border-radius: 4px;
+  border: 2px solid transparent;
+}
+
+.imagenes-banner img:first-child {
+  border: 2px solid #0b5ed7; /* borde azul para banner principal */
+}
+
+.evento-descripcion {
+  flex: 2;
+  padding-left: 20px;
+}
+
+.seleccionar-evento {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+
+.disfrutar {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.descripcion {
+  font-size: 14px;
+  color: #333;
+}
+
+.duracion {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+/*---------------------------------- Eventos Descripción ---------------------------------- */
+.evento-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  background-color: #0b53c1;
+  color: white;
+  padding: 10px;
+}
+
+.evento-card {
+  background-color: #eee;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.evento-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.evento-imagenes {
+  width: 40%;
+}
+
+.imagenes-grid {
+  display: flex;
+  gap: 10px;
+}
+
+.img-placeholder {
+  width: 150px;
+  height: 100px;
+  background-color: #ccc;
+  border: 2px solid #aaa;
+  border-radius: 5px;
+}
+
+.img-small-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.img-placeholder.small {
+  width: 80px;
+  height: 45px;
+}
+
+.evento-detalles {
+  width: 55%;
+}
+
+.formulario {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.boletos-group {
+  display: flex;
+  gap: 10px;
+}
+
+.form-group.double {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-group.double > div {
+  width: 48%;
+}
+
+input {
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.boton {
+  background-color: #ccc;
+  padding: 8px 20px;
+  border: none;
+  cursor: pointer;
+}
 
 
 /*---------------------------------- Reservas Generales ---------------------------------- */

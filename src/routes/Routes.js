@@ -4,6 +4,10 @@ import Inicio from '../components/Inicio'
 import ReservasGenerales  from '../components/ReservasGenerales';
 import Taquilla from '../components/Taquilla/Taquilla';
 import Visitas from '../components/Visitas';
+import Eventos from '../components/Eventos';
+import ListaEventos from '../components/ListaEventos';
+import EventosVisitantes from '../components/EventosVisitantes';
+import EventosDescripcion from '../components/EventosDescripcion';
 
 const AppRoutes = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -17,6 +21,10 @@ const AppRoutes = () => {
                 <Route path="/" element={<Inicio />} />
                 <Route path="*" element={<Navigate to="/inicio" />} />
                 <Route path="/visitas" element={<Visitas />} />
+                <Route path="/eventos" element={<Eventos />} />
+                <Route path="/lista-eventos" element={<ListaEventos />} />
+                <Route path="/eventos-visitantes" element={<EventosVisitantes />} />
+                <Route path="/eventos-descripcion" element={<EventosDescripcion />} />
             </Routes>
         </Router>
     );
