@@ -255,7 +255,7 @@ app.post('/registro-visitantes', (req, res) => {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
     const values = [
-        datos.idRegistro, datos. niños5a10, datos.niños10a15, datos.niños15a18, datos.niñas5a10,
+        datos.idRegistro, datos.niños5a10, datos.niños10a15, datos.niños15a18, datos.niñas5a10,
         datos.niñas10a15, datos.niñas15a18, datos.hombres20a30, datos.hombres30a40, datos.hombres40omas,
         datos.mujeres20a30, datos.mujeres30a40, datos.mujeres40omas, datos.maestros20a30,
         datos.maestros30a40, datos.maestros40omas
@@ -272,6 +272,207 @@ app.post('/registro-visitantes', (req, res) => {
         res.status(201).json({ idInsertado: result.insertId });
     });
 });
+
+// ---------- Rutas para Visitantes por Eventos ----------
+// Ruta para visualizar visitantes por eventos
+app.get('/visitantes-eventos', (req, res) => {
+    const query = 'SELECT * FROM visitanteseventos';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error en la consulta:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.json(results);
+    });
+});
+// Ruta para agregar visitantes por eventos
+app.post('/visitantes-eventos', (req, res) => {
+    const datos = req.body;
+    const query = `
+        INSERT INTO visitanteseventos (
+            nombre, correo, edad, contrasena
+        ) VALUES (?, ?, ?, ?)
+    `;
+    const values = [
+        datos.nombre, datos.correo, datos.edad, datos.contrasena
+    ];
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Error al insertar visitante de evento:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.status(201).json({ idInsertado: result.insertId });
+    });
+});
+// Ruta para actualizar visitantes por eventos
+app.put('/visitantes-eventos/:id', (req, res) => {
+    const id = req.params.id;
+    const datos = req.body;
+
+    let query = 'UPDATE visitanteseventos SET ';
+    let values = [];
+    let fields = [];
+
+    Object.keys(datos).forEach((key) => {
+        if (datos[key] !== "" && datos[key] !== undefined) {
+            fields.push(`${key} = ?`);
+            values.push(datos[key]);
+        }
+    });
+
+    if (fields.length === 0) {
+        return res.status(400).json({ mensaje: "No se enviaron datos válidos para actualizar" });
+    }
+
+    query += fields.join(", ") + " WHERE id = ?";
+    values.push(id);
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Error al actualizar visitante de evento:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.json({ mensaje: "Visitante de evento actualizado correctamente" });
+    });
+});
+// Ruta para eliminar visitantes por eventos
+app.delete('/visitantes-eventos/:id', (req, res) => {
+    const id = req.params.id;
+    const query = 'DELETE FROM visitanteseventos WHERE id = ?';
+
+    db.query(query, [id], (err, result) => {
+        if (err) {
+            console.error('Error al eliminar visitante de evento:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.json({ mensaje: 'Visitante de evento eliminado correctamente' });
+    });
+});
+// Ruta para verificar en login los visitantes por eventos
+app.post('/visitantes-eventos/login', (req, res) => {
+    const { correo, contrasena } = req.body;
+
+    if (!correo || !contrasena) {
+        return res.status(400).json({ mensaje: 'Correo y contraseña son obligatorios' });
+    }
+
+    const query = 'SELECT * FROM visitanteseventos WHERE correo = ? LIMIT 1';
+
+    db.query(query, [correo], (err, results) => {
+        if (err) {
+            console.error('Error al buscar visitante de evento:', err.message);
+            return res.status(500).send(err.message);
+        }
+
+        if (results.length === 0) {
+            return res.status(401).json({ mensaje: 'Correo no registrado' });
+        }
+
+        const visitante = results[0];
+
+        if (visitante.contrasena !== contrasena) {
+            return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+        }
+
+        res.json({
+            mensaje: 'Login exitoso',
+            visitante: {
+                id: visitante.id,
+                nombre: visitante.nombre,
+                correo: visitante.correo,
+                edad: visitante.edad
+            }
+        });
+    });
+});
+
+// ---------- Rutas para Eventos ----------
+// Ruta para visualizar eventos
+app.get('/eventos', (req, res) => {
+    const query = 'SELECT * FROM evento';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error al obtener eventos:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.json(results);
+    });
+});
+// Ruta para agregar eventos
+app.post('/eventos', (req, res) => {
+    const datos = req.body;
+    const query = `
+        INSERT INTO evento (
+            nombre, fechaInicio, fechaFinal, lugar, descripcion, formulario, baner
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+    const values = [
+        datos.nombre, datos.fechaInicio, datos.fechaFinal, datos.lugar,
+        datos.descripcion, datos.formulario, datos.baner
+    ];
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Error al insertar evento:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.status(201).json({ idInsertado: result.insertId });
+    });
+});
+// Ruta para actualizar eventos
+app.put('/eventos/:id', (req, res) => {
+    const id = req.params.id;
+    const datos = req.body;
+
+    let query = 'UPDATE evento SET ';
+    let values = [];
+    let fields = [];
+
+    Object.keys(datos).forEach((key) => {
+        if (datos[key] !== "" && datos[key] !== undefined) {
+            fields.push(`${key} = ?`);
+            values.push(datos[key]);
+        }
+    });
+
+    if (fields.length === 0) {
+        return res.status(400).json({ mensaje: "No se enviaron datos válidos para actualizar" });
+    }
+
+    query += fields.join(", ") + " WHERE id = ?";
+    values.push(id);
+
+    db.query(query, values, (err, result) => {
+        if (err) {
+            console.error('Error al actualizar evento:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.json({ mensaje: "Evento actualizado correctamente" });
+    });
+});
+// Ruta para eliminar eventos
+app.delete('/eventos/:id', (req, res) => {
+    const id = req.params.id;
+    const query = 'DELETE FROM evento WHERE id = ?';
+
+    db.query(query, [id], (err, result) => {
+        if (err) {
+            console.error('Error al eliminar evento:', err.message);
+            res.status(500).send(err.message);
+            return;
+        }
+        res.json({ mensaje: 'Evento eliminado correctamente' });
+    });
+});
+
 
 // Iniciar el servidor
 app.listen(port, () => {
