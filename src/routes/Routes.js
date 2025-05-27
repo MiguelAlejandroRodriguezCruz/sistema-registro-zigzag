@@ -8,6 +8,8 @@ import Eventos from '../components/Eventos';
 import ListaEventos from '../components/ListaEventos';
 import EventosVisitantes from '../components/EventosVisitantes';
 import EventosDescripcion from '../components/EventosDescripcion';
+import Login from '../components/Login/Login';
+import Registro from '../components/Login/Registro'
 
 const AppRoutes = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -25,6 +27,8 @@ const AppRoutes = () => {
                 <Route path="/lista-eventos" element={<ListaEventos />} />
                 <Route path="/eventos-visitantes" element={<EventosVisitantes />} />
                 <Route path="/eventos-descripcion" element={<EventosDescripcion />} />
+                <Route path='/login' element={<Login />} />
+                <Route path='/registro' element={<Registro />} />
             </Routes>
         </Router>
     );
