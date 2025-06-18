@@ -473,6 +473,24 @@ app.delete('/eventos/:id', (req, res) => {
     });
 });
 
+// Ruta para obtener un solo evento por ID
+app.get('/eventos/:id', (req, res) => {
+    const id = req.params.id;
+    const query = 'SELECT * FROM evento WHERE id = ?';
+    
+    db.query(query, [id], (err, results) => {
+        if (err) {
+            console.error('Error al obtener evento:', err.message);
+            return;
+        }
+        
+        if (results.length === 0) {
+            return res.status(404).json({ mensaje: "Evento no encontrado" });
+        }
+        
+        res.json(results[0]);
+    });
+});
 
 // Iniciar el servidor
 app.listen(port, () => {
