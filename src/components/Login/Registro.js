@@ -13,7 +13,7 @@ const RegistroForm = () => {
   return (
     <div className="d-flex flex-column min-vh-100 bg-light">
       <Comp_encabezado />
-
+      <div className='login-header'/>
       <div className="login-box bg-white">
             <h1 className="login-title card-title text-center mb-4">Crear cuenta</h1>
 

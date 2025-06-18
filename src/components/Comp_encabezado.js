@@ -12,7 +12,7 @@ export function Comp_encabezado() {
           style={{ height: '60px', cursor: 'pointer' }}
         />
       </div>
-      <div className='login-header'/>
+      
 
         
     </>

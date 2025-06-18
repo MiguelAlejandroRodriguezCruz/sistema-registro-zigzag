@@ -19,6 +19,7 @@ const LoginForm = () => {
     <div className="d-flex flex-column min-vh-100 bg-light">
       {/* Componente para el encabezado */}
       <Comp_encabezado/>  
+      <div className='login-header'/>
       {/* Formulario de login */}
       <div className="login-box bg-white" >
         <h1 className="login-title text-center mb-4">Iniciar sesión</h1>
