@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import ReservasEncabezado from './ReservasAdmin/ReservasEncabezado';
 import { ReservasTabs } from './ReservasAdmin/ReservasTabs';
 import { ReservasLista } from './ReservasAdmin/ReservasLista';
+import { Comp_encabezado } from './Comp_encabezado';
+import { Comp_Pie_pagina } from './Comp_Pie_pagina';
 
 
 
@@ -75,8 +77,13 @@ function ReservasGenerales() {
 
 
     return (
-        <div>
-            <ReservasEncabezado />
+        <div className='flex-column min-vh-100 bg-light mt-4'>
+            <Comp_encabezado/>
+            <div className="row">
+                    <div className="col text-center bg-danger py-2">
+                        <h1 className="text-white m-0">Solicitud de Reservas</h1>
+                    </div>
+            </div>
             <div className="p-2">
                 <ReservasTabs pestanaActiva={pestanaActiva} setPestanaActiva={setPestanaActiva} />
                 <ReservasLista
@@ -91,6 +98,7 @@ function ReservasGenerales() {
             >
                 🗑 Resetear todas las reservas
             </button>
+            <Comp_Pie_pagina/>
         </div>
     );
 }

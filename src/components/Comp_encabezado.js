@@ -5,7 +5,7 @@ import logo from "../images/zig_zag_logo.png";
 export function Comp_encabezado() {
   return (
     <>
-      <div className=" container d-flex align-items-center m-4">
+      <div className=" container d-flex align-items-center m-1">
         <img
           src={logo}
           alt="Logo Zig Zag"

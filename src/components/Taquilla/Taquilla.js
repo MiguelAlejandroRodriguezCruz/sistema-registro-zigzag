@@ -4,6 +4,8 @@ import logo from "../../images/zig_zag_logo.png";
 import EntradasConfirmadas from "./EntradasConfirmadas";
 import FormularioDatos from "./FormularioDatos";
 import DatosGuardados from "./DatosGuardados";
+import { Comp_encabezado } from "../Comp_encabezado";
+import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
 
 const Taquilla = () => {
   const [showEntradasConfirmadas, setEntradasConfirmadas] = useState(false);
@@ -42,12 +44,16 @@ const Taquilla = () => {
   };
 
   return (
-    <div className="container-fluid mt-4">
-      <div className="d-flex align-items-center justify-content-between p-2 mb-5 custom-yellow w-100">
-        <img src={logo} alt="Logo" className="me-6" style={{ width: "150px", height: "40px" }} />
-        <h2 className="fw-bold text-center flex-grow-1 m-0">Registros de visita</h2>
+    <div className="mt-4">
+      <Comp_encabezado/>
+      
+      <div className="row">
+          <div className="col text-center bg-danger py-2">
+              <h1 className="text-white m-0">Registros de visita</h1>
+          </div>
       </div>
-      <div className="container">
+
+      <div className="container p-4">
         <table className="table table-striped table-bordered table-hover text-center mb-5">
           <thead>
             <tr>
@@ -111,6 +117,8 @@ const Taquilla = () => {
           </div>
         </div>
       )}
+
+      <Comp_Pie_pagina/>
     </div>
   );
 };

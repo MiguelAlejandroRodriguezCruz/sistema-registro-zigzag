@@ -3,7 +3,7 @@ import logo from "../images/zig_zag_logo.png";
 
 export function Comp_Pie_pagina() {
   return (
-    <footer className="bg-white text-black py-3 w-auto mt-auto">
+    <footer className="bg-white text-black py-3 w-100 mt-auto">
       <div className="container-fluid d-flex flex-column flex-md-row justify-content-between align-items-center px-4">
         <div className="d-flex align-items-center mb-2 mb-md-0">
           <img src={logo} alt="Logo Zig Zag" style={{ height: "40px" }} />
