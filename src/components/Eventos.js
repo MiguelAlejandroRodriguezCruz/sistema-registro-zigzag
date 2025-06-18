@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
+import { Comp_encabezado } from "./Comp_encabezado";
 
 export default function CrearEvento() {
   const navigate = useNavigate();
@@ -113,143 +115,149 @@ export default function CrearEvento() {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1000px", margin: "auto" }}>
+    <div className="mt-4">
       {/* Encabezado */}
-      <div style={{ backgroundColor: "#22a31f", color: "#fff", padding: "10px" }}>
-        <img src="ruta-del-logo.png" alt="Logo ZigZag" style={{ height: "60px" }} />
-        <h2 style={{ margin: 0, backgroundColor: "#22a31f" }}>Eventos</h2>
-        <a href="#" onClick={handleCancel} style={{ color: "#fff", textDecoration: "underline", fontSize: "14px", cursor: "pointer" }}>← Regresar</a>
-      </div>
+      <Comp_encabezado/>
+      
+          <div style={{ backgroundColor: "#22a31f", color: "#fff", padding: "10px" }}>
+            <h1 style={{ margin: 0, backgroundColor: "#22a31f" }}>Eventos</h1>
+            <a href="#" onClick={handleCancel} style={{ color: "#fff", textDecoration: "underline", fontSize: "14px", cursor: "pointer" }}>← Regresar</a>
+          </div>
+      <div style={{ padding: "20px", maxWidth: "1000px", margin: "auto" }}>
+          
 
-      {/* Texto de instrucciones */}
-      <p style={{ marginTop: "20px", fontSize: "22px" }}>
-        <strong>NOTA: {isEditing ? 'Edición' : 'Creación'} de un evento, favor de llenar todos los campos disponibles y revisar correctamente el contenido de los mismos.</strong>
-      </p>
+          {/* Texto de instrucciones */}
+          <p style={{ marginTop: "20px", fontSize: "22px" }}>
+            <strong>NOTA: {isEditing ? 'Edición' : 'Creación'} de un evento, favor de llenar todos los campos disponibles y revisar correctamente el contenido de los mismos.</strong>
+          </p>
 
-      {error && (
-        <div className="alert alert-danger" style={{ marginTop: "20px" }}>
-          {error}
-        </div>
-      )}
-
-      {/* Formulario */}
-      <form onSubmit={handleSubmit}>
-        <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-          {/* Columna izquierda */}
-          <div style={{ flex: 1, minWidth: "300px" }}>
-            <div className="mb-3">
-              <label>Nombre del evento:</label>
-              <input 
-                type="text" 
-                className="form-control" 
-                placeholder="Escriba un nombre" 
-                name="nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-                required
-              />
+          {error && (
+            <div className="alert alert-danger" style={{ marginTop: "20px" }}>
+              {error}
             </div>
+          )}
 
-            <div className="mb-3">
-              <label>Fecha del evento:</label>
-              <div style={{ display: "flex", gap: "10px" }}>
-                <input 
-                  type="date" 
-                  className="form-control" 
-                  name="fechaInicio"
-                  value={formData.fechaInicio}
-                  onChange={handleChange}
-                  required
-                />
-                <input 
-                  type="date" 
-                  className="form-control" 
-                  name="fechaFinal"
-                  value={formData.fechaFinal}
-                  onChange={handleChange}
-                  required
-                />
+          {/* Formulario */}
+          <form onSubmit={handleSubmit}>
+            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+              {/* Columna izquierda */}
+              <div style={{ flex: 1, minWidth: "300px" }}>
+                <div className="mb-3">
+                  <label>Nombre del evento:</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    placeholder="Escriba un nombre" 
+                    name="nombre"
+                    value={formData.nombre}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label>Fecha del evento:</label>
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <input 
+                      type="date" 
+                      className="form-control" 
+                      name="fechaInicio"
+                      value={formData.fechaInicio}
+                      onChange={handleChange}
+                      required
+                    />
+                    <input 
+                      type="date" 
+                      className="form-control" 
+                      name="fechaFinal"
+                      value={formData.fechaFinal}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label>Lugar del evento:</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    placeholder="Ingrese una dirección" 
+                    name="lugar"
+                    value={formData.lugar}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="mb-3">
+                  <label>Descripción del evento:</label>
+                  <textarea 
+                    className="form-control" 
+                    rows="5" 
+                    placeholder="Escriba aquí" 
+                    name="descripcion"
+                    value={formData.descripcion}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Columna derecha */}
+              <div style={{ flex: 1, minWidth: "300px" }}>
+                <div className="mb-3">
+                  <label>Banner (opcional):</label>
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary w-100 mb-2"
+                    onClick={() => alert("Funcionalidad de banner pendiente")}
+                  >
+                    + Agregar Banner
+                  </button>
+                  <div className="image-placeholder mb-3" style={placeholderStyle}>
+                    {formData.baner}
+                  </div>
+                </div>
+
+                <div className="mb-3">
+                  <label>Formulario:</label>
+                  <button 
+                    type="button" 
+                    className="btn btn-warning w-100 mb-2"
+                    onClick={() => alert("Funcionalidad de formulario pendiente")}
+                  >
+                    Crear formulario de evento
+                  </button>
+                  <div className="image-placeholder mb-3" style={placeholderStyle}>
+                    {formData.formulario}
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="mb-3">
-              <label>Lugar del evento:</label>
-              <input 
-                type="text" 
-                className="form-control" 
-                placeholder="Ingrese una dirección" 
-                name="lugar"
-                value={formData.lugar}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="mb-3">
-              <label>Descripción del evento:</label>
-              <textarea 
-                className="form-control" 
-                rows="5" 
-                placeholder="Escriba aquí" 
-                name="descripcion"
-                value={formData.descripcion}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-
-          {/* Columna derecha */}
-          <div style={{ flex: 1, minWidth: "300px" }}>
-            <div className="mb-3">
-              <label>Banner (opcional):</label>
+            {/* Botones */}
+            <div className="mt-4" style={{ display: "flex", gap: "10px" }}>
               <button 
                 type="button" 
-                className="btn btn-secondary w-100 mb-2"
-                onClick={() => alert("Funcionalidad de banner pendiente")}
+                className="btn btn-danger"
+                onClick={handleCancel}
               >
-                + Agregar Banner
+                Cancelar
               </button>
-              <div className="image-placeholder mb-3" style={placeholderStyle}>
-                {formData.baner}
-              </div>
-            </div>
-
-            <div className="mb-3">
-              <label>Formulario:</label>
               <button 
-                type="button" 
-                className="btn btn-warning w-100 mb-2"
-                onClick={() => alert("Funcionalidad de formulario pendiente")}
+                type="submit" 
+                className="btn btn-success"
+                disabled={isLoading}
               >
-                Crear formulario de evento
+                {isLoading ? 'Guardando...' : isEditing ? 'Actualizar Evento' : 'Guardar Evento'}
               </button>
-              <div className="image-placeholder mb-3" style={placeholderStyle}>
-                {formData.formulario}
-              </div>
             </div>
-          </div>
+          </form>
         </div>
-
-        {/* Botones */}
-        <div className="mt-4" style={{ display: "flex", gap: "10px" }}>
-          <button 
-            type="button" 
-            className="btn btn-danger"
-            onClick={handleCancel}
-          >
-            Cancelar
-          </button>
-          <button 
-            type="submit" 
-            className="btn btn-success"
-            disabled={isLoading}
-          >
-            {isLoading ? 'Guardando...' : isEditing ? 'Actualizar Evento' : 'Guardar Evento'}
-          </button>
-        </div>
-      </form>
+          <Comp_Pie_pagina/>
     </div>
+    
   );
 }
 
