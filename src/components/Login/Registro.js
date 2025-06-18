@@ -1,36 +1,53 @@
+// RegistroForm.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../images/zig_zag_logo.png";
-import "../../style/App.css";
+import { Comp_encabezado } from "../Comp_encabezado";
+import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
 
-const RegistroForm = ({ onVolver }) => {
+const RegistroForm = () => {
   const navigate = useNavigate();
-  
-    const handleAccountCreated = () => {
-      navigate("/login"); // Redirige al componente de eventos
-    };
-  
+
+  const handleAccountCreated = () => navigate("/login");
+  const handleVolver = () => navigate(-1);
 
   return (
-    <div className="login-container">
-      <img src={logo} alt="Logo Zig Zag" className="login-logo" />
-      <div className="login-header">
-        <h1 className="login-title">Crear cuenta</h1>
+    <div className="d-flex flex-column min-vh-100 bg-light">
+      <Comp_encabezado />
+
+      <div className="login-box bg-white">
+            <h1 className="login-title card-title text-center mb-4">Crear cuenta</h1>
+
+            <div className="mb-3">
+              <label className="login-label">Nombre completo</label>
+              <input type="text" className="form-control" placeholder="Juan Pérez" />
+            </div>
+
+            <div className="mb-3">
+              <label className="login-label">Correo</label>
+              <input type="email" className="form-control" placeholder="correo@ejemplo.com" />
+            </div>
+
+            <div className="mb-3">
+              <label className="login-label">Edad</label>
+              <input type="number" className="form-control" placeholder="25" />
+            </div>
+
+            <div className="mb-4">
+              <label className="login-label">Contraseña</label>
+              <input type="password" className="form-control" placeholder="********" />
+            </div>
+
+            <div className="d-grid gap-2">
+              <button className="login-button btn-success" onClick={handleAccountCreated}>
+                Crear cuenta
+              </button>
+              <button className="login-button-gray btn-secondary" onClick={handleVolver}>
+                Volver
+              </button>
+            </div> 
       </div>
-      <div className="login-box">
-        <label className="login-label">Ingresa tu nombre</label>
-        <input type="text" placeholder="Juan Pérez" className="login-input" />
-        <label className="login-label">Ingresa tu correo</label>
-        <input type="email" placeholder="correo@ejemplo.com" className="login-input" />
-        <label className="login-label">Ingresa tu edad</label>
-        <input type="number" placeholder="25" className="login-input" />
-        <label className="login-label">Ingresa una contraseña</label>
-        <input type="password" placeholder="********" className="login-input" />
-        <div className="text-center mt-3">
-          <button className="login-button" onClick={handleAccountCreated} >Crear</button>
-          <button className="login-button-gray mt-2" onClick={handleAccountCreated}>Volver</button>
-        </div>
-      </div>
+
+      <Comp_Pie_pagina />
     </div>
   );
 };
