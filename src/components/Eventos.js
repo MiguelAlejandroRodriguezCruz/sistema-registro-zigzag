@@ -322,21 +322,21 @@ export default function CrearEvento() {
                 </div>
               </div>
 
-              {/* Columna derecha */}
-              <div style={{ flex: 1, minWidth: "300px" }}>
-                <div className="mb-3">
-                  <label>Banner (opcional):</label>
-                  <button 
-                    type="button" 
-                    className="btn btn-secondary w-100 mb-2"
-                    onClick={() => alert("Funcionalidad de banner pendiente")}
-                  >
-                    + Agregar Banner
-                  </button>
-                  <div className="image-placeholder mb-3" style={placeholderStyle}>
-                    {formData.baner}
-                  </div>
-                </div>
+          {/* Columna derecha */}
+          <div style={{ flex: 1, minWidth: "300px" }}>
+            <div className="mb-3">
+              <label>Banner (opcional):</label>
+              <button 
+                type="button" 
+                className="btn btn-secondary w-100 mb-2"
+                onClick={() => alert("Funcionalidad de banner pendiente")}
+              >
+                + Agregar Banner
+              </button>
+              <div className="image-placeholder mb-3" style={placeholderStyle}>
+                {formData.baner}
+              </div>
+            </div>
 
             <div className="mb-3">
               <label>Formulario:</label>
