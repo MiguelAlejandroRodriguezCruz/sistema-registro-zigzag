@@ -1,10 +1,51 @@
+const mysql = require('mysql2'); 
 const express = require('express');
-const mysql = require('mysql2');
+const path = require('path');
+const multer = require('multer');
+const fs = require('fs');
 const app = express();
 const port = 3001;
 
 // Middleware para analizar el cuerpo de las solicitudes entrantes como JSON
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Configuración de Multer para almacenamiento de archivos
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadPath = path.join(__dirname, 'uploads');
+    
+    // Crear directorio si no existe
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    
+    cb(null, uploadPath);
+  },
+  filename: function (req, file, cb) {
+    // Nombre único para el archivo
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, file.fieldname + '-' + uniqueSuffix + ext);
+  }
+});
+
+// Filtrar solo imágenes
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image/')) {
+    cb(null, true);
+  } else {
+    cb(new Error('Solo se permiten archivos de imagen'), false);
+  }
+};
+
+const upload = multer({ 
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // Límite de 5MB
+  }
+});
 
 // Configuración de la conexión a MySQL
 const db = mysql.createConnection({
@@ -404,74 +445,159 @@ app.get('/eventos', (req, res) => {
         res.json(results);
     });
 });
+
 // Ruta para agregar eventos
-app.post('/eventos', (req, res) => {
+app.post('/eventos', upload.single('baner'), (req, res) => {
+  try {
     const datos = req.body;
+    
+    // Validación de campos obligatorios
+    if (!datos.nombre || !datos.fechaInicio || !datos.fechaFinal || !datos.lugar || !datos.descripcion) {
+      return res.status(400).json({ message: 'Faltan campos obligatorios' });
+    }
+
+    // Verificar si se subió un archivo
+    if (!req.file) {
+      return res.status(400).json({ message: 'Debe subir un banner para el evento' });
+    }
+
+    // Construir URL del banner
+    const urlBaner = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+
+    // Asegurar que el formulario tenga un valor por defecto si es undefined
+    const formulario = datos.formulario || '[]';
+
     const query = `
-        INSERT INTO evento (
-            nombre, fechaInicio, fechaFinal, lugar, descripcion, formulario, baner
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO evento (
+        nombre, fechaInicio, fechaFinal, lugar, descripcion, formulario, baner
+      ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
+    
     const values = [
-        datos.nombre, datos.fechaInicio, datos.fechaFinal, datos.lugar,
-        datos.descripcion, datos.formulario, datos.baner
+      datos.nombre,
+      datos.fechaInicio,
+      datos.fechaFinal,
+      datos.lugar,
+      datos.descripcion,
+      formulario, // Usar el valor asegurado
+      urlBaner
     ];
 
     db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al insertar evento:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.status(201).json({ idInsertado: result.insertId });
+      if (err) {
+        console.error('Error al insertar evento:', err.message);
+        console.error('Query:', query);
+        console.error('Values:', values);
+        return res.status(500).json({ 
+          message: 'Error en la base de datos',
+          error: err.message
+        });
+      }
+      
+      res.status(201).json({ 
+        idInsertado: result.insertId, 
+        banerUrl: urlBaner 
+      });
     });
+    
+  } catch (error) {
+    console.error('Error general:', error);
+    res.status(500).json({ 
+      message: 'Error interno del servidor',
+      error: error.message 
+    });
+  }
 });
+
 // Ruta para actualizar eventos
-app.put('/eventos/:id', (req, res) => {
-    const id = req.params.id;
+app.put('/eventos/:id', upload.single('baner'), (req, res) => {
+  try {
+    const eventoId = req.params.id;
     const datos = req.body;
 
-    let query = 'UPDATE evento SET ';
-    let values = [];
-    let fields = [];
-
-    Object.keys(datos).forEach((key) => {
-        if (datos[key] !== "" && datos[key] !== undefined) {
-            fields.push(`${key} = ?`);
-            values.push(datos[key]);
-        }
-    });
-
-    if (fields.length === 0) {
-        return res.status(400).json({ mensaje: "No se enviaron datos válidos para actualizar" });
+    // Validación de campos obligatorios
+    if (!datos.nombre || !datos.fechaInicio || !datos.fechaFinal || !datos.lugar || !datos.descripcion) {
+      return res.status(400).json({ message: 'Faltan campos obligatorios' });
     }
 
-    query += fields.join(", ") + " WHERE id = ?";
-    values.push(id);
+    const getCurrentBanner = `SELECT baner FROM evento WHERE id = ?`;
+    
+    db.query(getCurrentBanner, [eventoId], (err, result) => {
+      if (err) {
+        console.error('Error al obtener banner actual:', err.message);
+        return res.status(500).json({
+          message: 'Error en la base de datos',
+          error: err.message
+        });
+      }
+      
+      if (result.length === 0) {
+        return res.status(404).json({ message: 'Evento no encontrado' });
+      }
+      
+      // Manejo del banner
+      let bannerFinal = result[0].baner;
+      if (req.file) {
+        bannerFinal = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+      }
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al actualizar evento:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json({ mensaje: "Evento actualizado correctamente" });
-    });
-});
-// Ruta para eliminar eventos
-app.delete('/eventos/:id', (req, res) => {
-    const id = req.params.id;
-    const query = 'DELETE FROM evento WHERE id = ?';
+      // Asegurar que el formulario tenga un valor
+      const formulario = datos.formulario || '[]';
 
-    db.query(query, [id], (err, result) => {
+      const query = `
+        UPDATE evento 
+        SET nombre = ?, 
+            fechaInicio = ?, 
+            fechaFinal = ?, 
+            lugar = ?, 
+            descripcion = ?, 
+            formulario = ?, 
+            baner = ?
+        WHERE id = ?
+      `;
+      
+      const values = [
+        datos.nombre,
+        datos.fechaInicio,
+        datos.fechaFinal,
+        datos.lugar,
+        datos.descripcion,
+        formulario, // Usar el valor asegurado
+        bannerFinal,
+        eventoId
+      ];
+
+      db.query(query, values, (err, result) => {
         if (err) {
-            console.error('Error al eliminar evento:', err.message);
-            res.status(500).send(err.message);
-            return;
+          console.error('Error al actualizar evento:', err.message);
+          return res.status(500).json({
+            message: 'Error en la base de datos',
+            error: err.message
+          });
         }
-        res.json({ mensaje: 'Evento eliminado correctamente' });
+        
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ message: 'Evento no encontrado' });
+        }
+        
+        res.status(200).json({ 
+          message: 'Evento actualizado', 
+          banerUrl: bannerFinal 
+        });
+      });
     });
+    
+  } catch (error) {
+    console.error('Error general:', error);
+    res.status(500).json({ 
+      message: 'Error interno del servidor',
+      error: error.message 
+    });
+  }
 });
+
+// Servir archivos estáticos desde la carpeta uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Ruta para obtener un solo evento por ID
 app.get('/eventos/:id', (req, res) => {

@@ -99,21 +99,33 @@ const Eventos = () => {
             marginBottom: '30px',
             boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
           }}>
-            <div className="evento-banner" style={{ marginBottom: '20px' }}>
+            <div className="evento-banner" style={{ marginBottom: '2px' }}>
               <h4 style={{ marginBottom: '15px' }}><b>{evento.nombre}</b></h4>
               <p>Banner de evento:</p>
               <div className="imagenes-banner" style={{ 
                 display: 'flex', 
-                gap: '10px', 
-                marginTop: '10px',
+                gap: '20px', 
+                marginTop: '20px',
                 backgroundColor: '#f5f5f5',
-                padding: '15px',
+                padding: '10px',
                 borderRadius: '5px',
                 justifyContent: 'center'
               }}>
+                {evento.baner ? (
+                  <img 
+                    src={evento.baner} 
+                    alt={`Banner de ${evento.nombre}`}
+                    style={{ 
+                      maxWidth: '100%', 
+                      maxHeight: '100%',
+                      objectFit: 'contain'
+                    }}
+                  />
+                ) : (
                 <div style={{ textAlign: 'center' }}>
-                  <p>{evento.baner}</p>
-                </div>
+                    <p>No hay banner disponible</p>
+                  </div>
+                )}
               </div>
             </div>
             <div className="evento-descripcion" style={{ marginBottom: '20px' }}>
