@@ -10,6 +10,9 @@ import EventosVisitantes from '../components/EventosVisitantes';
 import EventosDescripcion from '../components/EventosDescripcion';
 import Login from '../components/Login/Login';
 import Registro from '../components/Login/Registro'
+import NuevaContrasena from '../components/Login/NuevaContrasena';
+import SolicitarCodigo from '../components/Login/SolicitarCodigo';
+import VerificarCodigo from '../components/Login/VerificarCodigo';
 
 const AppRoutes = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,6 +33,9 @@ const AppRoutes = () => {
                 <Route path="/eventos-descripcion/:id" element={<EventosDescripcion />} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/registro' element={<Registro />} />
+                <Route path='/nueva-contrasena' element={<NuevaContrasena />} />
+                <Route path='/solicitar-codigo' element={<SolicitarCodigo />} />
+                <Route path='/verificar-codigo' element={<VerificarCodigo />} />
             </Routes>
         </Router>
     );

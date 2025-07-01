@@ -94,7 +94,12 @@ const LoginForm = () => {
         </div>
 
         <div className="login-links mb-3">
-          <a href="#">¿Olvidaste tu contraseña?</a><br />
+          <a href="" onClick={(e) => {
+            e.preventDefault();
+            navigate("/solicitar-codigo");
+          }} style={{ cursor: "pointer" }}>
+            ¿Olvidaste tu contraseña?
+          </a>
           <a href="" onClick={handleCreateAccount} style={{ cursor: "pointer" }}>Crear una cuenta</a>
         </div>
 
