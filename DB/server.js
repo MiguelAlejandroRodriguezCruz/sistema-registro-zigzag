@@ -618,6 +618,35 @@ app.get('/eventos/:id', (req, res) => {
     });
 });
 
+// Endpoint para guardar formularios
+app.post('/guardar-formulario', (req, res) => {
+  const { id_evento, formulario, fecha_evento, num_adultos, num_ninos } = req.body;
+  
+  // Temporalmente usamos id_visitante = 1
+  const id_visitante = 1;
+  
+  const query = `
+    INSERT INTO formularios 
+    (id_visitante, id_evento, formulario, fecha_evento, num_adultos, num_ninos) 
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+  
+  db.query(query, 
+    [id_visitante, id_evento, formulario, fecha_evento, num_adultos, num_ninos],
+    (err, result) => {
+      if (err) {
+        console.error('Error al guardar formulario:', err.message);
+        res.status(500).json({ error: 'Error al guardar formulario' });
+        return;
+      }
+      res.status(200).json({ 
+        message: 'Formulario guardado exitosamente',
+        id: result.insertId
+      });
+    }
+  );
+});
+
 // Iniciar el servidor
 app.listen(port, () => {
     console.log(`API corriendo en http://localhost:${port}`);

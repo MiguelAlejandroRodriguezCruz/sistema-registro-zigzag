@@ -1,25 +1,192 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Comp_encabezado } from "./Comp_encabezado";
 import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
 
 const EventosDescripcion = () => {
-  return (
-    <div className="mt-4">
-      <Comp_encabezado/>
+  const { id } = useParams();
+  const [evento, setEvento] = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Estados para el formulario
+  const [fechaEvento, setFechaEvento] = useState("");
+  const [numAdultos, setNumAdultos] = useState(0);
+  const [numNinos, setNumNinos] = useState(0);
+  const [respuestas, setRespuestas] = useState({});
+  const [enviando, setEnviando] = useState(false);
+  const [mensajeExito, setMensajeExito] = useState("");
+  const [errorFormulario, setErrorFormulario] = useState("");
+  
+  // Función para formatear fechas (igual que en EventosSeleccionar)
+  const formatearFecha = (fechaISO) => {
+    try {
+      const fecha = new Date(fechaISO);
+      if (isNaN(fecha)) return 'Fecha inválida';
+      return fecha.toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+    } catch (e) {
+      return 'Fecha inválida';
+    }
+  };
 
-       <header className="eventos-header azul">
-          <h1 className="text-white m-0">Eventos</h1>
-        </header>
+  useEffect(() => {
+    const cargarEvento = async () => {
+      try {
+        const respuesta = await fetch(`http://localhost:3001/eventos/${id}`);
+        if (!respuesta.ok) {
+          throw new Error('Error al cargar el evento');
+        }
+        const datos = await respuesta.json();
+        setEvento(datos);
+        
+        // Inicializar respuestas del formulario
+        try {
+          const formularioParseado = JSON.parse(datos.formulario || "[]");
+          const respuestasIniciales = {};
+          formularioParseado.forEach(campo => {
+            if (campo.type === 'checkbox') {
+              respuestasIniciales[campo.id] = campo.options ? [] : false;
+            } else {
+              respuestasIniciales[campo.id] = '';
+            }
+          });
+          setRespuestas(respuestasIniciales);
+        } catch (e) {
+          console.error("Error al inicializar respuestas:", e);
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setCargando(false);
+      }
+    };
+
+    cargarEvento();
+  }, [id]);
+
+  // Manejar cambios en campos dinámicos
+  const handleCampoChange = (campoId, value) => {
+    setRespuestas({
+      ...respuestas,
+      [campoId]: value
+    });
+  };
+
+  // Enviar formulario
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setEnviando(true);
+    setErrorFormulario("");
+    setMensajeExito("");
+
+    try {
+      // Validación básica
+      if (!fechaEvento) {
+        throw new Error("Por favor seleccione una fecha para el evento");
+      }
+      if (numAdultos <= 0 && numNinos <= 0) {
+        throw new Error("Debe adquirir al menos un boleto");
+      }
+
+      // Preparar datos para enviar
+      const datosFormulario = {
+        id_evento: evento.id,
+        formulario: JSON.stringify(respuestas),
+        fecha_evento: fechaEvento,
+        num_adultos: parseInt(numAdultos) || 0,
+        num_ninos: parseInt(numNinos) || 0
+      };
+
+      const respuesta = await fetch('http://localhost:3001/guardar-formulario', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datosFormulario)
+      });
+
+      const resultado = await respuesta.json();
+
+      if (!respuesta.ok) {
+        throw new Error(resultado.error || 'Error al guardar formulario');
+      }
+
+      setMensajeExito('¡Formulario guardado exitosamente!');
+    } catch (err) {
+      setErrorFormulario(err.message);
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  if (cargando) {
+    return (
+      <div className="cargando-container">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+        <p>Cargando información del evento...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-container">
+        <div className="alert alert-danger" role="alert">
+          Error: {error}
+        </div>
+        <button 
+          className="btn btn-primary mt-3"
+          onClick={() => window.location.reload()}
+        >
+          Intentar de nuevo
+        </button>
+      </div>
+    );
+  }
+
+  if (!evento) {
+    return (
+      <div className="sin-eventos">
+        <div className="alert alert-info" role="alert">
+          Evento no encontrado
+        </div>
+      </div>
+    );
+  }
+
+  // Parsear el formulario JSON
+  let formularioParseado = [];
+  try {
+    formularioParseado = JSON.parse(evento.formulario || "[]");
+  } catch (e) {
+    console.error("Error al parsear el formulario:", e);
+  }
+
+  return (
+    <div className="mt-4 eventos-descripcion-container">
+      <Comp_encabezado/>
+      <header className="eventos-header azul">
+        <h1 className="text-white m-0">{evento.nombre}</h1>
+      </header>
 
       <div className="eventos-container">
-       
         <div className="evento-card">
           <div className="evento-info">
             <div className="evento-imagenes">
-              <p><strong>Metales pesados y su magia</strong></p>
-              <p>Banner de evento:</p>
               <div className="imagenes-grid">
-                <div className="img-placeholder"></div>
+                <div className="banner-principal">
+                  <img 
+                    src={evento.baner || "/placeholder.png"} 
+                    alt={`Banner de ${evento.nombre}`}
+                    className="img-banner"
+                  />
+                </div>
                 <div className="img-small-grid">
                   <div className="img-placeholder small"></div>
                   <div className="img-placeholder small"></div>
@@ -28,49 +195,146 @@ const EventosDescripcion = () => {
             </div>
 
             <div className="evento-detalles">
-              <p><strong>Podrás disfrutar de :</strong></p>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam velit, vulputate eu pharetra nec...
+              <p><strong>Podrás disfrutar de:</strong></p>
+              <p className="descripcion-evento">
+                {evento.descripcion || "Descripción no disponible"}
               </p>
-              <p><strong>Duración del evento:</strong><br />14/05/25 - 28/05/25</p>
-              <a href="#" className="eventos-link">Seleccionar evento</a>
+              
+              <div className="info-adicional">
+                <p><strong>Duración del evento:</strong></p>
+                <p>
+                  {formatearFecha(evento.fechaInicio)} - {formatearFecha(evento.fechaFinal)}
+                </p>
+                
+                <p><strong>Lugar:</strong></p>
+                <p>{evento.lugar}</p>
+              </div>
             </div>
           </div>
 
-          <form className="formulario">
+          <form className="formulario" onSubmit={handleSubmit}>
             <h4>Rellene el cuestionario solicitado:</h4>
 
+            {/* Renderizar campos del formulario dinámico */}
+            {formularioParseado.map((campo, index) => (
+              <div className="form-group" key={campo.id || index}>
+                <label>{campo.label}{campo.required && <span className="text-danger">*</span>}</label>
+                {campo.type === 'checkbox' ? (
+                  <div>
+                    {campo.options ? (
+                      campo.options.map((opcion, i) => (
+                        <div key={i} className="form-check">
+                          <input 
+                            type="checkbox" 
+                            id={`${campo.id}-${i}`} 
+                            className="form-check-input" 
+                            checked={respuestas[campo.id]?.includes(opcion) || false}
+                            onChange={(e) => {
+                              const selected = respuestas[campo.id] || [];
+                              let newSelected;
+                              if (e.target.checked) {
+                                newSelected = [...selected, opcion];
+                              } else {
+                                newSelected = selected.filter(item => item !== opcion);
+                              }
+                              handleCampoChange(campo.id, newSelected);
+                            }}
+                          />
+                          <label htmlFor={`${campo.id}-${i}`} className="form-check-label">
+                            {opcion}
+                          </label>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="form-check">
+                        <input 
+                          type="checkbox" 
+                          id={campo.id} 
+                          className="form-check-input" 
+                          checked={respuestas[campo.id] || false}
+                          onChange={(e) => handleCampoChange(campo.id, e.target.checked)}
+                        />
+                        <label htmlFor={campo.id} className="form-check-label">
+                          {campo.label}
+                        </label>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    placeholder={campo.placeholder || ''} 
+                    value={respuestas[campo.id] || ""}
+                    onChange={(e) => handleCampoChange(campo.id, e.target.value)}
+                    required={campo.required}
+                  />
+                )}
+              </div>
+            ))}
+
             <div className="form-group">
-              <label>Fecha del evento:</label>
-              <input type="date" />
+              <label>Fecha del evento: <span className="text-danger">*</span></label>
+              <input 
+                type="date" 
+                className="form-control" 
+                min={evento.fechaInicio.split('T')[0]}
+                max={evento.fechaFinal.split('T')[0]}
+                value={fechaEvento}
+                onChange={(e) => setFechaEvento(e.target.value)}
+                required
+              />
             </div>
 
             <div className="form-group">
-              <label>Número de Boletos a adquirir:</label>
+              <label>Número de Boletos a adquirir: <span className="text-danger">*</span></label>
               <div className="boletos-group">
-                <input type="text" placeholder="Adultos" />
-                <input type="text" placeholder="Niñ@s" />
+                <input 
+                  type="number" 
+                  className="form-control" 
+                  placeholder="Adultos" 
+                  min="0"
+                  value={numAdultos}
+                  onChange={(e) => setNumAdultos(e.target.value)}
+                  required
+                />
+                <input 
+                  type="number" 
+                  className="form-control" 
+                  placeholder="Niñ@s" 
+                  min="0"
+                  value={numNinos}
+                  onChange={(e) => setNumNinos(e.target.value)}
+                  required
+                />
               </div>
             </div>
 
-            <div className="form-group double">
-              <div>
-                <label>Se necesita asistencia médica:</label>
-                <input type="text" placeholder="Placeholder" />
-              </div>
-              <div>
-                <label>Se requiere alimento:</label>
-                <input type="text" placeholder="sí o no" />
-              </div>
-            </div>
+            {errorFormulario && (
+              <div className="alert alert-danger">{errorFormulario}</div>
+            )}
+            
+            {mensajeExito && (
+              <div className="alert alert-success">{mensajeExito}</div>
+            )}
 
-            <button className="boton">Obtener boletos</button>
+            <button 
+              className="boton" 
+              type="submit"
+              disabled={enviando}
+            >
+              {enviando ? (
+                <>
+                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Guardando...
+                </>
+              ) : "Obtener boletos"}
+            </button>
           </form>
         </div>
       </div>
       <Comp_Pie_pagina/>
     </div>
-   
   );
 };
 
