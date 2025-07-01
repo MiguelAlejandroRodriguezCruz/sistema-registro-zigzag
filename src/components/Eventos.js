@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
-import { Comp_encabezado } from "./Comp_encabezado";
 
 export default function CrearEvento() {
   const navigate = useNavigate();
@@ -12,7 +10,8 @@ export default function CrearEvento() {
     fechaFinal: "",
     lugar: "",
     descripcion: "",
-    formulario: [],
+    formulario: [], // Ahora será un array de objetos
+    baner: "banner temporal"
   });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +44,7 @@ export default function CrearEvento() {
           setFormFields(formattedData.formulario);
 
           // Cargar preview del banner si existe
-          if (formattedData.baner) {
+          if (formattedData.baner && formattedData.baner !== "banner temporal") {
             setBannerPreview(formattedData.baner);
           }
 
@@ -73,7 +72,7 @@ export default function CrearEvento() {
     if (file) {
       // Validar tipo de archivo
       if (!file.type.match('image.*')) {
-        setError('Solo se permiten archivos de imagen (JPEG, PNG, etc.)');
+        setError('Solo se permiten archivos de imagen');
         return;
       }
       
@@ -100,17 +99,12 @@ export default function CrearEvento() {
     setError(null);
 
     try {
-      // Validar campos obligatorios
-      if (!formData.nombre || !formData.fechaInicio || !formData.fechaFinal || !formData.lugar || !formData.descripcion) {
-        throw new Error('Todos los campos básicos son obligatorios');
-      }
-
       // Validar fechas
       if (new Date(formData.fechaInicio) > new Date(formData.fechaFinal)) {
         throw new Error('La fecha de inicio no puede ser mayor a la fecha final');
       }
 
-      // Validar banner solo en creación
+      // Validar que se haya subido un banner al crear
       if (!isEditing && !bannerFile) {
         throw new Error('Debe subir un banner para el evento');
       }
@@ -122,9 +116,7 @@ export default function CrearEvento() {
       formDataToSend.append('fechaFinal', formData.fechaFinal);
       formDataToSend.append('lugar', formData.lugar);
       formDataToSend.append('descripcion', formData.descripcion);
-      
-      // Asegurar que formFields tenga un valor válido
-      formDataToSend.append('formulario', JSON.stringify(formFields || []));
+      formDataToSend.append('formulario', JSON.stringify(formFields));
 
       // Agregar archivo si existe
       if (bannerFile) {
@@ -146,10 +138,8 @@ export default function CrearEvento() {
         });
       }
 
-      // Manejar errores de respuesta
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || `Error ${response.status}: ${response.statusText}`);
+        throw new Error(isEditing ? 'Error al actualizar el evento' : 'Error al crear el evento');
       }
 
       const data = await response.json();
@@ -158,8 +148,7 @@ export default function CrearEvento() {
       // Redirigir con estado para mostrar notificación
       navigate("/lista-eventos", { 
         state: { 
-          [isEditing ? 'eventoActualizado' : 'eventoCreado']: true,
-          message: isEditing ? 'Evento actualizado exitosamente' : 'Evento creado exitosamente'
+          [isEditing ? 'eventoActualizado' : 'eventoCreado']: true 
         } 
       });
       
@@ -233,108 +222,138 @@ export default function CrearEvento() {
   };
 
   return (
-    <div className="mt-4">
+    <div style={{ padding: "20px", maxWidth: "1000px", margin: "auto" }}>
       {/* Encabezado */}
-      <Comp_encabezado/>
-      
-          <div style={{ backgroundColor: "#22a31f", color: "#fff", padding: "10px" }}>
-            <h1 style={{ margin: 0, backgroundColor: "#22a31f" }}>Eventos</h1>
-            <a href="#" onClick={handleCancel} style={{ color: "#fff", textDecoration: "underline", fontSize: "14px", cursor: "pointer" }}>← Regresar</a>
-          </div>
-      <div style={{ padding: "20px", maxWidth: "1000px", margin: "auto" }}>
-          
+      <div style={{ backgroundColor: "#22a31f", color: "#fff", padding: "10px" }}>
+        <img src="ruta-del-logo.png" alt="Logo ZigZag" style={{ height: "60px" }} />
+        <h2 style={{ margin: 0, backgroundColor: "#22a31f" }}>Eventos</h2>
+        <a href="#" onClick={handleCancel} style={{ color: "#fff", textDecoration: "underline", fontSize: "14px", cursor: "pointer" }}>← Regresar</a>
+      </div>
 
-          {/* Texto de instrucciones */}
-          <p style={{ marginTop: "20px", fontSize: "22px" }}>
-            <strong>NOTA: {isEditing ? 'Edición' : 'Creación'} de un evento, favor de llenar todos los campos disponibles y revisar correctamente el contenido de los mismos.</strong>
-          </p>
+      {/* Texto de instrucciones */}
+      <p style={{ marginTop: "20px", fontSize: "22px" }}>
+        <strong>NOTA: {isEditing ? 'Edición' : 'Creación'} de un evento, favor de llenar todos los campos disponibles y revisar correctamente el contenido de los mismos.</strong>
+      </p>
 
-          {error && (
-            <div className="alert alert-danger" style={{ marginTop: "20px" }}>
-              {error}
+      {error && (
+        <div className="alert alert-danger" style={{ marginTop: "20px" }}>
+          {error}
+        </div>
+      )}
+
+      {/* Formulario */}
+      <form onSubmit={handleSubmit}>
+        <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+          {/* Columna izquierda */}
+          <div style={{ flex: 1, minWidth: "300px" }}>
+            <div className="mb-3">
+              <label>Nombre del evento:</label>
+              <input 
+                type="text" 
+                className="form-control" 
+                placeholder="Escriba un nombre" 
+                name="nombre"
+                value={formData.nombre}
+                onChange={handleChange}
+                required
+              />
             </div>
-          )}
 
-          {/* Formulario */}
-          <form onSubmit={handleSubmit}>
-            <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-              {/* Columna izquierda */}
-              <div style={{ flex: 1, minWidth: "300px" }}>
-                <div className="mb-3">
-                  <label>Nombre del evento:</label>
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="Escriba un nombre" 
-                    name="nombre"
-                    value={formData.nombre}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label>Fecha del evento:</label>
-                  <div style={{ display: "flex", gap: "10px" }}>
-                    <input 
-                      type="date" 
-                      className="form-control" 
-                      name="fechaInicio"
-                      value={formData.fechaInicio}
-                      onChange={handleChange}
-                      required
-                    />
-                    <input 
-                      type="date" 
-                      className="form-control" 
-                      name="fechaFinal"
-                      value={formData.fechaFinal}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label>Lugar del evento:</label>
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder="Ingrese una dirección" 
-                    name="lugar"
-                    value={formData.lugar}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label>Descripción del evento:</label>
-                  <textarea 
-                    className="form-control" 
-                    rows="5" 
-                    placeholder="Escriba aquí" 
-                    name="descripcion"
-                    value={formData.descripcion}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+            <div className="mb-3">
+              <label>Fecha del evento:</label>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <input 
+                  type="date" 
+                  className="form-control" 
+                  name="fechaInicio"
+                  value={formData.fechaInicio}
+                  onChange={handleChange}
+                  required
+                />
+                <input 
+                  type="date" 
+                  className="form-control" 
+                  name="fechaFinal"
+                  value={formData.fechaFinal}
+                  onChange={handleChange}
+                  required
+                />
               </div>
+            </div>
+
+            <div className="mb-3">
+              <label>Lugar del evento:</label>
+              <input 
+                type="text" 
+                className="form-control" 
+                placeholder="Ingrese una dirección" 
+                name="lugar"
+                value={formData.lugar}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label>Descripción del evento:</label>
+              <textarea 
+                className="form-control" 
+                rows="5" 
+                placeholder="Escriba aquí" 
+                name="descripcion"
+                value={formData.descripcion}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
 
           {/* Columna derecha */}
           <div style={{ flex: 1, minWidth: "300px" }}>
             <div className="mb-3">
-              <label>Banner (opcional):</label>
-              <button 
-                type="button" 
-                className="btn btn-secondary w-100 mb-2"
-                onClick={() => alert("Funcionalidad de banner pendiente")}
-              >
-                + Agregar Banner
-              </button>
+              <label>Banner:</label>
+              <div className="mb-2">
+                <input 
+                  type="file" 
+                  id="banner-upload"
+                  accept="image/*"
+                  onChange={handleBannerChange}
+                  style={{ display: 'none' }}
+                />
+                <label 
+                  htmlFor="banner-upload" 
+                  className="btn btn-secondary w-100"
+                  style={{ cursor: 'pointer' }}
+                >
+                  {bannerFile || bannerPreview ? 'Cambiar Banner' : 'Seleccionar Banner'}
+                </label>
+              </div>
               <div className="image-placeholder mb-3" style={placeholderStyle}>
-                {formData.baner}
+                {/* Vista previa del banner */}
+                {bannerPreview ? (
+                  <div className="mb-3" style={{ textAlign: 'center' }}>
+                    <img 
+                      src={bannerPreview} 
+                      alt="Vista previa del banner" 
+                      style={{ 
+                        maxWidth: '100%', 
+                        maxHeight: '200px', 
+                        border: '1px solid #ddd',
+                        borderRadius: '4px',
+                        padding: '5px'
+                      }} 
+                    />
+                    <p className="mt-2 small text-muted">
+                      Vista previa del banner
+                    </p>
+                  </div>
+                ) : (
+                  <div className="image-placeholder mb-3" style={placeholderStyle}>
+                    {isEditing && formData.baner !== "banner temporal" 
+                      ? "Banner existente (no cambiará a menos que suba uno nuevo)" 
+                      : "Sin banner seleccionado"}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -343,39 +362,140 @@ export default function CrearEvento() {
               <button 
                 type="button" 
                 className="btn btn-warning w-100 mb-2"
-                onClick={() => alert("Funcionalidad de formulario pendiente")}
+                onClick={() => setShowFormBuilder(!showFormBuilder)}
               >
-                Crear formulario de evento
+                {showFormBuilder ? 'Ocultar Constructor' : 'Crear formulario de evento'}
               </button>
-              <div className="image-placeholder mb-3" style={placeholderStyle}>
-                {formData.formulario}
+              
+              {showFormBuilder && (
+                <div className="form-builder" style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '5px', marginBottom: '15px' }}>
+                  <div className="mb-3">
+                    <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('text')}>
+                      + Texto
+                    </button>
+                    <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('number')}>
+                      + Número
+                    </button>
+                    <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('select')}>
+                      + Selección
+                    </button>
+                    <button type="button" className="btn btn-sm btn-primary" onClick={() => addFormField('checkbox')}>
+                      + Checkbox
+                    </button>
+                  </div>
+
+                  {formFields.map((field) => (
+                    <div key={field.id} className="card mb-3">
+                      <div className="card-body">
+                        <div className="d-flex justify-content-between mb-2">
+                          <div>
+                            <strong>{getFieldTypeName(field.type)}</strong>
+                          </div>
+                          <button 
+                            type="button" 
+                            className="btn btn-sm btn-danger"
+                            onClick={() => removeFormField(field.id)}
+                          >
+                            Eliminar
+                          </button>
+                        </div>
+                        
+                        <div className="mb-2">
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Etiqueta del campo"
+                            value={field.label}
+                            onChange={(e) => updateFieldLabel(field.id, e.target.value)}
+                          />
+                        </div>
+                        
+                        <div className="form-check mb-2">
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            checked={field.required}
+                            onChange={() => toggleFieldRequired(field.id)}
+                          />
+                          <label className="form-check-label">Requerido</label>
+                        </div>
+                        
+                        {field.type === 'select' && (
+                          <div>
+                            <label>Opciones:</label>
+                            {field.options.map((option, idx) => (
+                              <div key={idx} className="d-flex mb-2">
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  value={option}
+                                  onChange={(e) => updateOption(field.id, idx, e.target.value)}
+                                />
+                                <button 
+                                  type="button" 
+                                  className="btn btn-sm btn-danger ms-2"
+                                  onClick={() => removeOption(field.id, idx)}
+                                >
+                                  -
+                                </button>
+                              </div>
+                            ))}
+                            <button 
+                              type="button" 
+                              className="btn btn-sm btn-secondary"
+                              onClick={() => addOption(field.id)}
+                            >
+                              + Agregar opción
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              <div className="preview mb-3" style={placeholderStyle}>
+                <h5>Vista previa del formulario:</h5>
+                {formFields.length === 0 ? (
+                  <p>No hay campos definidos</p>
+                ) : (
+                  <div>
+                    {formFields.map((field) => (
+                      <div key={field.id} className="mb-2">
+                        <label>
+                          {field.label || "(Sin etiqueta)"} 
+                          {field.required && <span className="text-danger">*</span>}
+                        </label>
+                        {renderPreviewField(field)}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
 
-            {/* Botones */}
-            <div className="mt-4" style={{ display: "flex", gap: "10px" }}>
-              <button 
-                type="button" 
-                className="btn btn-danger"
-                onClick={handleCancel}
-              >
-                Cancelar
-              </button>
-              <button 
-                type="submit" 
-                className="btn btn-success"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Guardando...' : isEditing ? 'Actualizar Evento' : 'Guardar Evento'}
-              </button>
-            </div>
-          </form>
+        {/* Botones */}
+        <div className="mt-4" style={{ display: "flex", gap: "10px" }}>
+          <button 
+            type="button" 
+            className="btn btn-danger"
+            onClick={handleCancel}
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            className="btn btn-success"
+            disabled={isLoading}
+          >
+            {isLoading ? 'Guardando...' : isEditing ? 'Actualizar Evento' : 'Guardar Evento'}
+          </button>
         </div>
-          <Comp_Pie_pagina/>
+      </form>
     </div>
-    
   );
 }
 
