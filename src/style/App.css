@@ -1,3 +1,97 @@
+/* Header */
+
+.comp_encabezado { 
+  display: flex;
+  range: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.encabezado__logo {
+  height: 60px;
+  cursor: pointer;
+  max-width: 100%;
+}
+@media (max-width: 600px) {
+  .encabezado__logo {
+    height: 40px;
+  }
+
+   .comp_encabezado {
+    justify-content: center;
+    padding: 8px 10px;
+  }
+}
+
+/* Pie de pagina */
+
+.pie-pagina {
+  background-color: #f8f9fa; /* Gris claro */
+  color: #212529; /* Texto oscuro */
+  padding: 16px 24px;
+  width: 100%;
+  border-top: 1px solid #dee2e6;
+  font-size: 0.9rem;
+}
+
+.pie-contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pie-logo-texto {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.pie-logo {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.pie-derechos {
+  font-size: 0.85rem;
+}
+
+.pie-enlaces {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.pie-enlaces a {
+  text-decoration: none;
+  color: #212529;
+  transition: color 0.3s;
+}
+
+.pie-enlaces a:hover {
+  color: #0d6efd; /* Azul Bootstrap */
+}
+
+/* Responsivo en pantallas medianas y grandes */
+@media (min-width: 768px) {
+  .pie-contenido {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+  }
+
+  .pie-logo-texto {
+    margin-bottom: 0;
+  }
+
+  .pie-enlaces {
+    justify-content: flex-end;
+  }
+}
+
 /*---------------------------------- login ---------------------------------- */
 
 .login-container {

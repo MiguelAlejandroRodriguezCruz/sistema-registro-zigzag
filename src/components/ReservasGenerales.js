@@ -79,10 +79,11 @@ function ReservasGenerales() {
     return (
         <div className='flex-column min-vh-100 bg-light mt-4'>
             <Comp_encabezado/>
-            <div className="row">
-                    <div className="col text-center bg-danger py-2">
+            <div className="mt-4">
+                    <header className="eventos-header bg-danger">
                         <h1 className="text-white m-0">Solicitud de Reservas</h1>
-                    </div>
+                        <a href="/lista-eventos" className="reservas-link">Eventos</a>
+                    </header>
             </div>
             <div className="p-2">
                 <ReservasTabs pestanaActiva={pestanaActiva} setPestanaActiva={setPestanaActiva} />

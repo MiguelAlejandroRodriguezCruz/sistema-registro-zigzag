@@ -5,13 +5,14 @@ import logo from "../images/zig_zag_logo.png";
 export function Comp_encabezado() {
   return (
     <>
-      <div className=" container d-flex align-items-center m-1">
+      <header className=" encabezado container d-flex align-items-center m-1">
         <img
           src={logo}
           alt="Logo Zig Zag"
+          className='encabezado__logo'
           style={{ height: '60px', cursor: 'pointer' }}
         />
-      </div>
+      </header>
       
 
         
