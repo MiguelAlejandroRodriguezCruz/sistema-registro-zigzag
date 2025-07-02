@@ -12,8 +12,8 @@ export default function CrearEvento() {
     fechaFinal: "",
     lugar: "",
     descripcion: "",
-    formulario: [], // Ahora será un array de objetos
-    baner: "banner temporal"
+    formulario: [],
+    baner:""
   });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +22,9 @@ export default function CrearEvento() {
   const [formFields, setFormFields] = useState([]);
   const [bannerFile, setBannerFile] = useState(null);
   const [bannerPreview, setBannerPreview] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]); // Archivos de imágenes adicionales
+  const [imagePreviews, setImagePreviews] = useState([]); // Previews de imágenes
+  const [eventImages, setEventImages] = useState([]); // Imágenes ya guardadas
 
   // Cargar datos del evento si estamos editando
   useEffect(() => {
@@ -57,6 +60,19 @@ export default function CrearEvento() {
         }
       };
       fetchEvento();
+
+       // Cargar imágenes existentes
+      const fetchEventImages = async () => {
+        try {
+          const response = await fetch(`http://localhost:3001/eventos/${id}/imagenes`);
+          if (!response.ok) throw new Error('Error al obtener imágenes');
+          const data = await response.json();
+          setEventImages(data);
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchEventImages();
     }
   }, [id]);
 
@@ -66,6 +82,44 @@ export default function CrearEvento() {
       ...prev,
       [name]: value
     }));
+  };
+
+  // Manejar selección de imágenes adicionales
+const handleImageChange = (e) => {
+  const files = Array.from(e.target.files);
+  
+  // Validar que sean imágenes y no excedan el tamaño
+  const validFiles = files.filter(file => 
+    file.type.match('image.*') && file.size <= 5 * 1024 * 1024
+  );
+
+  if (validFiles.length !== files.length) {
+    setError('Algunos archivos no son imágenes o son demasiado grandes (máx. 5MB)');
+  }
+
+  // Crear previsualizaciones
+  const newPreviews = validFiles.map(file => URL.createObjectURL(file));
+  setImagePreviews(prev => [...prev, ...newPreviews]);
+  setImageFiles(prev => [...prev, ...validFiles]);
+};
+
+  // Eliminar preview de imagen
+  const removeImagePreview = (index) => {
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    setImageFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // Eliminar imagen ya guardada
+  const removeEventImage = async (imageId) => {
+    try {
+      const response = await fetch(`http://localhost:3001/imagenes/${imageId}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) throw new Error('Error al eliminar imagen');
+      setEventImages(prev => prev.filter(img => img.id !== imageId));
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   // Manejar cambio de archivo de banner
@@ -126,26 +180,58 @@ export default function CrearEvento() {
       }
 
       let response;
+      let eventoId;
+      let createdEventData;
+
       if (isEditing) {
         // Actualizar evento existente
         response = await fetch(`http://localhost:3001/eventos/${id}`, {
           method: 'PUT',
           body: formDataToSend
         });
+
+        if (!response.ok) {
+          throw new Error('Error al actualizar el evento');
+        }
+
+        eventoId = id;
       } else {
         // Crear nuevo evento
         response = await fetch('http://localhost:3001/eventos', {
           method: 'POST',
           body: formDataToSend
         });
+
+        if (!response.ok) {
+          throw new Error('Error al crear el evento');
+        }
+
+        createdEventData = await response.json();
+        eventoId = createdEventData.idInsertado;
+      }
+
+      // Subir imágenes adicionales si hay
+      if (imageFiles.length > 0) {
+        const formDataImages = new FormData();
+        imageFiles.forEach(file => {
+          formDataImages.append('imagenes', file);
+        });
+
+        const uploadResponse = await fetch(`http://localhost:3001/eventos/${eventoId}/imagenes`, {
+          method: 'POST',
+          body: formDataImages
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error('Error al subir imágenes adicionales');
+        }
       }
 
       if (!response.ok) {
         throw new Error(isEditing ? 'Error al actualizar el evento' : 'Error al crear el evento');
       }
 
-      const data = await response.json();
-      console.log(isEditing ? 'Evento actualizado:' : 'Evento creado con ID:', data.idInsertado || id);
+      console.log(isEditing ? 'Evento actualizado' : 'Evento creado con ID:', eventoId);
       
       // Redirigir con estado para mostrar notificación
       navigate("/lista-eventos", { 
@@ -357,6 +443,76 @@ export default function CrearEvento() {
                           {isEditing && formData.baner !== "banner temporal" 
                             ? "Banner existente (no cambiará a menos que suba uno nuevo)" 
                             : "Sin banner seleccionado"}
+                        </div>
+                      )}
+                    </div>
+                    {/* Sección para imágenes adicionales */}
+                    <div className="mb-3">
+                      <label>Imágenes adicionales del evento:</label>
+                      <div className="mb-2">
+                        <input 
+                          type="file" 
+                          id="image-upload"
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          multiple
+                          style={{ display: 'none' }}
+                        />
+                        <label 
+                          htmlFor="image-upload" 
+                          className="btn btn-secondary w-100"
+                          style={{ cursor: 'pointer' }}
+                        >
+                          Seleccionar Imágenes
+                        </label>
+                      </div>
+
+                      {/* Previsualización de imágenes nuevas */}
+                      <div className="d-flex flex-wrap gap-2 mb-3">
+                        {imagePreviews.map((preview, index) => (
+                          <div key={index} className="position-relative" style={{ width: '100px', height: '100px' }}>
+                            <img 
+                              src={preview} 
+                              alt={`Preview ${index}`}
+                              className="img-thumbnail"
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                            <button
+                              type="button"
+                              className="btn btn-danger btn-sm position-absolute top-0 end-0"
+                              onClick={() => removeImagePreview(index)}
+                              style={{ padding: '2px 5px' }}
+                            >
+                              &times;
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Imágenes ya guardadas (solo en edición) */}
+                      {isEditing && eventImages.length > 0 && (
+                        <div>
+                          <h6>Imágenes del evento:</h6>
+                          <div className="d-flex flex-wrap gap-2">
+                            {eventImages.map(img => (
+                              <div key={img.id} className="position-relative" style={{ width: '100px', height: '100px' }}>
+                                <img 
+                                  src={img.ruta_imagen} 
+                                  alt={`Evento ${img.id}`}
+                                  className="img-thumbnail"
+                                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-danger btn-sm position-absolute top-0 end-0"
+                                  onClick={() => removeEventImage(img.id)}
+                                  style={{ padding: '2px 5px' }}
+                                >
+                                  &times;
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>

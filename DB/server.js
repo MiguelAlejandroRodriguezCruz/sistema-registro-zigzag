@@ -647,6 +647,91 @@ app.post('/guardar-formulario', (req, res) => {
   );
 });
 
+// Ruta para subir imágenes adicionales
+app.post('/eventos/:idEvento/imagenes', upload.array('imagenes', 10), (req, res) => {
+  const idEvento = req.params.idEvento;
+  
+  // Validar que hay archivos
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: 'Debe subir al menos una imagen' });
+  }
+
+  // Construir rutas de las imágenes
+  const imagenes = req.files.map(file => ({
+    ruta: `${req.protocol}://${req.get('host')}/uploads/${file.filename}`,
+    nombre: file.filename
+  }));
+
+  // Insertar en base de datos
+  const query = 'INSERT INTO imagenes (evento_id, ruta_imagen) VALUES ?';
+  const values = imagenes.map(imagen => [idEvento, imagen.ruta]);
+
+  db.query(query, [values], (err, result) => {
+    if (err) {
+      console.error('Error al insertar imágenes:', err);
+      return res.status(500).json({ message: 'Error en la base de datos' });
+    }
+
+    res.status(201).json({
+      message: 'Imágenes guardadas correctamente',
+      imagenes: imagenes
+    });
+  });
+});
+
+// Ruta para obtener imágenes de un evento
+app.get('/eventos/:idEvento/imagenes', (req, res) => {
+  const idEvento = req.params.idEvento;
+  const query = 'SELECT * FROM imagenes WHERE evento_id = ?';
+
+  db.query(query, [idEvento], (err, results) => {
+    if (err) {
+      console.error('Error al obtener imágenes:', err);
+      return res.status(500).json({ message: 'Error en la base de datos' });
+    }
+    res.json(results);
+  });
+});
+
+// Ruta para eliminar una imagen
+app.delete('/imagenes/:idImagen', (req, res) => {
+  const idImagen = req.params.idImagen;
+
+  // Primero obtener la ruta de la imagen
+  const selectQuery = 'SELECT ruta_imagen FROM imagenes WHERE id = ?';
+  db.query(selectQuery, [idImagen], (err, results) => {
+    if (err) {
+      console.error('Error al obtener la imagen:', err);
+      return res.status(500).json({ message: 'Error en la base de datos' });
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'Imagen no encontrada' });
+    }
+
+    const rutaImagen = results[0].ruta_imagen;
+    const nombreArchivo = rutaImagen.split('/').pop();
+
+    // Eliminar de la base de datos
+    const deleteQuery = 'DELETE FROM imagenes WHERE id = ?';
+    db.query(deleteQuery, [idImagen], (err, result) => {
+      if (err) {
+        console.error('Error al eliminar la imagen de la base de datos:', err);
+        return res.status(500).json({ message: 'Error en la base de datos' });
+      }
+
+      // Eliminar el archivo del sistema
+      const filePath = path.join(__dirname, 'uploads', nombreArchivo);
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error al eliminar el archivo:', err);
+        }
+        res.json({ message: 'Imagen eliminada correctamente' });
+      });
+    });
+  });
+});
+
 // Iniciar el servidor
 app.listen(port, () => {
     console.log(`API corriendo en http://localhost:${port}`);
