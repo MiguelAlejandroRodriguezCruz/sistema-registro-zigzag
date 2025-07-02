@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Comp_encabezado } from "./Comp_encabezado";
 import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
 import { QRCodeCanvas } from 'qrcode.react';
+import "../style/EventosDescripcion.css"
 
 
 const EventosDescripcion = () => {
@@ -10,6 +11,7 @@ const EventosDescripcion = () => {
   const [evento, setEvento] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [imagenes, setImagenes] = useState([]);
 
   // Estados para el formulario
   const [fechaEvento, setFechaEvento] = useState("");
@@ -49,6 +51,14 @@ const EventosDescripcion = () => {
         }
         const datos = await respuesta.json();
         setEvento(datos);
+
+        // Cargar imágenes adicionales del evento
+        const imagenesResponse = await fetch(`http://localhost:3001/eventos/${id}/imagenes`);
+        if (!imagenesResponse.ok) {
+          throw new Error('Error al cargar las imágenes del evento');
+        }
+        const imagenesData = await imagenesResponse.json();
+        setImagenes(imagenesData);
 
         // Inicializar respuestas del formulario
         try {
@@ -181,6 +191,7 @@ const EventosDescripcion = () => {
           <div className="evento-info">
             <div className="evento-imagenes">
               <div className="imagenes-grid">
+                {/* Banner principal */}
                 <div className="banner-principal">
                   <img
                     src={evento.baner || "/placeholder.png"}
@@ -188,9 +199,23 @@ const EventosDescripcion = () => {
                     className="img-banner"
                   />
                 </div>
+
+                {/* Imágenes adicionales */}
                 <div className="img-small-grid">
-                  <div className="img-placeholder small"></div>
-                  <div className="img-placeholder small"></div>
+                  {imagenes.slice(0, 4).map((imagen, index) => (
+                    <div key={imagen.id} className="img-small-container">
+                      <img
+                        src={imagen.ruta_imagen}
+                        alt={`Imagen ${index + 1} de ${evento.nombre}`}
+                        className="img-small"
+                      />
+                    </div>
+                  ))}
+                  
+                  {/* Placeholders si hay menos de 4 imágenes */}
+                  {Array.from({ length: 4 - Math.min(imagenes.length, 4) }).map((_, i) => (
+                    <div key={`placeholder-${i}`} className="img-placeholder small"></div>
+                  ))}
                 </div>
               </div>
             </div>
