@@ -2,13 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Comp_encabezado } from "./Comp_encabezado";
 import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
+import { QRCodeCanvas } from 'qrcode.react';
+import "../style/EventosDescripcion.css"
+
 
 const EventosDescripcion = () => {
   const { id } = useParams();
   const [evento, setEvento] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  
+  const [imagenes, setImagenes] = useState([]);
+
   // Estados para el formulario
   const [fechaEvento, setFechaEvento] = useState("");
   const [numAdultos, setNumAdultos] = useState(0);
@@ -17,7 +21,12 @@ const EventosDescripcion = () => {
   const [enviando, setEnviando] = useState(false);
   const [mensajeExito, setMensajeExito] = useState("");
   const [errorFormulario, setErrorFormulario] = useState("");
-  
+
+  const [mostrarQR, setMostrarQR] = useState(false);
+  const [idReserva, setIdReserva] = useState(null);
+  const [qrValue, setQrValue] = useState("");
+
+
   // Función para formatear fechas (igual que en EventosSeleccionar)
   const formatearFecha = (fechaISO) => {
     try {
@@ -42,7 +51,15 @@ const EventosDescripcion = () => {
         }
         const datos = await respuesta.json();
         setEvento(datos);
-        
+
+        // Cargar imágenes adicionales del evento
+        const imagenesResponse = await fetch(`http://localhost:3001/eventos/${id}/imagenes`);
+        if (!imagenesResponse.ok) {
+          throw new Error('Error al cargar las imágenes del evento');
+        }
+        const imagenesData = await imagenesResponse.json();
+        setImagenes(imagenesData);
+
         // Inicializar respuestas del formulario
         try {
           const formularioParseado = JSON.parse(datos.formulario || "[]");
@@ -84,15 +101,9 @@ const EventosDescripcion = () => {
     setMensajeExito("");
 
     try {
-      // Validación básica
-      if (!fechaEvento) {
-        throw new Error("Por favor seleccione una fecha para el evento");
-      }
-      if (numAdultos <= 0 && numNinos <= 0) {
-        throw new Error("Debe adquirir al menos un boleto");
-      }
+      if (!fechaEvento) throw new Error("Por favor seleccione una fecha para el evento");
+      if (numAdultos <= 0 && numNinos <= 0) throw new Error("Debe adquirir al menos un boleto");
 
-      // Preparar datos para enviar
       const datosFormulario = {
         id_evento: evento.id,
         formulario: JSON.stringify(respuestas),
@@ -103,25 +114,25 @@ const EventosDescripcion = () => {
 
       const respuesta = await fetch('http://localhost:3001/guardar-formulario', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datosFormulario)
       });
 
       const resultado = await respuesta.json();
-
-      if (!respuesta.ok) {
-        throw new Error(resultado.error || 'Error al guardar formulario');
-      }
+      if (!respuesta.ok) throw new Error(resultado.error || 'Error al guardar formulario');
 
       setMensajeExito('¡Formulario guardado exitosamente!');
+      setQrValue(resultado.codigo_qr);  // lo que viene de la BD
+      setMostrarQR(true);
+
     } catch (err) {
       setErrorFormulario(err.message);
     } finally {
       setEnviando(false);
     }
   };
+
+
 
   if (cargando) {
     return (
@@ -140,7 +151,7 @@ const EventosDescripcion = () => {
         <div className="alert alert-danger" role="alert">
           Error: {error}
         </div>
-        <button 
+        <button
           className="btn btn-primary mt-3"
           onClick={() => window.location.reload()}
         >
@@ -170,7 +181,7 @@ const EventosDescripcion = () => {
 
   return (
     <div className="mt-4 eventos-descripcion-container">
-      <Comp_encabezado/>
+      <Comp_encabezado />
       <header className="eventos-header azul">
         <h1 className="text-white m-0">{evento.nombre}</h1>
       </header>
@@ -180,16 +191,31 @@ const EventosDescripcion = () => {
           <div className="evento-info">
             <div className="evento-imagenes">
               <div className="imagenes-grid">
+                {/* Banner principal */}
                 <div className="banner-principal">
-                  <img 
-                    src={evento.baner || "/placeholder.png"} 
+                  <img
+                    src={evento.baner || "/placeholder.png"}
                     alt={`Banner de ${evento.nombre}`}
                     className="img-banner"
                   />
                 </div>
+
+                {/* Imágenes adicionales */}
                 <div className="img-small-grid">
-                  <div className="img-placeholder small"></div>
-                  <div className="img-placeholder small"></div>
+                  {imagenes.slice(0, 4).map((imagen, index) => (
+                    <div key={imagen.id} className="img-small-container">
+                      <img
+                        src={imagen.ruta_imagen}
+                        alt={`Imagen ${index + 1} de ${evento.nombre}`}
+                        className="img-small"
+                      />
+                    </div>
+                  ))}
+                  
+                  {/* Placeholders si hay menos de 4 imágenes */}
+                  {Array.from({ length: 4 - Math.min(imagenes.length, 4) }).map((_, i) => (
+                    <div key={`placeholder-${i}`} className="img-placeholder small"></div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -199,13 +225,13 @@ const EventosDescripcion = () => {
               <p className="descripcion-evento">
                 {evento.descripcion || "Descripción no disponible"}
               </p>
-              
+
               <div className="info-adicional">
                 <p><strong>Duración del evento:</strong></p>
                 <p>
                   {formatearFecha(evento.fechaInicio)} - {formatearFecha(evento.fechaFinal)}
                 </p>
-                
+
                 <p><strong>Lugar:</strong></p>
                 <p>{evento.lugar}</p>
               </div>
@@ -224,10 +250,10 @@ const EventosDescripcion = () => {
                     {campo.options ? (
                       campo.options.map((opcion, i) => (
                         <div key={i} className="form-check">
-                          <input 
-                            type="checkbox" 
-                            id={`${campo.id}-${i}`} 
-                            className="form-check-input" 
+                          <input
+                            type="checkbox"
+                            id={`${campo.id}-${i}`}
+                            className="form-check-input"
                             checked={respuestas[campo.id]?.includes(opcion) || false}
                             onChange={(e) => {
                               const selected = respuestas[campo.id] || [];
@@ -247,10 +273,10 @@ const EventosDescripcion = () => {
                       ))
                     ) : (
                       <div className="form-check">
-                        <input 
-                          type="checkbox" 
-                          id={campo.id} 
-                          className="form-check-input" 
+                        <input
+                          type="checkbox"
+                          id={campo.id}
+                          className="form-check-input"
                           checked={respuestas[campo.id] || false}
                           onChange={(e) => handleCampoChange(campo.id, e.target.checked)}
                         />
@@ -261,10 +287,10 @@ const EventosDescripcion = () => {
                     )}
                   </div>
                 ) : (
-                  <input 
-                    type="text" 
-                    className="form-control" 
-                    placeholder={campo.placeholder || ''} 
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder={campo.placeholder || ''}
                     value={respuestas[campo.id] || ""}
                     onChange={(e) => handleCampoChange(campo.id, e.target.value)}
                     required={campo.required}
@@ -275,9 +301,9 @@ const EventosDescripcion = () => {
 
             <div className="form-group">
               <label>Fecha del evento: <span className="text-danger">*</span></label>
-              <input 
-                type="date" 
-                className="form-control" 
+              <input
+                type="date"
+                className="form-control"
                 min={evento.fechaInicio.split('T')[0]}
                 max={evento.fechaFinal.split('T')[0]}
                 value={fechaEvento}
@@ -289,19 +315,19 @@ const EventosDescripcion = () => {
             <div className="form-group">
               <label>Número de Boletos a adquirir: <span className="text-danger">*</span></label>
               <div className="boletos-group">
-                <input 
-                  type="number" 
-                  className="form-control" 
-                  placeholder="Adultos" 
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="Adultos"
                   min="0"
                   value={numAdultos}
                   onChange={(e) => setNumAdultos(e.target.value)}
                   required
                 />
-                <input 
-                  type="number" 
-                  className="form-control" 
-                  placeholder="Niñ@s" 
+                <input
+                  type="number"
+                  className="form-control"
+                  placeholder="Niñ@s"
                   min="0"
                   value={numNinos}
                   onChange={(e) => setNumNinos(e.target.value)}
@@ -313,13 +339,13 @@ const EventosDescripcion = () => {
             {errorFormulario && (
               <div className="alert alert-danger">{errorFormulario}</div>
             )}
-            
+
             {mensajeExito && (
               <div className="alert alert-success">{mensajeExito}</div>
             )}
 
-            <button 
-              className="boton" 
+            <button
+              className="boton"
               type="submit"
               disabled={enviando}
             >
@@ -332,8 +358,42 @@ const EventosDescripcion = () => {
             </button>
           </form>
         </div>
+        {mostrarQR && (
+          <div className="modal-backdrop-custom">
+            <div className="modal-qr-content">
+              <h4 className="text-center mb-3">¡Reserva Generada!</h4>
+              <p className="text-center">
+                <strong>Boletos:</strong><br />
+                Adultos: {numAdultos} <br />
+                Niños: {numNinos}
+              </p>
+
+              <div className="qr-container">
+                <QRCodeCanvas
+                  value={`ReservaID:${qrValue}`}  // usa qrValue que viene del backend
+                  size={220}
+                />
+              </div>
+
+              <p className="text-center mt-3">
+                Lleva este código el día del evento
+              </p>
+
+              <div className="text-center mt-4">
+                <button
+                  className="btn btn-success"
+                  onClick={() => setMostrarQR(false)}
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
       </div>
-      <Comp_Pie_pagina/>
+      <Comp_Pie_pagina />
     </div>
   );
 };
