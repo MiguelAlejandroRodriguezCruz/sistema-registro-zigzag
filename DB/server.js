@@ -1,4 +1,4 @@
-const mysql = require('mysql2'); 
+const mysql = require('mysql2');
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
@@ -14,12 +14,12 @@ app.use(express.urlencoded({ extended: true }));
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadPath = path.join(__dirname, 'uploads');
-    
+
     // Crear directorio si no existe
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
-    
+
     cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
@@ -39,7 +39,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
   limits: {
@@ -49,46 +49,46 @@ const upload = multer({
 
 // Configuración de la conexión a MySQL
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',      // Usuario por defecto en XAMPP
-    password: '',      // Contraseña 
-    database: 'zigzag', // Nombre de la base de datos
-    port: 3306
+  host: 'localhost',
+  user: 'root',      // Usuario por defecto en XAMPP
+  password: '',      // Contraseña 
+  database: 'zigzag', // Nombre de la base de datos
+  port: 3306
 });
 
 // Verificar la conexión
 db.connect((err) => {
-    if (err) {
-        console.error('Error al conectar a la base de datos:', err.message);
-        return;
-    }
-    console.log('Conectado a la base de datos zigzag');
+  if (err) {
+    console.error('Error al conectar a la base de datos:', err.message);
+    return;
+  }
+  console.log('Conectado a la base de datos zigzag');
 });
 
 // Middleware para habilitar CORS
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
 });
 
 // Ruta para obtener los visitantes de institución
 app.get('/visitantes', (req, res) => {
-    const query = 'SELECT * FROM visitantesinstitucion';
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error en la consulta:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json(results);
-    });
+  const query = 'SELECT * FROM visitantesinstitucion';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error en la consulta:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json(results);
+  });
 });
 // Ruta para agregar los visitantes de institución
 app.post('/visitantes', (req, res) => {
-    const datos = req.body;
-    const query = `
+  const datos = req.body;
+  const query = `
         INSERT INTO visitantesinstitucion (
             nombreSoli, nombreOrg, noVisitantesA, noVisitantesD,
             telefono, direccion, colonia, municipio, autobus,
@@ -96,198 +96,198 @@ app.post('/visitantes', (req, res) => {
             fecha, horario, medioEnterado, comentarios, precioEntrada, estatus
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const values = [
-        datos.nombreSoli, datos.nombreOrg, datos.noVisitantesA, datos.noVisitantesD,
-        datos.telefono, datos.direccion, datos.colonia, datos.municipio, datos.autobus,
-        datos.correo, datos.tipoRecorrido, datos.gradoEscolar, datos.autorizaFotos,
-        datos.fecha, datos.horario, datos.medioEnterado, datos.comentarios, datos.precioEntrada,
-        datos.estatus
-    ];
+  const values = [
+    datos.nombreSoli, datos.nombreOrg, datos.noVisitantesA, datos.noVisitantesD,
+    datos.telefono, datos.direccion, datos.colonia, datos.municipio, datos.autobus,
+    datos.correo, datos.tipoRecorrido, datos.gradoEscolar, datos.autorizaFotos,
+    datos.fecha, datos.horario, datos.medioEnterado, datos.comentarios, datos.precioEntrada,
+    datos.estatus
+  ];
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al insertar visitante:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.status(201).json({ idInsertado: result.insertId });
-    });
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al insertar visitante:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.status(201).json({ idInsertado: result.insertId });
+  });
 });
 // Ruta para actualizar los visitantes de institución
 app.put('/visitantes/:id', (req, res) => {
-    const id = req.params.id;
-    const datos = req.body;
+  const id = req.params.id;
+  const datos = req.body;
 
-    let query = 'UPDATE visitantesinstitucion SET ';
-    let values = [];
-    let fields = [];
+  let query = 'UPDATE visitantesinstitucion SET ';
+  let values = [];
+  let fields = [];
 
-    // Agregar solo los campos que no sean vacíos o undefined
-    Object.keys(datos).forEach((key) => {
-        if (datos[key] !== "" && datos[key] !== undefined) {
-            fields.push(`${key} = ?`);
-            values.push(datos[key]);
-        }
-    });
-
-    // Si no hay campos para actualizar, salir con error
-    if (fields.length === 0) {
-        return res.status(400).json({ mensaje: "No se enviaron datos válidos para actualizar" });
+  // Agregar solo los campos que no sean vacíos o undefined
+  Object.keys(datos).forEach((key) => {
+    if (datos[key] !== "" && datos[key] !== undefined) {
+      fields.push(`${key} = ?`);
+      values.push(datos[key]);
     }
+  });
 
-    // Construcción final del query
-    query += fields.join(", ") + " WHERE id = ?";
-    values.push(id);
+  // Si no hay campos para actualizar, salir con error
+  if (fields.length === 0) {
+    return res.status(400).json({ mensaje: "No se enviaron datos válidos para actualizar" });
+  }
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al actualizar visitante:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json({ mensaje: "Visitante actualizado correctamente" });
-    });
+  // Construcción final del query
+  query += fields.join(", ") + " WHERE id = ?";
+  values.push(id);
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al actualizar visitante:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json({ mensaje: "Visitante actualizado correctamente" });
+  });
 });
 
 // Provicional xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 // Ruta para actualizar el estatus de todas las reservas
 app.put('/visitantes', (req, res) => {
-    const { estatus } = req.body;
+  const { estatus } = req.body;
 
-    // Asegúrate de que el campo "estatus" se haya enviado
-    if (!estatus) {
-        return res.status(400).json({ mensaje: "El estatus es requerido" });
+  // Asegúrate de que el campo "estatus" se haya enviado
+  if (!estatus) {
+    return res.status(400).json({ mensaje: "El estatus es requerido" });
+  }
+
+  // Consulta para actualizar todas las reservas
+  const query = 'UPDATE visitantesinstitucion SET estatus = ?';
+  const values = [estatus];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al actualizar el estatus de todas las reservas:', err.message);
+      return res.status(500).send(err.message);
     }
-
-    // Consulta para actualizar todas las reservas
-    const query = 'UPDATE visitantesinstitucion SET estatus = ?';
-    const values = [estatus];
-
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al actualizar el estatus de todas las reservas:', err.message);
-            return res.status(500).send(err.message);
-        }
-        res.json({ mensaje: "Estatus de todas las reservas actualizado correctamente" });
-    });
+    res.json({ mensaje: "Estatus de todas las reservas actualizado correctamente" });
+  });
 });
 
 
 // Ruta para eliminar los visitantes de institución
 app.delete('/visitantes/:id', (req, res) => {
-    const id = req.params.id;
-    const query = 'DELETE FROM visitantesinstitucion WHERE id = ?';
+  const id = req.params.id;
+  const query = 'DELETE FROM visitantesinstitucion WHERE id = ?';
 
-    db.query(query, [id], (err, result) => {
-        if (err) {
-            console.error('Error al eliminar visitante:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json({ mensaje: 'Visitante eliminado correctamente' });
-    });
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Error al eliminar visitante:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json({ mensaje: 'Visitante eliminado correctamente' });
+  });
 });
 
 app.get('/visitantes-independientes', (req, res) => {
-    const query = 'SELECT * FROM visitantesidependientes';
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error en la consulta:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json(results);
-    });
+  const query = 'SELECT * FROM visitantesidependientes';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error en la consulta:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json(results);
+  });
 });
 
 app.post('/visitantes-independientes', (req, res) => {
-    const datos = req.body;
-    const query = `
+  const datos = req.body;
+  const query = `
         INSERT INTO visitantesidependientes (
             nombre, fecha, hora, telefono, correo, medioEnterado, monto, codigo, estatus
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const values = [
-        datos.nombre, datos.fecha, datos.hora, datos.telefono,
-        datos.correo, datos.medioEnterado, datos.monto, datos.codigo, datos.estatus
-    ];
+  const values = [
+    datos.nombre, datos.fecha, datos.hora, datos.telefono,
+    datos.correo, datos.medioEnterado, datos.monto, datos.codigo, datos.estatus
+  ];
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al insertar visitante independiente:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.status(201).json({ idInsertado: result.insertId });
-    });
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al insertar visitante independiente:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.status(201).json({ idInsertado: result.insertId });
+  });
 });
 
 app.put('/visitantes-independientes/:id', (req, res) => {
-    const id = req.params.id;
-    const datos = req.body;
+  const id = req.params.id;
+  const datos = req.body;
 
-    let query = 'UPDATE visitantesidependientes SET ';
-    let values = [];
-    let fields = [];
+  let query = 'UPDATE visitantesidependientes SET ';
+  let values = [];
+  let fields = [];
 
-    // Agregar solo los campos que no sean vacíos o undefined
-    Object.keys(datos).forEach((key) => {
-        if (datos[key] !== "" && datos[key] !== undefined) {
-            fields.push(`${key} = ?`);
-            values.push(datos[key]);
-        }
-    });
-
-    // Si no hay campos para actualizar, salir con error
-    if (fields.length === 0) {
-        return res.status(400).json({ mensaje: "No se enviaron datos válidos para actualizar" });
+  // Agregar solo los campos que no sean vacíos o undefined
+  Object.keys(datos).forEach((key) => {
+    if (datos[key] !== "" && datos[key] !== undefined) {
+      fields.push(`${key} = ?`);
+      values.push(datos[key]);
     }
+  });
 
-    // Construcción final del query
-    query += fields.join(", ") + " WHERE id = ?";
-    values.push(id);
+  // Si no hay campos para actualizar, salir con error
+  if (fields.length === 0) {
+    return res.status(400).json({ mensaje: "No se enviaron datos válidos para actualizar" });
+  }
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al actualizar visitante independiente:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json({ mensaje: "Visitante independiente actualizado correctamente" });
-    });
+  // Construcción final del query
+  query += fields.join(", ") + " WHERE id = ?";
+  values.push(id);
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al actualizar visitante independiente:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json({ mensaje: "Visitante independiente actualizado correctamente" });
+  });
 });
 
 app.delete('/visitantes-independientes/:id', (req, res) => {
-    const id = req.params.id;
-    const query = 'DELETE FROM visitantesidependientes WHERE id = ?';
+  const id = req.params.id;
+  const query = 'DELETE FROM visitantesidependientes WHERE id = ?';
 
-    db.query(query, [id], (err, result) => {
-        if (err) {
-            console.error('Error al eliminar visitante independiente:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json({ mensaje: 'Visitante independiente eliminado correctamente' });
-    });
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Error al eliminar visitante independiente:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json({ mensaje: 'Visitante independiente eliminado correctamente' });
+  });
 });
 
 //Ruta para visualizar registro de visitantes
 app.get('/registro', (req, res) => {
-    const query = 'SELECT * FROM registrovisitas';
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error en la consulta:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json(results);
-    });
+  const query = 'SELECT * FROM registrovisitas';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error en la consulta:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json(results);
+  });
 });
 
 // Ruta para agregar registro de visitantes
 app.post('/registro-visitantes', (req, res) => {
-    const datos = req.body;
-    const query = `
+  const datos = req.body;
+  const query = `
         INSERT INTO registrovisitas (
             id_institucion, niños5a10, niños10a15, niños15a18, niñas5a10,
             niñas10a15, niñas15a18, hombres20a30, hombres30a40, hombres40omas,
@@ -295,162 +295,162 @@ app.post('/registro-visitantes', (req, res) => {
             maestros30a40, maestros40omas
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const values = [
-        datos.idRegistro, datos.niños5a10, datos.niños10a15, datos.niños15a18, datos.niñas5a10,
-        datos.niñas10a15, datos.niñas15a18, datos.hombres20a30, datos.hombres30a40, datos.hombres40omas,
-        datos.mujeres20a30, datos.mujeres30a40, datos.mujeres40omas, datos.maestros20a30,
-        datos.maestros30a40, datos.maestros40omas
-    ];
+  const values = [
+    datos.idRegistro, datos.niños5a10, datos.niños10a15, datos.niños15a18, datos.niñas5a10,
+    datos.niñas10a15, datos.niñas15a18, datos.hombres20a30, datos.hombres30a40, datos.hombres40omas,
+    datos.mujeres20a30, datos.mujeres30a40, datos.mujeres40omas, datos.maestros20a30,
+    datos.maestros30a40, datos.maestros40omas
+  ];
 
-    console.log(datos.idRegistro)
+  console.log(datos.idRegistro)
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al guardar el registro:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.status(201).json({ idInsertado: result.insertId });
-    });
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al guardar el registro:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.status(201).json({ idInsertado: result.insertId });
+  });
 });
 
 // ---------- Rutas para Visitantes por Eventos ----------
 // Ruta para visualizar visitantes por eventos
 app.get('/visitantes-eventos', (req, res) => {
-    const query = 'SELECT * FROM visitanteseventos';
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error en la consulta:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json(results);
-    });
+  const query = 'SELECT * FROM visitanteseventos';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error en la consulta:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json(results);
+  });
 });
 // Ruta para agregar visitantes por eventos
 app.post('/visitantes-eventos', (req, res) => {
-    const datos = req.body;
-    const query = `
+  const datos = req.body;
+  const query = `
         INSERT INTO visitanteseventos (
             nombre, correo, edad, contrasena
         ) VALUES (?, ?, ?, ?)
     `;
-    const values = [
-        datos.nombre, datos.correo, datos.edad, datos.contrasena
-    ];
+  const values = [
+    datos.nombre, datos.correo, datos.edad, datos.contrasena
+  ];
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al insertar visitante de evento:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.status(201).json({ idInsertado: result.insertId });
-    });
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al insertar visitante de evento:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.status(201).json({ idInsertado: result.insertId });
+  });
 });
 // Ruta para actualizar visitantes por eventos
 app.put('/visitantes-eventos/:id', (req, res) => {
-    const id = req.params.id;
-    const datos = req.body;
+  const id = req.params.id;
+  const datos = req.body;
 
-    let query = 'UPDATE visitanteseventos SET ';
-    let values = [];
-    let fields = [];
+  let query = 'UPDATE visitanteseventos SET ';
+  let values = [];
+  let fields = [];
 
-    Object.keys(datos).forEach((key) => {
-        if (datos[key] !== "" && datos[key] !== undefined) {
-            fields.push(`${key} = ?`);
-            values.push(datos[key]);
-        }
-    });
-
-    if (fields.length === 0) {
-        return res.status(400).json({ mensaje: "No se enviaron datos válidos para actualizar" });
+  Object.keys(datos).forEach((key) => {
+    if (datos[key] !== "" && datos[key] !== undefined) {
+      fields.push(`${key} = ?`);
+      values.push(datos[key]);
     }
+  });
 
-    query += fields.join(", ") + " WHERE id = ?";
-    values.push(id);
+  if (fields.length === 0) {
+    return res.status(400).json({ mensaje: "No se enviaron datos válidos para actualizar" });
+  }
 
-    db.query(query, values, (err, result) => {
-        if (err) {
-            console.error('Error al actualizar visitante de evento:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json({ mensaje: "Visitante de evento actualizado correctamente" });
-    });
+  query += fields.join(", ") + " WHERE id = ?";
+  values.push(id);
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al actualizar visitante de evento:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json({ mensaje: "Visitante de evento actualizado correctamente" });
+  });
 });
 // Ruta para eliminar visitantes por eventos
 app.delete('/visitantes-eventos/:id', (req, res) => {
-    const id = req.params.id;
-    const query = 'DELETE FROM visitanteseventos WHERE id = ?';
+  const id = req.params.id;
+  const query = 'DELETE FROM visitanteseventos WHERE id = ?';
 
-    db.query(query, [id], (err, result) => {
-        if (err) {
-            console.error('Error al eliminar visitante de evento:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json({ mensaje: 'Visitante de evento eliminado correctamente' });
-    });
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error('Error al eliminar visitante de evento:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json({ mensaje: 'Visitante de evento eliminado correctamente' });
+  });
 });
 // Ruta para verificar en login los visitantes por eventos
 app.post('/visitantes-eventos/login', (req, res) => {
-    const { correo, contrasena } = req.body;
+  const { correo, contrasena } = req.body;
 
-    if (!correo || !contrasena) {
-        return res.status(400).json({ mensaje: 'Correo y contraseña son obligatorios' });
+  if (!correo || !contrasena) {
+    return res.status(400).json({ mensaje: 'Correo y contraseña son obligatorios' });
+  }
+
+  const query = 'SELECT * FROM visitanteseventos WHERE correo = ? LIMIT 1';
+
+  db.query(query, [correo], (err, results) => {
+    if (err) {
+      console.error('Error al buscar visitante de evento:', err.message);
+      return res.status(500).send(err.message);
     }
 
-    const query = 'SELECT * FROM visitanteseventos WHERE correo = ? LIMIT 1';
+    if (results.length === 0) {
+      return res.status(401).json({ mensaje: 'Correo no registrado' });
+    }
 
-    db.query(query, [correo], (err, results) => {
-        if (err) {
-            console.error('Error al buscar visitante de evento:', err.message);
-            return res.status(500).send(err.message);
-        }
+    const visitante = results[0];
 
-        if (results.length === 0) {
-            return res.status(401).json({ mensaje: 'Correo no registrado' });
-        }
+    if (visitante.contrasena !== contrasena) {
+      return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
+    }
 
-        const visitante = results[0];
-
-        if (visitante.contrasena !== contrasena) {
-            return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
-        }
-
-        res.json({
-            mensaje: 'Login exitoso',
-            visitante: {
-                id: visitante.id,
-                nombre: visitante.nombre,
-                correo: visitante.correo,
-                edad: visitante.edad
-            }
-        });
+    res.json({
+      mensaje: 'Login exitoso',
+      visitante: {
+        id: visitante.id,
+        nombre: visitante.nombre,
+        correo: visitante.correo,
+        edad: visitante.edad
+      }
     });
+  });
 });
 
 // ---------- Rutas para Eventos ----------
 // Ruta para visualizar eventos
 app.get('/eventos', (req, res) => {
-    const query = 'SELECT * FROM evento';
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error al obtener eventos:', err.message);
-            res.status(500).send(err.message);
-            return;
-        }
-        res.json(results);
-    });
+  const query = 'SELECT * FROM evento';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error al obtener eventos:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json(results);
+  });
 });
 
 // Ruta para agregar eventos
 app.post('/eventos', upload.single('baner'), (req, res) => {
   try {
     const datos = req.body;
-    
+
     // Validación de campos obligatorios
     if (!datos.nombre || !datos.fechaInicio || !datos.fechaFinal || !datos.lugar || !datos.descripcion) {
       return res.status(400).json({ message: 'Faltan campos obligatorios' });
@@ -472,7 +472,7 @@ app.post('/eventos', upload.single('baner'), (req, res) => {
         nombre, fechaInicio, fechaFinal, lugar, descripcion, formulario, baner
       ) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
-    
+
     const values = [
       datos.nombre,
       datos.fechaInicio,
@@ -488,23 +488,23 @@ app.post('/eventos', upload.single('baner'), (req, res) => {
         console.error('Error al insertar evento:', err.message);
         console.error('Query:', query);
         console.error('Values:', values);
-        return res.status(500).json({ 
+        return res.status(500).json({
           message: 'Error en la base de datos',
           error: err.message
         });
       }
-      
-      res.status(201).json({ 
-        idInsertado: result.insertId, 
-        banerUrl: urlBaner 
+
+      res.status(201).json({
+        idInsertado: result.insertId,
+        banerUrl: urlBaner
       });
     });
-    
+
   } catch (error) {
     console.error('Error general:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       message: 'Error interno del servidor',
-      error: error.message 
+      error: error.message
     });
   }
 });
@@ -521,7 +521,7 @@ app.put('/eventos/:id', upload.single('baner'), (req, res) => {
     }
 
     const getCurrentBanner = `SELECT baner FROM evento WHERE id = ?`;
-    
+
     db.query(getCurrentBanner, [eventoId], (err, result) => {
       if (err) {
         console.error('Error al obtener banner actual:', err.message);
@@ -530,11 +530,11 @@ app.put('/eventos/:id', upload.single('baner'), (req, res) => {
           error: err.message
         });
       }
-      
+
       if (result.length === 0) {
         return res.status(404).json({ message: 'Evento no encontrado' });
       }
-      
+
       // Manejo del banner
       let bannerFinal = result[0].baner;
       if (req.file) {
@@ -555,7 +555,7 @@ app.put('/eventos/:id', upload.single('baner'), (req, res) => {
             baner = ?
         WHERE id = ?
       `;
-      
+
       const values = [
         datos.nombre,
         datos.fechaInicio,
@@ -575,23 +575,23 @@ app.put('/eventos/:id', upload.single('baner'), (req, res) => {
             error: err.message
           });
         }
-        
+
         if (result.affectedRows === 0) {
           return res.status(404).json({ message: 'Evento no encontrado' });
         }
-        
-        res.status(200).json({ 
-          message: 'Evento actualizado', 
-          banerUrl: bannerFinal 
+
+        res.status(200).json({
+          message: 'Evento actualizado',
+          banerUrl: bannerFinal
         });
       });
     });
-    
+
   } catch (error) {
     console.error('Error general:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       message: 'Error interno del servidor',
-      error: error.message 
+      error: error.message
     });
   }
 });
@@ -601,47 +601,57 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Ruta para obtener un solo evento por ID
 app.get('/eventos/:id', (req, res) => {
-    const id = req.params.id;
-    const query = 'SELECT * FROM evento WHERE id = ?';
-    
-    db.query(query, [id], (err, results) => {
-        if (err) {
-            console.error('Error al obtener evento:', err.message);
-            return;
-        }
-        
-        if (results.length === 0) {
-            return res.status(404).json({ mensaje: "Evento no encontrado" });
-        }
-        
-        res.json(results[0]);
-    });
-});
+  const id = req.params.id;
+  const query = 'SELECT * FROM evento WHERE id = ?';
 
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Error al obtener evento:', err.message);
+      return;
+    }
+
+    if (results.length === 0) {
+      return res.status(404).json({ mensaje: "Evento no encontrado" });
+    }
+
+    res.json(results[0]);
+  });
+});
 // Endpoint para guardar formularios
 app.post('/guardar-formulario', (req, res) => {
   const { id_evento, formulario, fecha_evento, num_adultos, num_ninos } = req.body;
-  
-  // Temporalmente usamos id_visitante = 1
   const id_visitante = 1;
-  
+
   const query = `
-    INSERT INTO formularios 
-    (id_visitante, id_evento, formulario, fecha_evento, num_adultos, num_ninos) 
-    VALUES (?, ?, ?, ?, ?, ?)
-  `;
-  
-  db.query(query, 
+      INSERT INTO formularios 
+      (id_visitante, id_evento, formulario, fecha_evento, num_adultos, num_ninos) 
+      VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+  db.query(query,
     [id_visitante, id_evento, formulario, fecha_evento, num_adultos, num_ninos],
     (err, result) => {
       if (err) {
         console.error('Error al guardar formulario:', err.message);
-        res.status(500).json({ error: 'Error al guardar formulario' });
-        return;
+        return res.status(500).json({ error: 'Error al guardar formulario' });
       }
-      res.status(200).json({ 
-        message: 'Formulario guardado exitosamente',
-        id: result.insertId
+
+      const idFormulario = result.insertId;
+      const codigoQR = `RES-${idFormulario}-${Date.now()}`;  // ejemplo de código QR
+
+      // Ahora actualizamos el registro con el codigo_qr
+      const updateQuery = `UPDATE formularios SET codigo_qr = ? WHERE id = ?`;
+      db.query(updateQuery, [codigoQR, idFormulario], (err2) => {
+        if (err2) {
+          console.error('Error al guardar codigo QR:', err2.message);
+          return res.status(500).json({ error: 'Error al guardar codigo QR' });
+        }
+
+        return res.status(200).json({
+          message: 'Formulario guardado exitosamente',
+          id: idFormulario,
+          codigo_qr: codigoQR
+        });
       });
     }
   );
@@ -650,7 +660,7 @@ app.post('/guardar-formulario', (req, res) => {
 // Ruta para subir imágenes adicionales
 app.post('/eventos/:idEvento/imagenes', upload.array('imagenes', 10), (req, res) => {
   const idEvento = req.params.idEvento;
-  
+
   // Validar que hay archivos
   if (!req.files || req.files.length === 0) {
     return res.status(400).json({ message: 'Debe subir al menos una imagen' });
@@ -734,5 +744,5 @@ app.delete('/imagenes/:idImagen', (req, res) => {
 
 // Iniciar el servidor
 app.listen(port, () => {
-    console.log(`API corriendo en http://localhost:${port}`);
+  console.log(`API corriendo en http://localhost:${port}`);
 });
