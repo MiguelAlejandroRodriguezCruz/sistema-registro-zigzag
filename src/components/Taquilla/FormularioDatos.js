@@ -29,7 +29,7 @@ const GroupAgeForm = ({ idRegistro, onClose, onShowDatosGuardados }) => {
 
   const handleGuardar = async () => {
     try {
-      const response = await fetch("http://localhost:3000/registro-visitantes", {
+      const response = await fetch("http://localhost:3001/registro-visitantes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,20 +39,20 @@ const GroupAgeForm = ({ idRegistro, onClose, onShowDatosGuardados }) => {
           ...formData,
         }),
       });
-  
+
       if (!response.ok) throw new Error("Error al registrar visitante");
-  
+
       const result = await response.json();
       console.log("Visita registrada correctamente. ID:", result.idInsertado);
       alert(`Visita registrada correctamente. ID: ${result.idInsertado}`);
-  
+
       if (onClose) onClose();
       if (onShowDatosGuardados) onShowDatosGuardados();
     } catch (error) {
       console.error(error);
       alert("Hubo un error al enviar los datos.");
     }
-  };  
+  };
 
   return (
     <div className="container mt-4 border p-3 rounded">
