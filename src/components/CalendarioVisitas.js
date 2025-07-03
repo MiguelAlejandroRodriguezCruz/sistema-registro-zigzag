@@ -51,50 +51,53 @@ const CalendarioVisitas = ({ onFechaFijada }) => {
     };
 
     return (
-        <div className="row align-items-start mb-4">
-            <div className="col-md-6">
-                <p style={{ fontSize: "28px" }}>
-                    ¡Agenda tu próxima visita al museo! <br />
-                    Selecciona en el calendario la fecha tentativa de tu visita.
-                </p>
-                <button
-                    className="btn btn-danger w-40 mb-3"
-                    onClick={manejarFijarFecha}
-                >
-                    FIJAR FECHA
-                </button>
-            </div>
+        <div className="container-fluid my-5 px-4 py-4 rounded ">
+             <div className="row align-items-start mb-4">
+                <div className="col-md-6">
+                    <p style={{ fontSize: "24px" }}>
+                        ¡Agenda tu próxima visita al museo! <br />
+                        Selecciona en el calendario la fecha tentativa de tu visita.
+                    </p>
+                    <button
+                        className="btn btn-danger w-40 mb-3"
+                        onClick={manejarFijarFecha}
+                    >
+                        FIJAR FECHA
+                    </button>
+                </div>
 
-            <div className="col-md-6 d-flex justify-content-center">
-                <div style={{ transform: "scale(1.2)" }}>
-                    <Calendar
-                        onChange={setFecha}
-                        value={fecha}
-                        minDate={new Date()}
-                        maxDate={fechaMaxima}
-                        tileClassName={({ date, view }) => {
-                            if (view === "month") {
-                                if (estaOcupada(date)) return "ocupada";
-                                if (
-                                    fechaFijada &&
-                                    date.toDateString() === fechaFijada.toDateString()
-                                )
-                                    return "fijada";
-                                if (date.toDateString() === fecha.toDateString())
-                                    return "seleccionada";
-                                if (esFinDeSemana(date)) return "fin-de-semana";
+                <div className="col-md-6 d-flex justify-content-center">
+                    <div style={{ transform: "scale(1.2)" }}>
+                        <Calendar
+                            onChange={setFecha}
+                            value={fecha}
+                            minDate={new Date()}
+                            maxDate={fechaMaxima}
+                            tileClassName={({ date, view }) => {
+                                if (view === "month") {
+                                    if (estaOcupada(date)) return "ocupada";
+                                    if (
+                                        fechaFijada &&
+                                        date.toDateString() === fechaFijada.toDateString()
+                                    )
+                                        return "fijada";
+                                    if (date.toDateString() === fecha.toDateString())
+                                        return "seleccionada";
+                                    if (esFinDeSemana(date)) return "fin-de-semana";
+                                }
+                                return null;
+                            }}
+                            tileDisabled={({ date }) =>
+                                estaOcupada(date) || esFinDeSemana(date)
                             }
-                            return null;
-                        }}
-                        tileDisabled={({ date }) =>
-                            estaOcupada(date) || esFinDeSemana(date)
-                        }
-                        className="border p-2 rounded"
-                        locale="es-ES"
-                    />
+                            className="border p-2 rounded"
+                            locale="es-ES"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
+       
     );
 };
 

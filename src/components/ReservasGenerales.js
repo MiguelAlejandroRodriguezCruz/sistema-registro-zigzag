@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import ReservasEncabezado from './ReservasAdmin/ReservasEncabezado';
 import { ReservasTabs } from './ReservasAdmin/ReservasTabs';
 import { ReservasLista } from './ReservasAdmin/ReservasLista';
 import { Comp_encabezado } from './Comp_encabezado';

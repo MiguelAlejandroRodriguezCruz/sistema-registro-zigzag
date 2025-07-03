@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import "../style/CalendarioOcupado.css"
 
 
 const CalendarioOcupado = () => {
@@ -38,7 +38,7 @@ const CalendarioOcupado = () => {
     fechaMaxima.setMonth(fechaMaxima.getMonth() + 6);
 
     return (
-        <div className="d-flex justify-content-center mt-4">
+        <div className="calendario-admin w-100 mt-4 px-5">
             <Calendar
                 minDate={new Date()}
                 maxDate={fechaMaxima}

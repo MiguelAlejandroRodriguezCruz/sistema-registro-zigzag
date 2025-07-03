@@ -91,6 +91,7 @@ const FormularioVisitas = () => {
     <div className="mt-4">
       {/* Comienza el encabezado*/}
       <Comp_encabezado />
+
       <div className="row">
         <div className="col text-center bg-success py-2">
           <h1 className="text-white m-0">Visitas</h1>
@@ -99,8 +100,13 @@ const FormularioVisitas = () => {
       {/* Termina el Encabezado*/}
 
       <div className="container mt-4">
+        <div className="p-lg-4">
 
-        <CalendarioVisitas onFechaFijada={setFechaFijada} />
+           <CalendarioVisitas onFechaFijada={setFechaFijada} />
+
+        </div>
+        
+       
 
         {/* Formulario */}
         <div className="row">
