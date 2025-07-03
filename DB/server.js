@@ -742,27 +742,44 @@ app.delete('/imagenes/:idImagen', (req, res) => {
   });
 });
 
-// Ruta para eliminar un evento y todas sus dependencias
+// Ruta para eliminar un evento y todas sus dependencias (incluyendo banner)
 app.delete('/eventos/:id', async (req, res) => {
   const eventoId = req.params.id;
 
   try {
-    // Paso 1: Eliminar formularios relacionados
-    const deleteFormulariosQuery = 'DELETE FROM formularios WHERE id_evento = ?';
-    await db.promise().query(deleteFormulariosQuery, [eventoId]);
-
-    // Paso 2: Obtener rutas de imágenes para eliminarlas físicamente
-    const [imagenes] = await db.promise().query('SELECT id, ruta_imagen FROM imagenes WHERE evento_id = ?', [eventoId]);
+    // 1. Obtener información del evento (para el banner)
+    const [evento] = await db.promise().query('SELECT baner FROM evento WHERE id = ?', [eventoId]);
     
-    // Paso 3: Eliminar imágenes de la base de datos
-    const deleteImagenesQuery = 'DELETE FROM imagenes WHERE evento_id = ?';
-    await db.promise().query(deleteImagenesQuery, [eventoId]);
+    if (evento.length === 0) {
+      return res.status(404).json({ mensaje: 'Evento no encontrado' });
+    }
 
-    // Paso 4: Eliminar imágenes físicamente
-    for (const imagen of imagenes) {
-      const nombreArchivo = imagen.ruta_imagen.split('/').pop();
-      const filePath = path.join(__dirname, 'uploads', nombreArchivo);
-      
+    // 2. Eliminar formularios relacionados
+    await db.promise().query('DELETE FROM formularios WHERE id_evento = ?', [eventoId]);
+
+    // 3. Obtener y eliminar imágenes adicionales
+    const [imagenes] = await db.promise().query('SELECT id, ruta_imagen FROM imagenes WHERE evento_id = ?', [eventoId]);
+    await db.promise().query('DELETE FROM imagenes WHERE evento_id = ?', [eventoId]);
+
+    // 4. Eliminar archivos físicos (banner e imágenes)
+    const filesToDelete = [];
+
+    // Agregar banner a la lista de archivos a eliminar
+    if (evento[0].baner) {
+      const bannerUrl = evento[0].baner;
+      const bannerName = bannerUrl.split('/').pop();
+      filesToDelete.push(bannerName);
+    }
+
+    // Agregar imágenes adicionales
+    imagenes.forEach(imagen => {
+      const imgName = imagen.ruta_imagen.split('/').pop();
+      filesToDelete.push(imgName);
+    });
+
+    // Eliminar archivos físicamente
+    filesToDelete.forEach(fileName => {
+      const filePath = path.join(__dirname, 'uploads', fileName);
       try {
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath);
@@ -770,17 +787,12 @@ app.delete('/eventos/:id', async (req, res) => {
       } catch (err) {
         console.error(`Error al eliminar archivo ${filePath}:`, err);
       }
-    }
+    });
 
-    // Paso 5: Eliminar el evento
-    const deleteEventoQuery = 'DELETE FROM evento WHERE id = ?';
-    const [result] = await db.promise().query(deleteEventoQuery, [eventoId]);
+    // 5. Eliminar el evento
+    await db.promise().query('DELETE FROM evento WHERE id = ?', [eventoId]);
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ mensaje: 'Evento no encontrado' });
-    }
-
-    res.json({ mensaje: 'Evento y todas sus dependencias eliminadas correctamente' });
+    res.json({ mensaje: 'Evento, formularios, imágenes y banner eliminados correctamente' });
   } catch (err) {
     console.error('Error al eliminar evento:', err.message);
     res.status(500).json({ error: 'Error interno del servidor' });
