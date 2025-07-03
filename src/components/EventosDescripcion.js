@@ -21,6 +21,7 @@ const EventosDescripcion = () => {
   const [enviando, setEnviando] = useState(false);
   const [mensajeExito, setMensajeExito] = useState("");
   const [errorFormulario, setErrorFormulario] = useState("");
+  const [user, setUser] = useState(null);
 
   const [mostrarQR, setMostrarQR] = useState(false);
   const [idReserva, setIdReserva] = useState(null);
@@ -43,6 +44,12 @@ const EventosDescripcion = () => {
   };
 
   useEffect(() => {
+    // Recuperar usuario del localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
     const cargarEvento = async () => {
       try {
         const respuesta = await fetch(`http://localhost:3001/eventos/${id}`);
@@ -103,8 +110,12 @@ const EventosDescripcion = () => {
     try {
       if (!fechaEvento) throw new Error("Por favor seleccione una fecha para el evento");
       if (numAdultos <= 0 && numNinos <= 0) throw new Error("Debe adquirir al menos un boleto");
+      if (!user) {
+        throw new Error("Debes iniciar sesión para realizar reservas");
+      }
 
       const datosFormulario = {
+        id_visitante: user.id,
         id_evento: evento.id,
         formulario: JSON.stringify(respuestas),
         fecha_evento: fechaEvento,

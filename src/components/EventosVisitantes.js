@@ -129,7 +129,10 @@ const EventosSeleccionar = () => {
             
             <div className="seleccionar-evento">
               <Link 
-                to={`/eventos-descripcion/${evento.id}`} 
+                to={{
+                  pathname: `/eventos-descripcion/${evento.id}`,
+                  state: { user: JSON.parse(localStorage.getItem('user')) }
+                }} 
                 className="btn-seleccionar"
               >
                 <i className="bi bi-calendar-plus"></i> Seleccionar evento

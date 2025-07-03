@@ -39,6 +39,9 @@ const LoginForm = () => {
       if (!response.ok) {
         throw new Error(data.mensaje || 'Error en el login');
       }
+
+      // Guardar información del usuario en localStorage
+      localStorage.setItem('user', JSON.stringify(data.visitante));
       
       // Redirigir a la página de eventos
       navigate("/eventos-visitantes");

@@ -618,18 +618,24 @@ app.get('/eventos/:id', (req, res) => {
     res.json(results[0]);
   });
 });
+
 // Endpoint para guardar formularios
 app.post('/guardar-formulario', (req, res) => {
-  const { id_evento, formulario, fecha_evento, num_adultos, num_ninos } = req.body;
-  const id_visitante = 1;
+  const { id_visitante, id_evento, formulario, fecha_evento, num_adultos, num_ninos } = req.body;
+  
+  // Validar que se recibe el ID del visitante
+  if (!id_visitante) {
+    return res.status(400).json({ error: 'ID de visitante es requerido' });
+  }
 
   const query = `
-      INSERT INTO formularios 
-      (id_visitante, id_evento, formulario, fecha_evento, num_adultos, num_ninos) 
-      VALUES (?, ?, ?, ?, ?, ?)
-    `;
+    INSERT INTO formularios 
+    (id_visitante, id_evento, formulario, fecha_evento, num_adultos, num_ninos) 
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
 
-  db.query(query,
+  db.query(
+    query,
     [id_visitante, id_evento, formulario, fecha_evento, num_adultos, num_ninos],
     (err, result) => {
       if (err) {
@@ -638,9 +644,8 @@ app.post('/guardar-formulario', (req, res) => {
       }
 
       const idFormulario = result.insertId;
-      const codigoQR = `RES-${idFormulario}-${Date.now()}`;  // ejemplo de código QR
+      const codigoQR = `RES-${idFormulario}-${Date.now()}`;
 
-      // Ahora actualizamos el registro con el codigo_qr
       const updateQuery = `UPDATE formularios SET codigo_qr = ? WHERE id = ?`;
       db.query(updateQuery, [codigoQR, idFormulario], (err2) => {
         if (err2) {
