@@ -252,6 +252,33 @@ const handleImageChange = (e) => {
     navigate(-1);
   };
 
+  // Nueva función para manejar la eliminación
+  const handleDelete = async () => {
+    if (!window.confirm('¿Estás seguro de eliminar este evento? Esta acción es irreversible.')) {
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:3001/eventos/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar el evento');
+      }
+
+      navigate("/lista-eventos", { 
+        state: { eventoEliminado: true } 
+      });
+    } catch (err) {
+      console.error('Error:', err);
+      setError(err.message || 'Ocurrió un error al eliminar el evento');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Funciones para el formulario dinámico
   const addFormField = (type) => {
     const newField = {
@@ -640,21 +667,33 @@ const handleImageChange = (e) => {
 
               {/* Botones */}
               <div className="mt-4" style={{ display: "flex", gap: "10px" }}>
+              {isEditing && (
                 <button 
                   type="button" 
                   className="btn btn-danger"
-                  onClick={handleCancel}
-                >
-                  Cancelar
-                </button>
-                <button 
-                  type="submit" 
-                  className="btn btn-success"
+                  onClick={handleDelete}
                   disabled={isLoading}
                 >
-                  {isLoading ? 'Guardando...' : isEditing ? 'Actualizar Evento' : 'Guardar Evento'}
+                  {isLoading ? 'Eliminando...' : 'Eliminar Evento'}
                 </button>
-              </div>
+              )}
+              
+              <button 
+                type="button" 
+                className="btn btn-danger"
+                onClick={handleCancel}
+              >
+                Cancelar
+              </button>
+              
+              <button 
+                type="submit" 
+                className="btn btn-success"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Guardando...' : isEditing ? 'Actualizar Evento' : 'Guardar Evento'}
+              </button>
+            </div>
             </form>
           </div>
         <Comp_Pie_pagina/>
