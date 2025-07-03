@@ -8,26 +8,28 @@ export default function NuevaContrasena() {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const handleCambiar = (e) => {
+  const handleCambiar = async (e) => {
     e.preventDefault();
 
-    // Pruebas XD
-    navigate("/login");
-
-    // Para que funcione 
-    /*
     try {
-      await fetch("http://localhost:3001/visitantes-eventos/restablecer-contrasena", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo: state.correo, nueva }),
+      const res = await fetch('http://localhost:3001/recuperar/cambiar-contrasena', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ correo: state?.correo, nuevaContrasena: nueva }),
       });
-      navigate("/login");
-    } catch (error) {
-      console.error("Error al cambiar contraseña:", error);
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.mensaje);
+
+      alert('Contraseña actualizada, inicia sesión');
+      navigate('/login');
+
+    } catch (err) {
+      alert(`Error: ${err.message}`);
     }
-    */
   };
+
 
   return (
     <div className="d-flex flex-column min-vh-100 bg-light">

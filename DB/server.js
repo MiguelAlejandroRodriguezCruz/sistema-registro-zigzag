@@ -5,6 +5,7 @@ const multer = require('multer');
 const fs = require('fs');
 const app = express();
 const port = 3001;
+const nodemailer = require('nodemailer');
 
 // Middleware para analizar el cuerpo de las solicitudes entrantes como JSON
 app.use(express.json());
@@ -749,7 +750,7 @@ app.delete('/eventos/:id', async (req, res) => {
   try {
     // 1. Obtener información del evento (para el banner)
     const [evento] = await db.promise().query('SELECT baner FROM evento WHERE id = ?', [eventoId]);
-    
+
     if (evento.length === 0) {
       return res.status(404).json({ mensaje: 'Evento no encontrado' });
     }
@@ -797,6 +798,105 @@ app.delete('/eventos/:id', async (req, res) => {
     console.error('Error al eliminar evento:', err.message);
     res.status(500).json({ error: 'Error interno del servidor' });
   }
+});
+// ---------- Rutas para Mandar correos ----------
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'yomiguel250@gmail.com',
+    pass: 'ehkr vhjy lxsl lppc' // NO tu password normal, sino contraseña de aplicación
+  }
+});
+app.post('/recuperar/enviar-codigo', (req, res) => {
+  const { correo } = req.body;
+
+  if (!correo) {
+    return res.status(400).json({ mensaje: 'Correo es requerido' });
+  }
+
+  // Verifica que exista el correo en la tabla de usuarios
+  db.query('SELECT * FROM visitanteseventos WHERE correo = ?', [correo], (err, results) => {
+    if (err) return res.status(500).json({ mensaje: err.message });
+
+    if (results.length === 0) {
+      return res.status(404).json({ mensaje: 'Correo no encontrado' });
+    }
+
+    // Genera el código y fecha de expiración
+    const codigo = Math.floor(100000 + Math.random() * 900000); // 6 dígitos
+    const expiracion = new Date(Date.now() + 10 * 60000);       // +10 min
+
+    // Guarda en la tabla codigos_recuperacion
+    db.query(
+      'INSERT INTO codigos_recuperacion (correo, codigo, expiracion) VALUES (?, ?, ?)',
+      [correo, codigo, expiracion],
+      (err) => {
+        if (err) return res.status(500).json({ mensaje: err.message });
+
+        // Prepara el correo
+        const mailOptions = {
+          from: 'tucorreo@gmail.com',
+          to: correo,
+          subject: 'Código de recuperación',
+          text: `Tu código de recuperación es: ${codigo}. Este código expirará en 10 minutos.`
+        };
+
+        // Envía el correo
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error('Error al enviar correo:', error);
+            return res.status(500).json({ mensaje: 'Error al enviar el correo' });
+          }
+
+          console.log('Correo enviado:', info.response);
+          return res.json({ mensaje: 'Código enviado al correo' });
+        });
+      }
+    );
+  });
+});
+app.post('/recuperar/verificar-codigo', (req, res) => {
+  const { correo, codigo } = req.body;
+
+  db.query(
+    'SELECT * FROM codigos_recuperacion WHERE correo = ? ORDER BY id DESC LIMIT 1',
+    [correo],
+    (err, results) => {
+      if (err) return res.status(500).json({ mensaje: err.message });
+
+      if (results.length === 0) {
+        return res.status(400).json({ mensaje: 'No se encontró código para este correo' });
+      }
+
+      const registro = results[0];
+
+      console.log(`DB: ${registro.codigo} (${typeof registro.codigo}), Cliente: ${codigo} (${typeof codigo})`);
+
+      if (registro.codigo.toString() !== codigo.toString()) {
+        return res.status(401).json({ mensaje: 'Código incorrecto' });
+      }
+
+      if (new Date(registro.expiracion) < new Date()) {
+        return res.status(401).json({ mensaje: 'Código expirado' });
+      }
+
+      return res.json({ mensaje: 'Código válido' });
+    }
+  );
+});
+
+app.post('/recuperar/cambiar-contrasena', (req, res) => {
+  const { correo, nuevaContrasena } = req.body;
+
+  db.query(
+    'UPDATE visitanteseventos SET contrasena = ? WHERE correo = ?',
+    [nuevaContrasena, correo],
+    (err, result) => {
+      if (err) return res.status(500).json({ mensaje: err.message });
+
+      return res.json({ mensaje: 'Contraseña actualizada correctamente' });
+    }
+  );
 });
 
 // Iniciar el servidor

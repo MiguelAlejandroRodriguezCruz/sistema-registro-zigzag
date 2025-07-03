@@ -8,29 +8,28 @@ export default function VerificarCodigo() {
   const navigate = useNavigate();
   const { state } = useLocation();
 
-  const handleVerificar = (e) => {
+  const handleVerificar = async (e) => {
     e.preventDefault();
 
-    // Prueba XD
-    navigate("/nueva-contrasena", { state: { correo: state?.correo || "" } });
-
-    // Quitar el comentario para activarlo de nuevo
-    /*
     try {
-      const res = await fetch("http://localhost:3001/visitantes-eventos/verificar-codigo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ correo: state.correo, codigo }),
+      const res = await fetch('http://localhost:3001/recuperar/verificar-codigo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ correo: state?.correo, codigo }),
       });
+
       const data = await res.json();
-      if (data.ok) {
-        navigate("/nueva-contrasena", { state: { correo: state.correo } });
-      }
-    } catch (error) {
-      console.error("Código inválido:", error);
+
+      if (!res.ok) throw new Error(data.mensaje);
+
+      alert('Código correcto');
+      navigate('/nueva-contrasena', { state: { correo: state?.correo } });
+
+    } catch (err) {
+      alert(`Error: ${err.message}`);
     }
-    */
   };
+
 
   return (
     <div className="d-flex flex-column min-vh-100 bg-light">
