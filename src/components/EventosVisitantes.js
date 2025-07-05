@@ -60,7 +60,7 @@ const EventosSeleccionar = () => {
         <div className="alert alert-danger" role="alert">
           Error: {error}
         </div>
-        <button 
+        <button
           className="btn btn-primary mt-3"
           onClick={() => window.location.reload()}
         >
@@ -82,12 +82,12 @@ const EventosSeleccionar = () => {
 
   return (
     <div className='eventos-seleccionar-container'>
-      <Comp_encabezado/>
-      
+      <Comp_encabezado />
+
       <header className="eventos-header azul">
         <h1 className="text-white m-0">Eventos Disponibles</h1>
       </header>
-      
+
       <div className="eventos-container">
         {eventos.map((evento) => (
           <div className="evento-card" key={evento.id}>
@@ -97,14 +97,14 @@ const EventosSeleccionar = () => {
                 <i className="bi bi-geo-alt-fill"></i> {evento.lugar}
               </p>
               <div className="imagenes-banner">
-                <img 
-                  src={evento.baner || "/placeholder.png"} 
-                  alt={`Banner de ${evento.nombre}`} 
-                  className="banner-principal"
+                <img
+                  src={evento.baner || "/placeholder.png"}
+                  alt={`Banner de ${evento.nombre}`}
+                  className="img-banner"
                 />
               </div>
             </div>
-            
+
             <div className="evento-descripcion">
               <p className="disfrutar">
                 <b><i className="bi bi-stars"></i> Podrás disfrutar de:</b>
@@ -126,13 +126,13 @@ const EventosSeleccionar = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="seleccionar-evento">
-              <Link 
+              <Link
                 to={{
                   pathname: `/eventos-descripcion/${evento.id}`,
                   state: { user: JSON.parse(localStorage.getItem('user')) }
-                }} 
+                }}
                 className="btn-seleccionar"
               >
                 <i className="bi bi-calendar-plus"></i> Seleccionar evento
@@ -141,8 +141,8 @@ const EventosSeleccionar = () => {
           </div>
         ))}
       </div>
-      
-      <Comp_Pie_pagina/>
+
+      <Comp_Pie_pagina />
     </div>
   );
 };

@@ -70,103 +70,99 @@ const Eventos = () => {
   }
 
   return (
-    <div className='mt-4'>  
-      <Comp_encabezado/>
+    <div className='mt-4'>
+      <Comp_encabezado />
       <header className="eventos-header">
-            <h1><strong>Eventos</strong></h1>
-            <a href="/ReservasGenerales" className="reservas-link">Reservas</a>
-          </header>
-       <div className="eventos-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-          <ToastContainer />
+        <h1><strong>Eventos</strong></h1>
+        <a href="/ReservasGenerales" className="reservas-link">Reservas</a>
+      </header>
+      <div className="eventos-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+        <ToastContainer />
 
-          
 
-          <div className="agregar-evento" style={{ textAlign: 'right', marginBottom: '20px' }}>
-            <a href="/eventos" style={{ 
-              backgroundColor: '#22a31f', 
-              color: 'white', 
-              padding: '10px 15px', 
-              borderRadius: '5px', 
-              textDecoration: 'none',
-              display: 'inline-block'
-            }}>+ Agregar evento</a>
-          </div>
 
-          {eventos.length === 0 ? (
-            <div className="alert alert-info">No hay eventos registrados</div>
-          ) : (
-            eventos.map((evento) => (
-              <div className="evento-card" key={evento.id} style={{
-                border: '1px solid #ddd',
-                borderRadius: '8px',
-                padding: '20px',
-                marginBottom: '30px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}>
-                <div className="evento-banner" style={{ marginBottom: '2px' }}>
-                  <h4 style={{ marginBottom: '15px' }}><b>{evento.nombre}</b></h4>
-                  <p>Banner de evento:</p>
-                  <div className="imagenes-banner" style={{ 
-                    display: 'flex', 
-                    gap: '20px', 
-                    marginTop: '20px',
-                    backgroundColor: '#f5f5f5',
-                    padding: '10px',
-                    borderRadius: '5px',
-                    justifyContent: 'center'
-                  }}>
-                    {evento.baner ? (
-                      <img 
-                        src={evento.baner} 
-                        alt={`Banner de ${evento.nombre}`}
-                        style={{ 
-                          maxWidth: '100%', 
-                          maxHeight: '100%',
-                          objectFit: 'contain'
-                        }}
-                      />
-                    ) : (
+        <div className="agregar-evento" style={{ textAlign: 'right', marginBottom: '20px' }}>
+          <a href="/eventos" style={{
+            backgroundColor: '#22a31f',
+            color: 'white',
+            padding: '10px 15px',
+            borderRadius: '5px',
+            textDecoration: 'none',
+            display: 'inline-block'
+          }}>+ Agregar evento</a>
+        </div>
+
+        {eventos.length === 0 ? (
+          <div className="alert alert-info">No hay eventos registrados</div>
+        ) : (
+          eventos.map((evento) => (
+            <div className="evento-card" key={evento.id} style={{
+              border: '1px solid #ddd',
+              borderRadius: '8px',
+              padding: '20px',
+              marginBottom: '30px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+            }}>
+              <div className="evento-banner" style={{ marginBottom: '2px' }}>
+                <h4 style={{ marginBottom: '15px' }}><b>{evento.nombre}</b></h4>
+                <p>Banner de evento:</p>
+                <div className="imagenes-banner" style={{
+                  display: 'flex',
+                  gap: '20px',
+                  marginTop: '20px',
+                  backgroundColor: '#f5f5f5',
+                  padding: '10px',
+                  borderRadius: '5px',
+                  justifyContent: 'center'
+                }}>
+                  {evento.baner ? (
+                    <img
+                      src={evento.baner}
+                      alt={`Banner de ${evento.nombre}`}
+                      className="img-banner"
+                    />
+                  ) : (
                     <div style={{ textAlign: 'center' }}>
-                        <p>No hay banner disponible</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="evento-descripcion" style={{ marginBottom: '20px' }}>
-                  <p className="disfrutar" style={{ fontWeight: 'bold', marginBottom: '10px' }}><b>Podrás disfrutar de:</b></p>
-                  <p className="descripcion" style={{ marginBottom: '15px' }}>
-                    {evento.descripcion || 'No hay descripción disponible'}
-                  </p>
-                  <p className="duracion" style={{ marginBottom: '0' }}>
-                    <b>Duración del evento:</b><br />
-                    {new Date(evento.fechaInicio).toLocaleDateString()} - {new Date(evento.fechaFinal).toLocaleDateString()}
-                  </p>
-                  <p style={{ marginTop: '10px' }}>
-                    <b>Lugar:</b> {evento.lugar || 'No especificado'}
-                  </p>
-                </div>
-                <div className="editar-evento" style={{ textAlign: 'right' }}>
-                  <button 
-                    onClick={() => handleEditarEvento(evento.id)}
-                    style={{ 
-                      color: '#22a31f', 
-                      textDecoration: 'underline',
-                      border: 'none',
-                      background: 'none',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Editar evento
-                  </button>
+                      <p>No hay banner disponible</p>
+                    </div>
+                  )}
                 </div>
               </div>
-            ))
-          )}
-        </div>
-        {/* Pie de pagina*/}
-        <Comp_Pie_pagina/>
+              <div className="evento-descripcion" style={{ marginBottom: '20px' }}>
+                <p className="disfrutar" style={{ fontWeight: 'bold', marginBottom: '10px' }}><b>Podrás disfrutar de:</b></p>
+                <p className="descripcion" style={{ marginBottom: '15px' }}>
+                  {evento.descripcion || 'No hay descripción disponible'}
+                </p>
+                <p className="duracion" style={{ marginBottom: '0' }}>
+                  <b>Duración del evento:</b><br />
+                  {new Date(evento.fechaInicio).toLocaleDateString()} - {new Date(evento.fechaFinal).toLocaleDateString()}
+                </p>
+                <p style={{ marginTop: '10px' }}>
+                  <b>Lugar:</b> {evento.lugar || 'No especificado'}
+                </p>
+              </div>
+              <div className="editar-evento" style={{ textAlign: 'right' }}>
+                <button
+                  onClick={() => handleEditarEvento(evento.id)}
+                  style={{
+                    color: '#22a31f',
+                    textDecoration: 'underline',
+                    border: 'none',
+                    background: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Editar evento
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+      {/* Pie de pagina*/}
+      <Comp_Pie_pagina />
     </div>
-   
+
   );
 };
 

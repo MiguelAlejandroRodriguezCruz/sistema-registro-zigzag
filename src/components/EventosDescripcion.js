@@ -201,33 +201,31 @@ const EventosDescripcion = () => {
         <div className="evento-card">
           <div className="evento-info">
             <div className="evento-imagenes">
-              <div className="imagenes-grid">
-                {/* Banner principal */}
-                <div className="banner-principal">
-                  <img
-                    src={evento.baner || "/placeholder.png"}
-                    alt={`Banner de ${evento.nombre}`}
-                    className="img-banner"
-                  />
-                </div>
+              {/* Banner principal */}
+              <div className="banner-grande">
+                <img
+                  src={evento.baner || "/placeholder.png"}
+                  alt={`Banner de ${evento.nombre}`}
+                  className="img-banner"
+                />
+              </div>
 
-                {/* Imágenes adicionales */}
-                <div className="img-small-grid">
-                  {imagenes.slice(0, 4).map((imagen, index) => (
-                    <div key={imagen.id} className="img-small-container">
-                      <img
-                        src={imagen.ruta_imagen}
-                        alt={`Imagen ${index + 1} de ${evento.nombre}`}
-                        className="img-small"
-                      />
-                    </div>
-                  ))}
-                  
-                  {/* Placeholders si hay menos de 4 imágenes */}
-                  {Array.from({ length: 4 - Math.min(imagenes.length, 4) }).map((_, i) => (
-                    <div key={`placeholder-${i}`} className="img-placeholder small"></div>
-                  ))}
-                </div>
+              {/* Imágenes adicionales */}
+              <div className="img-small-grid">
+                {imagenes.slice(0, 4).map((imagen, index) => (
+                  <div key={imagen.id} className="img-small-container">
+                    <img
+                      src={imagen.ruta_imagen}
+                      alt={`Imagen ${index + 1} de ${evento.nombre}`}
+                      className="img-small"
+                    />
+                  </div>
+                ))}
+
+                {/* Placeholders si hay menos de 4 imágenes */}
+                {Array.from({ length: 4 - Math.min(imagenes.length, 4) }).map((_, i) => (
+                  <div key={`placeholder-${i}`} className="img-placeholder small"></div>
+                ))}
               </div>
             </div>
 
