@@ -66,10 +66,10 @@
 }
 
 
-/* estadisiticas */ 
+/* estadisiticas */
 .estadistica-box {
   background-color: #f8f9fa;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .react-calendar {
@@ -77,7 +77,7 @@
   max-width: 100%;
   font-size: 1.1rem;
   background-color: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 input.form-control {
