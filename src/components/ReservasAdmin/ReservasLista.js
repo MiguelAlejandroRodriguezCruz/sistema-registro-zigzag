@@ -1,8 +1,24 @@
 import { ReservaCard } from "./ReservaCard";
 import CalendarioFechasOcupadas from "../CalendarioFechasOcupadas"; // o el nombre de tu componente de calendario
+import Estadistica from "./Estadistica"
+
 
 export function ReservasLista({ reservas, pestanaActiva, actualizarEstadoReserva }) {
-    const reservasFiltradas = reservas.filter(reserva => reserva.estatus === pestanaActiva);
+
+    const reservasFiltradas = pestanaActiva !== "estadistica"
+        ? reservas.filter(reserva => reserva.estatus === pestanaActiva)
+        : [];
+
+         // Si está activa la pestaña de estadísticas, mostrar solo ese componente
+            if (pestanaActiva === "estadistica") {
+                return (
+                    <div className="mt-4">
+                        <h4 className="mb-3">Estadísticas generales</h4>
+                        <Estadistica reservas={reservas} />
+                    </div>
+                );
+            }
+
 
     return (
         <>
@@ -13,9 +29,10 @@ export function ReservasLista({ reservas, pestanaActiva, actualizarEstadoReserva
                     <div className="calendario-admin">
                         <CalendarioFechasOcupadas/>
                     </div>
-                    
                 </div>
             )}
+
+            
             {reservasFiltradas.length > 0 ? (
                 reservasFiltradas.map(reserva => (
                     <ReservaCard

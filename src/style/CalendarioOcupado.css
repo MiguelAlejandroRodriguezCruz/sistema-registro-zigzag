@@ -1,44 +1,85 @@
-.calendario-admin .react-calendar {
-  width: 100%;
-  max-width: 1500px;
-  font-size: 1.8rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #ffffff;
-  padding: 1rem 0.75rem;
-  min-height: 60px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  border: 1px solid #dee2e6;
-  transition: all 0.3s ease-in-out;
-}
 .calendario-admin {
   display: flex;
   justify-content: center;
-  /* Si quieres centrar verticalmente también: */
-  /* align-items: center; */
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
+
+/* Estilo general del calendario */
+.calendario-admin .react-calendar {
+  width: 100%;
+  max-width: 1200px;
+  font-size: 1.3rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #dee2e6;
+  transition: all 0.3s ease-in-out;
+}
+
 /* Fechas ocupadas */
 .calendario-admin .ocupada-verde {
   background-color: #dc3545 !important;
   color: #fff !important;
   font-weight: bold;
-  border-radius: 8px;
+  border-radius: 50% !important;
+  text-align: center;
 }
 
-/* Encabezado */
+/* Encabezado del mes */
 .calendario-admin .react-calendar__navigation {
   background-color: #f8f9fa;
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   color: #212529;
-  border-radius: 0.5rem;
+  border-radius: 0.75 rem;
   margin-bottom: 0.5rem;
+  padding: 0 rem;
 }
 
 /* Día actual */
 .calendario-admin .react-calendar__tile--now {
-  background-color: #d1e7dd;
-  color: #0f5132;
+  background-color: #d1e7dd !important;
+  color: #0f5132 !important;
   font-weight: bold;
-  border-radius: 8px;
+  border-radius: 1% !important;
+}
+
+/* Día seleccionado */
+.calendario-admin .react-calendar__tile--active {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  border-radius: 50% !important;
+}
+
+/* Hover en días */
+.calendario-admin .react-calendar__tile:hover {
+  background-color: #e2e6ea;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+
+/* estadisiticas */ 
+.estadistica-box {
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.react-calendar {
+  width: 100%;
+  max-width: 100%;
+  font-size: 1.1rem;
+  background-color: white;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+input.form-control {
+  max-width: 120px;
 }
