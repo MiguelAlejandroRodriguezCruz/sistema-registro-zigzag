@@ -228,25 +228,23 @@ const EventosDescripcion = () => {
                 ))}
               </div>
             </div>
+            
+            {/* CONTENIDO DETALLES + FORMULARIO EN COLUMNAS */}
+             <div className="evento-texto-formulario">
+              <div className="evento-detalles mb-a">
+                <p><strong>Podrás disfrutar de:</strong></p>
+                <p className="descripcion-evento">{evento.descripcion || "Descripción no disponible"}</p>
 
-            <div className="evento-detalles">
-              <p><strong>Podrás disfrutar de:</strong></p>
-              <p className="descripcion-evento">
-                {evento.descripcion || "Descripción no disponible"}
-              </p>
+                <div className="info-adicional mt-3">
+                  <p><strong>Duración del evento:</strong></p>
+                  <p>{formatearFecha(evento.fechaInicio)} - {formatearFecha(evento.fechaFinal)}</p>
 
-              <div className="info-adicional">
-                <p><strong>Duración del evento:</strong></p>
-                <p>
-                  {formatearFecha(evento.fechaInicio)} - {formatearFecha(evento.fechaFinal)}
-                </p>
-
-                <p><strong>Lugar:</strong></p>
-                <p>{evento.lugar}</p>
+                  <p><strong>Lugar:</strong></p>
+                  <p>{evento.lugar}</p>
+                </div>
               </div>
-            </div>
-          </div>
 
+          {/* FORMULARIO */}
           <form className="formulario" onSubmit={handleSubmit}>
             <h4>Rellene el cuestionario solicitado:</h4>
 
@@ -308,6 +306,8 @@ const EventosDescripcion = () => {
               </div>
             ))}
 
+            {/* Otros campos */}
+
             <div className="form-group">
               <label>Fecha del evento: <span className="text-danger">*</span></label>
               <input
@@ -323,7 +323,7 @@ const EventosDescripcion = () => {
 
             <div className="form-group">
               <label>Número de Boletos a adquirir: <span className="text-danger">*</span></label>
-              <div className="boletos-group">
+              <div className="boletos-group d-flex gap-2">
                 <input
                   type="number"
                   className="form-control"
@@ -367,6 +367,7 @@ const EventosDescripcion = () => {
             </button>
           </form>
         </div>
+      </div>
         {mostrarQR && (
           <div className="modal-backdrop-custom">
             <div className="modal-qr-content">
@@ -401,6 +402,7 @@ const EventosDescripcion = () => {
         )}
 
 
+      </div>
       </div>
       <Comp_Pie_pagina />
     </div>

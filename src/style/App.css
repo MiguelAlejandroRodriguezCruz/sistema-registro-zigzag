@@ -808,7 +808,3 @@ input {
   justify-content: center;
   margin-top: 15px;
 }
-
-input.form-control {
-  max-width: 120px;
-}

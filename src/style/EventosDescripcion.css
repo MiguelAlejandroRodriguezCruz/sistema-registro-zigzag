@@ -1,8 +1,20 @@
 /* Estilos para el contenedor de imágenes */
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.formulario input[type="text"],
+.formulario input[type="number"],
+.formulario input[type="date"] {
+  width: 100%;
+  max-width: 500px; /* Puedes ajustar esto según tu gusto */
+  box-sizing: border-box;
+}
+
 .imagenes-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 15px;
+  gap: 20px;
   margin-bottom: 20px;
 }
 
@@ -47,4 +59,40 @@
 .img-placeholder.small {
   padding-top: 100%;
   /* Mantener relación 1:1 */
+}
+
+.evento-info {
+  display: flex;
+  flex-direction: column; /* Uno debajo del otro por defecto */
+  gap: 2rem;
+}
+/* Para pantallas grandes, puedes usar side-by-side */
+@media (min-width: 768px) {
+  .evento-info {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  
+}
+
+.evento-texto-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.evento-detalles {
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 1.5rem;
+}
+.detalles-y-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* espaciado entre los bloques */
+}
+
+.boletos-group input {
+  flex: 1;
+  min-width: 120px;
 }
