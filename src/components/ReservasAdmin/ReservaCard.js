@@ -4,24 +4,43 @@ import Button from "react-bootstrap/Button";
 
 
 export function ReservaCard({ reserva, actualizarEstadoReserva }) {
-    
+
     /* Modificar reserva */
-     const [mostrarModal, setMostrarModal] = useState(false);
-     const [formData, setFormData] = useState({ ...reserva });
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const [formData, setFormData] = useState({ ...reserva });
 
 
-     const handleChange = (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const guardarCambios = () => {
-        console.log("Reserva actualizada:", formData);
-        setMostrarModal(false);
-        // Aquí llamar a una función que actualice el backend o el estado global
+    const guardarCambios = async () => {
+        try {
+            const response = await fetch(`http://localhost:3001/visitantes/${reserva.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al actualizar la reserva');
+            }
+
+            const data = await response.json();
+            console.log("Reserva actualizada:", data);
+            setMostrarModal(false);
+            // Puedes llamar aquí a una función para actualizar la lista principal si es necesario
+
+        } catch (error) {
+            console.error('Error al guardar cambios:', error);
+        }
     };
 
-    
+
+
     /* Para activar el boton */
     const [botonActivo, setBotonActivo] = useState(null);
 
@@ -92,9 +111,9 @@ export function ReservaCard({ reserva, actualizarEstadoReserva }) {
             <div className="d-flex justify-content-between">
                 <p>📞 {reserva.telefono}</p>
                 <p>✉️ {reserva.correo}</p>
-                <button 
-                    type="button" 
-                    className="btn btn-outline-primary" 
+                <button
+                    type="button"
+                    className="btn btn-outline-primary"
                     onClick={() => setMostrarModal(true)}
                 >
 
@@ -106,50 +125,54 @@ export function ReservaCard({ reserva, actualizarEstadoReserva }) {
                 <Modal.Header closeButton>
                     <Modal.Title>Modificar Reserva</Modal.Title>
                 </Modal.Header>
-                    <Modal.Body>
-                        <div className="mb-2">
-                            <label>Institución:</label>
-                            <input type="text" name="institucion" className="form-control" value={formData.institucion} onChange={handleChange} />
-                        </div>
-                        <div className="mb-2">
-                            <label>Solicitante:</label>
-                            <input type="text" name="solicitante" className="form-control" value={formData.solicitante} onChange={handleChange} />
-                        </div>
-                        <div className="mb-2">
-                            <label>Teléfono:</label>
-                            <input type="tel" name="telefono" className="form-control" value={formData.telefono} onChange={handleChange}  />
-                        </div>
-                        <div className="mb-2">
-                            <label>Fecha: </label>
-                            <input type="date" name="fecha" className="form-control" value={formData.telefono} onChange={handleChange} />
-                        </div>
-                        <div className="mb-2">
-                            <label>Horario: </label>
-                            <input type="time" name="horario" className="form-control" value={formData.telefono} onChange={handleChange} />
-                        </div>
-                        <div className="mb-2">
-                            <label>Correo Electronico: </label>
-                            <input type="email" name="correo" className="form-control" value={formData.telefono} onChange={handleChange} />
-                        </div>
-                        <div className="mb-2">
-                            <label>Transporte:</label>
-                            <select
-                                name="autobus" className="form-control" value={formData.autobus} onChange={handleChange}
-                            >
-                                <option value="">Selecciona una opción</option>
-                                <option value={true}>Sí</option>
-                                <option value={false}>No</option>
-                            </select>
-                        </div>
-                        </Modal.Body>
-                        <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setMostrarModal(false)}>
-                            Cancelar
-                        </Button>
-                        <Button variant="primary" onClick={guardarCambios}>
-                            Guardar cambios
-                        </Button>
-                    </Modal.Footer>
+                <Modal.Body>
+                    <div className="mb-2">
+                        <label>Institución:</label>
+                        <input type="text" name="institucion" className="form-control" value={formData.nombreOrg} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label>Solicitante:</label>
+                        <input type="text" name="solicitante" className="form-control" value={formData.nombreSoli} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label>Teléfono:</label>
+                        <input type="tel" name="telefono" className="form-control" value={formData.telefono} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label>Fecha: </label>
+                        <input type="date" name="fecha" className="form-control" value={formData.fecha} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label>Horario: </label>
+                        <select
+                            name="horario" className="form-control" value={formData.horario} onChange={handleChange}
+                        >
+                            <option>01:00</option>
+                            <option>03:00</option>
+                        </select>
+                    </div>
+                    <div className="mb-2">
+                        <label>Correo Electronico: </label>
+                        <input type="email" name="correo" className="form-control" value={formData.correo} onChange={handleChange} />
+                    </div>
+                    <div className="mb-2">
+                        <label>Transporte:</label>
+                        <select
+                            name="autobus" className="form-control" value={formData.autobus} onChange={handleChange}
+                        >
+                            <option>Si</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setMostrarModal(false)}>
+                        Cancelar
+                    </Button>
+                    <Button variant="primary" onClick={guardarCambios}>
+                        Guardar cambios
+                    </Button>
+                </Modal.Footer>
             </Modal>
         </div>
     );
