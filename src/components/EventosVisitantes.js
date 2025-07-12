@@ -8,25 +8,55 @@ const EventosSeleccionar = () => {
   const [eventos, setEventos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
-    const obtenerEventos = async () => {
-      try {
-        const respuesta = await fetch('http://localhost:3001/eventos');
-        if (!respuesta.ok) {
-          throw new Error('Error al obtener eventos');
-        }
-        const datos = await respuesta.json();
-        setEventos(datos);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setCargando(false);
-      }
-    };
-
-    obtenerEventos();
+    // Obtener usuario del localStorage
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      const parsedUser = JSON.parse(userData);
+      setUsuario(parsedUser);
+      obtenerEventosDisponibles(parsedUser.id);
+    } else {
+      setCargando(false);
+      setError('Usuario no identificado. Por favor inicia sesión.');
+    }
   }, []);
+
+  const obtenerEventosDisponibles = async (idVisitante) => {
+    try {
+      const respuesta = await fetch(`http://localhost:3001/eventos-disponibles/${idVisitante}`);
+      
+      if (!respuesta.ok) {
+        // Si hay un error en la respuesta, intentar obtener todos los eventos
+        if (respuesta.status === 404) {
+          console.warn('Endpoint específico no disponible, usando endpoint general');
+          return await obtenerTodosEventos();
+        }
+        throw new Error('Error al obtener eventos disponibles');
+      }
+      
+      const datos = await respuesta.json();
+      setEventos(datos);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const obtenerTodosEventos = async () => {
+    try {
+      const respuesta = await fetch('http://localhost:3001/eventos');
+      if (!respuesta.ok) {
+        throw new Error('Error al obtener eventos');
+      }
+      return await respuesta.json();
+    } catch (err) {
+      throw err;
+    }
+  };
 
   // Función para formatear fechas ISO a formato local
   const formatearFecha = (fechaISO) => {
@@ -85,7 +115,9 @@ const EventosSeleccionar = () => {
       <Comp_encabezado />
 
       <header className="eventos-header azul">
-        <h1 className="text-white m-0">Eventos Disponibles</h1>
+        <h1 className="text-white m-0">
+          {usuario ? `Eventos Disponibles para ${usuario.nombre}` : 'Eventos Disponibles'}
+        </h1>
       </header>
 
       <div className="eventos-container">

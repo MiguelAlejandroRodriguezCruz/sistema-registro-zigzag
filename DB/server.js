@@ -447,6 +447,30 @@ app.get('/eventos', (req, res) => {
   });
 });
 
+// Nuevo endpoint para obtener eventos no registrados por un usuario
+app.get('/eventos-disponibles/:idVisitante', (req, res) => {
+  const idVisitante = req.params.idVisitante;
+  
+  const query = `
+    SELECT e.* 
+    FROM evento e
+    WHERE e.id NOT IN (
+      SELECT f.id_evento 
+      FROM formularios f 
+      WHERE f.id_visitante = ?
+    )
+  `;
+
+  db.query(query, [idVisitante], (err, results) => {
+    if (err) {
+      console.error('Error al obtener eventos disponibles:', err.message);
+      res.status(500).send(err.message);
+      return;
+    }
+    res.json(results);
+  });
+});
+
 // Ruta para agregar eventos
 app.post('/eventos', upload.single('baner'), (req, res) => {
   try {
