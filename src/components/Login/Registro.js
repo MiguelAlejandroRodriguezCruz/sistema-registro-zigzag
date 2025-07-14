@@ -67,7 +67,7 @@ const RegistroForm = () => {
             <label className="login-label">Nombre completo</label>
             <input 
               type="text" 
-              className="form-control" 
+              className="uniforme" 
               placeholder="Juan Pérez" 
               name="nombre"
               value={formData.nombre}
@@ -80,7 +80,7 @@ const RegistroForm = () => {
             <label className="login-label">Correo</label>
             <input 
               type="email" 
-              className="form-control" 
+              className="uniforme" 
               placeholder="correo@ejemplo.com" 
               name="correo"
               value={formData.correo}
@@ -93,7 +93,7 @@ const RegistroForm = () => {
             <label className="login-label">Edad</label>
             <input 
               type="number" 
-              className="form-control" 
+              className="uniforme" 
               placeholder="25" 
               name="edad"
               value={formData.edad}
@@ -107,7 +107,7 @@ const RegistroForm = () => {
             <label className="login-label">Contraseña</label>
             <input 
               type="password" 
-              className="form-control" 
+              className="uniforme" 
               placeholder="********" 
               name="contrasena"
               value={formData.contrasena}

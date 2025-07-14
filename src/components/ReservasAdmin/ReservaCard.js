@@ -128,24 +128,24 @@ export function ReservaCard({ reserva, actualizarEstadoReserva }) {
                 <Modal.Body>
                     <div className="mb-2">
                         <label>Institución:</label>
-                        <input type="text" name="institucion" className="form-control" value={formData.nombreOrg} onChange={handleChange} />
+                        <input type="text" name="institucion" className="uniforme-reservas" value={formData.nombreOrg} onChange={handleChange} />
                     </div>
                     <div className="mb-2">
                         <label>Solicitante:</label>
-                        <input type="text" name="solicitante" className="form-control" value={formData.nombreSoli} onChange={handleChange} />
+                        <input type="text" name="solicitante" className="uniforme-reservas" value={formData.nombreSoli} onChange={handleChange} />
                     </div>
                     <div className="mb-2">
                         <label>Teléfono:</label>
-                        <input type="tel" name="telefono" className="form-control" value={formData.telefono} onChange={handleChange} />
+                        <input type="tel" name="telefono" className="uniforme-reservas" value={formData.telefono} onChange={handleChange} />
                     </div>
                     <div className="mb-2">
                         <label>Fecha: </label>
-                        <input type="date" name="fecha" className="form-control" value={formData.fecha} onChange={handleChange} />
+                        <input type="date" name="fecha" className="uniforme-reservas" value={formData.fecha} onChange={handleChange} />
                     </div>
                     <div className="mb-2">
                         <label>Horario: </label>
                         <select
-                            name="horario" className="form-control" value={formData.horario} onChange={handleChange}
+                            name="horario" className="uniforme-reservas" value={formData.horario} onChange={handleChange}
                         >
                             <option>01:00</option>
                             <option>03:00</option>
@@ -153,12 +153,12 @@ export function ReservaCard({ reserva, actualizarEstadoReserva }) {
                     </div>
                     <div className="mb-2">
                         <label>Correo Electronico: </label>
-                        <input type="email" name="correo" className="form-control" value={formData.correo} onChange={handleChange} />
+                        <input type="email" name="correo" className="uniforme-reservas" value={formData.correo} onChange={handleChange} />
                     </div>
                     <div className="mb-2">
                         <label>Transporte:</label>
                         <select
-                            name="autobus" className="form-control" value={formData.autobus} onChange={handleChange}
+                            name="autobus" className="uniforme-reservas" value={formData.autobus} onChange={handleChange}
                         >
                             <option>Si</option>
                             <option>No</option>

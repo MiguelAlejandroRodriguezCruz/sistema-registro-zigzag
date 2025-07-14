@@ -83,3 +83,7 @@
 input.form-control {
   max-width: 120px;
 }
+
+input.uniforme {
+  max-width: 100%;
+}

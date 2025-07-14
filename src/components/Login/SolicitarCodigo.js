@@ -42,7 +42,7 @@ export default function SolicitarCodigo() {
           <label className="login-label">Ingresa tu correo</label>
           <input
             type="email"
-            className="form-control"
+            className="uniforme"
             placeholder="correo@ejemplo.com"
             value={correo}
             onChange={(e) => setCorreo(e.target.value)}

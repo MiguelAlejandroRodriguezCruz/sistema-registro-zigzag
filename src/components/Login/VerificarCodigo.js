@@ -43,7 +43,7 @@ export default function VerificarCodigo() {
           <label className="login-label">Código recibido:</label>
           <input
             type="text"
-            className="form-control"
+            className="uniforme"
             value={codigo}
             onChange={(e) => setCodigo(e.target.value)}
             required

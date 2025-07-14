@@ -75,7 +75,7 @@ const LoginForm = () => {
             type="email" 
             name="correo"
             placeholder="correo@ejemplo.com" 
-            className="form-control" 
+            className="uniforme" 
             value={formData.correo}
             onChange={handleChange}
             required
@@ -88,7 +88,7 @@ const LoginForm = () => {
             type="password" 
             name="contrasena"
             placeholder="*******" 
-            className="form-control" 
+            className="uniforme" 
             value={formData.contrasena}
             onChange={handleChange}
             required

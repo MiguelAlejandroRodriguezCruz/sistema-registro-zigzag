@@ -43,7 +43,7 @@ export default function NuevaContrasena() {
           <label className="login-label">Escribe tu nueva contraseña:</label>
           <input
             type="password"
-            className="form-control"
+            className="uniforme"
             value={nueva}
             onChange={(e) => setNueva(e.target.value)}
             minLength="6"
