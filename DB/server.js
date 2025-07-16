@@ -86,6 +86,7 @@ app.get('/visitantes', (req, res) => {
     res.json(results);
   });
 });
+
 // Ruta para agregar los visitantes de institución
 app.post('/visitantes', (req, res) => {
   const datos = req.body;
@@ -287,31 +288,82 @@ app.get('/registro', (req, res) => {
 
 // Ruta para agregar registro de visitantes
 app.post('/registro-visitantes', (req, res) => {
-  const datos = req.body;
-  const query = `
-        INSERT INTO registrovisitas (
-            id_institucion, niños5a10, niños10a15, niños15a18, niñas5a10,
-            niñas10a15, niñas15a18, hombres20a30, hombres30a40, hombres40omas,
-            mujeres20a30, mujeres30a40, mujeres40omas, maestros20a30,
-            maestros30a40, maestros40omas
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-  const values = [
-    datos.idRegistro, datos.niños5a10, datos.niños10a15, datos.niños15a18, datos.niñas5a10,
-    datos.niñas10a15, datos.niñas15a18, datos.hombres20a30, datos.hombres30a40, datos.hombres40omas,
-    datos.mujeres20a30, datos.mujeres30a40, datos.mujeres40omas, datos.maestros20a30,
-    datos.maestros30a40, datos.maestros40omas
-  ];
+  const { idRegistro, visitantes } = req.body;
+  
+  if (!visitantes || visitantes.length === 0) {
+    return res.status(400).json({ error: "No hay datos de visitantes" });
+  }
 
-  console.log(datos.idRegistro)
-
-  db.query(query, values, (err, result) => {
+  // Obtener fecha actual en formato YYYY-MM-DD
+  const hoy = new Date().toISOString().split('T')[0];
+  
+  // Iniciar transacción
+  db.beginTransaction((err) => {
     if (err) {
-      console.error('Error al guardar el registro:', err.message);
-      res.status(500).send(err.message);
-      return;
+      return res.status(500).json({ error: "Error al iniciar transacción" });
     }
-    res.status(201).json({ idInsertado: result.insertId });
+
+    // Insertar visitantes con fecha
+    const promises = visitantes.map(visitante => {
+      return new Promise((resolve, reject) => {
+        const query = `
+          INSERT INTO registrovisitas 
+            (id_institucion, tipo, rango, cantidad, fecha_registro) 
+          VALUES (?, ?, ?, ?, ?)
+        `;
+        
+        const values = [
+          idRegistro, 
+          visitante.tipo, 
+          visitante.rango, 
+          visitante.cantidad,
+          hoy  // Agregar fecha actual
+        ];
+
+        db.query(query, values, (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        });
+      });
+    });
+
+    Promise.all(promises)
+      .then(() => {
+        // Actualizar estado de la reserva principal
+        const updateQuery = `
+          UPDATE visitantesinstitucion 
+          SET estatus = 'registradas'
+          WHERE id = ?
+        `;
+        
+        db.query(updateQuery, [idRegistro], (err, result) => {
+          if (err) {
+            return db.rollback(() => {
+              res.status(500).json({ error: "Error al actualizar estado" });
+            });
+          }
+          
+          // Confirmar transacción
+          db.commit((err) => {
+            if (err) {
+              return db.rollback(() => {
+                res.status(500).json({ error: "Error al confirmar transacción" });
+              });
+            }
+            
+            res.json({
+              mensaje: "Registros guardados y estado actualizado",
+              idActualizado: idRegistro
+            });
+          });
+        });
+      })
+      .catch(error => {
+        db.rollback(() => {
+          console.error(error);
+          res.status(500).json({ error: "Error en el servidor" });
+        });
+      });
   });
 });
 

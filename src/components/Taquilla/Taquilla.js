@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../../style/App.css";
-import logo from "../../images/zig_zag_logo.png";
 import EntradasConfirmadas from "./EntradasConfirmadas";
 import FormularioDatos from "./FormularioDatos";
 import DatosGuardados from "./DatosGuardados";
@@ -13,6 +12,7 @@ const Taquilla = () => {
   const [showDatosGuardados, setShowDatosGuardados] = useState(false);
   const [records, setRecords] = useState([]); // State para almacenar las reservas filtradas
   const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
+  const [reloadCounter, setReloadCounter] = useState(0);
 
   useEffect(() => {
     // Hacer la solicitud GET para obtener los registros de la API
@@ -26,12 +26,12 @@ const Taquilla = () => {
       .catch((error) => {
         console.error("Error al cargar los registros:", error);
       });
-  }, []);
+  }, [reloadCounter]);
 
   const handleRowClick = (record) => {
-    setRegistroSeleccionado(record); // Guarda el registro seleccionado
-    setShowFormulario(true);         // Muestra el modal
-  };
+  setRegistroSeleccionado(record.id);
+  setShowFormulario(true);
+};
 
   const handleProcesarEntradas = () => {
     setEntradasConfirmadas(false);
@@ -41,6 +41,12 @@ const Taquilla = () => {
   const handleGuardarFormulario = () => {
     setShowFormulario(false);
     setShowDatosGuardados(true);
+  };
+
+  // Función para recargar los datos cuando se cierra el modal
+  const handleCerrarDatosGuardados = () => {
+    setShowDatosGuardados(false);
+    setReloadCounter(prev => prev + 1); // Incrementa el contador para forzar recarga
   };
 
   return (
@@ -98,22 +104,22 @@ const Taquilla = () => {
 
       {/* Modal: FormularioDatos */}
       {showFormulario && (
-        <div className="modal-overlay d-flex justify-content-center align-items-center">
-          <div className="modal-content-custom">
-            <FormularioDatos
-              idRegistro={registroSeleccionado?.id}
-              onClose={() => setShowFormulario(false)}
-              onShowDatosGuardados={handleGuardarFormulario}
-            />
-          </div>
+      <div className="modal-overlay d-flex justify-content-center align-items-center">
+        <div className="modal-content-custom">
+          <FormularioDatos
+            idRegistro={registroSeleccionado} // Solo el ID numérico
+            onClose={() => setShowFormulario(false)}
+            onShowDatosGuardados={handleGuardarFormulario}
+          />
         </div>
+      </div>
       )}
 
       {/* Modal: DatosGuardados*/}
       {showDatosGuardados && (
         <div className="modal-overlay">
           <div className="modal-content-custom">
-            <DatosGuardados onClose={() => setShowDatosGuardados(false)} />
+            <DatosGuardados onClose={(handleCerrarDatosGuardados)} />
           </div>
         </div>
       )}
