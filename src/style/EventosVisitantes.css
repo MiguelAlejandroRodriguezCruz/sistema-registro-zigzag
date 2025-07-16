@@ -1,0 +1,73 @@
+/*---------------------------------- Eventos Visitantes ---------------------------------- */
+.eventos-container.azul {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.eventos-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.eventos-header.azul {
+  display: flex;
+  background-color: #0b5ed7;
+  /* Azul */
+
+}
+
+.logo {
+  height: 60px;
+}
+
+.evento-card {
+  background-color: #f1f1f1;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.evento-banner {
+  flex: 1;
+}
+
+
+
+.imagenes-banner img:first-child {
+  border: 2px solid #0b5ed7;
+  /* borde azul para banner principal */
+}
+
+.evento-descripcion {
+  flex: 2;
+  padding-left: 20px;
+}
+
+.seleccionar-evento {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+
+.disfrutar {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.descripcion {
+  font-size: 14px;
+  color: #333;
+}
+
+.duracion {
+  margin-top: 10px;
+  font-size: 13px;
+}

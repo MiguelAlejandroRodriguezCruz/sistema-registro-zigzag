@@ -1,0 +1,26 @@
+/* Header */
+
+.comp_encabezado {
+  display: flex;
+  range: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.encabezado__logo {
+  height: 60px;
+  cursor: pointer;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .encabezado__logo {
+    height: 40px;
+  }
+
+  .comp_encabezado {
+    justify-content: center;
+    padding: 8px 10px;
+  }
+}

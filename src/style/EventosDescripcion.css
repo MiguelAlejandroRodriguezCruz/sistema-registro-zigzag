@@ -1,3 +1,134 @@
+/*---------------------------------- Eventos Descripción ---------------------------------- */
+.evento-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  background-color: #0b53c1;
+  color: white;
+  padding: 10px;
+}
+
+.evento-card {
+  background-color: #eee;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.evento-info {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.evento-imagenes {
+  width: 120%;
+  display: flex;
+  flex-direction: column;
+  align-items: row;
+}
+
+
+.imagenes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: start;
+}
+
+.img-placeholder {
+  width: 150px;
+  height: 100px;
+  background-color: #ccc;
+  border: 2px solid #aaa;
+  border-radius: 5px;
+}
+
+.img-small-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.img-small-container {
+  position: relative;
+  width: 100%;
+  padding-top: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.img-small {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-placeholder.small {
+  width: 80px;
+  height: 45px;
+}
+
+.evento-detalles {
+  width: 55%;
+}
+
+.formulario {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.boletos-group {
+  display: flex;
+  gap: 10px;
+}
+
+.form-group.double {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-group.double>div {
+  width: 48%;
+}
+
+input {
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.boton {
+  background-color: #ccc;
+  padding: 8px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.banner-grande {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.banner-grande img.img-banner {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
 /* Estilos para el contenedor de imágenes */
 
 body {

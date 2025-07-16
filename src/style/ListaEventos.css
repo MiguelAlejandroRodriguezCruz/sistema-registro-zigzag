@@ -1,0 +1,96 @@
+/*---------------------------------- Lista Eventos ---------------------------------- */
+.eventos-container {
+  font-family: Arial, sans-serif;
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.eventos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #33a532;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.logo {
+  height: 60px;
+}
+
+.reservas-link {
+  color: white;
+  text-decoration: underline;
+  font-weight: bold;
+}
+
+.agregar-evento {
+  text-align: right;
+  margin: 10px 0;
+}
+
+.evento-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+
+.evento-banner {
+  flex: 1;
+}
+
+.imagenes-banner {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 600px;
+  max-height: none;
+}
+
+.imagenes-banner img {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  background-color: #f5f5f5;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 600px;
+  /* Aumenta este valor */
+  max-height: none;
+  /* Elimina la restricción de altura */
+}
+
+.evento-descripcion {
+  flex: 2;
+  padding-left: 20px;
+}
+
+.editar-evento {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+
+.disfrutar {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.descripcion {
+  font-size: 14px;
+  color: #333;
+}
+
+.duracion {
+  margin-top: 10px;
+  font-size: 13px;
+}

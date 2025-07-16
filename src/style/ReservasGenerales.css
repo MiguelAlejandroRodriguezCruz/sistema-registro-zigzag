@@ -1,0 +1,153 @@
+/*---------------------------------- Reservas Generales ---------------------------------- */
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.btn-pendiente {
+  background-color: #FFE551;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-pendiente:hover {
+  background-color: #e6c200;
+  /* Cambia el fondo al pasar el mouse */
+  cursor: pointer;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  border: #FFE551;
+  color: #cfa800;
+  ;
+}
+
+.btn-aprobada {
+  background-color: #2ABC00;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-aprobada:hover {
+  background-color: #24A000;
+  /* Cambia el fondo al pasar el mouse */
+  cursor: pointer;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  border: #32D901;
+  color: #12a802;
+  ;
+}
+
+.btn-rechazada {
+  background-color: #ff1e1e;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-rechazada:hover {
+  background-color: #c71616;
+  /* Cambia el fondo al pasar el mouse */
+  cursor: pointer;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  border: #a90000;
+  color: #960505;
+  ;
+}
+
+/* Pintar los días ocupados en verde */
+.react-calendar__tile.ocupada-verde {
+  background: #4caf50;
+  color: white;
+  border-radius: 8px;
+}
+
+/* Efecto al pasar el mouse */
+.react-calendar__tile.ocupada-verde:hover {
+  background: #45a049;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal-backdrop-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal-qr-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.qr-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+input.uniforme-reservas {
+  max-width: 100%
+}
