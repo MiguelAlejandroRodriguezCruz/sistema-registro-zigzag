@@ -63,6 +63,47 @@ const FormularioVisitas = () => {
       return;
     }
 
+    const regexNombre = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+
+    if (!regexNombre.test(formData.nombreSoli)) {
+      alert("El nombre del solicitante solo debe contener letras y espacios.");
+      return;
+    }
+
+    if (!regexNombre.test(formData.nombreOrg)) { 
+      alert("El nombre de la organización solo debe contener letras y espacios.");
+      return;
+    }
+
+    if (!regexNombre.test(formData.direccion)) {
+      alert("La dirección solo debe contener letras, números, espacios y algunos caracteres especiales.");
+      return;
+    }
+
+    if (!regexNombre.test(formData.colonia)) {
+      alert("La colonia solo debe contener letras y espacios.");
+      return;
+    }
+
+    if (!regexNombre.test(formData.municipio)) {
+      alert("El municipio solo debe contener letras y espacios.");
+      return;
+    }
+
+    const regexTelefono = /^[0-9]{10}$/;
+
+    if (!regexTelefono.test(formData.telefono)) {
+      alert("El teléfono debe contener exactamente 10 dígitos.");
+      return;
+    }
+
+    const regexCorreo = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!regexCorreo.test(formData.correo)) {
+      alert("El correo electrónico no es válido.");
+      return;
+    }
+
     const datosAEnviar = {
       ...formData,
       fecha: fechaFijada.toISOString().split("T")[0],
@@ -117,8 +158,13 @@ const FormularioVisitas = () => {
               type="text"
               name="nombreSoli"
               className="form-control mb-2"
+              title="Solo letras y espacios permitidos"
               value={formData.nombreSoli}
-              onChange={manejarCambio}
+              onChange={(e) => {
+                const soloLetras = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
+                manejarCambio({ target: { name: "nombreSoli", value: soloLetras } });
+              }}
+              required
             />
 
             <label style={{ fontSize: "19px" }} className="form-label">Nombre de la escuela/organización</label>
@@ -127,7 +173,10 @@ const FormularioVisitas = () => {
               name="nombreOrg"
               className="form-control mb-2"
               value={formData.nombreOrg}
-              onChange={manejarCambio}
+              onChange={(e) => {
+                const soloLetras = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
+                manejarCambio({ target: { name: "nombreOrg", value: soloLetras } });
+              }}
             />
 
             <label style={{ fontSize: "19px" }} className="form-label">No. de visitantes (alumnos)</label>
@@ -154,7 +203,10 @@ const FormularioVisitas = () => {
               name="telefono"
               className="form-control mb-2"
               value={formData.telefono}
-              onChange={manejarCambio}
+              onChange={(e) => {
+                const soloNumeros = e.target.value.replace(/[^0-9]/g, "");
+                manejarCambio({ target: { name: "telefono", value: soloNumeros } });
+              }}
             />
 
             <label style={{ fontSize: "19px" }} className="form-label">Dirección</label>
@@ -163,7 +215,10 @@ const FormularioVisitas = () => {
               name="direccion"
               className="form-control mb-2"
               value={formData.direccion}
-              onChange={manejarCambio}
+              onChange={(e) => {
+                const soloLetras = e.target.value.replace(/[^A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\s,.-]/g, "");
+                manejarCambio({ target: { name: "direccion", value: soloLetras } });
+              }}
             />
 
             <label style={{ fontSize: "19px" }} className="form-label">Colonia/Localidad</label>
@@ -172,7 +227,10 @@ const FormularioVisitas = () => {
               name="colonia"
               className="form-control mb-2"
               value={formData.colonia}
-              onChange={manejarCambio}
+              onChange={(e) => {
+                const soloLetras = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
+                manejarCambio({ target: { name: "colonia", value: soloLetras } });
+              }}
             />
 
             <label style={{ fontSize: "19px" }} className="form-label">¿Requiere de servicio de autobús?</label>
@@ -219,7 +277,10 @@ const FormularioVisitas = () => {
               name="municipio"
               className="form-control mb-2"
               value={formData.municipio}
-              onChange={manejarCambio}
+              onChange={(e) => {
+                const soloLetras = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
+                manejarCambio({ target: { name: "municipio", value: soloLetras } });
+              }}
             />
 
             <label style={{ fontSize: "19px" }} className="form-label">Correo Electrónico</label>
@@ -228,7 +289,10 @@ const FormularioVisitas = () => {
               name="correo"
               className="form-control mb-2"
               value={formData.correo}
-              onChange={manejarCambio}
+              onChange={(e) => {
+                const soloLetras = e.target.value.replace(/[^A-Za-z0-9._%+-@]/g, "");
+                manejarCambio({ target: { name: "correo", value: soloLetras } });
+              }}
             />
 
             <label style={{ fontSize: "19px" }} className="form-label">Tipo de recorrido requerido</label>
