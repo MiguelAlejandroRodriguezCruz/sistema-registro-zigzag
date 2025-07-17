@@ -252,6 +252,7 @@ const EventosDescripcion = () => {
             {formularioParseado.map((campo, index) => (
               <div className="form-group" key={campo.id || index}>
                 <label>{campo.label}{campo.required && <span className="text-danger">*</span>}</label>
+
                 {campo.type === 'checkbox' ? (
                   <div>
                     {campo.options ? (
@@ -293,9 +294,23 @@ const EventosDescripcion = () => {
                       </div>
                     )}
                   </div>
+                ) : campo.type === 'select' ? ( 
+                  <select
+                    className="form-control"
+                    value={respuestas[campo.id] || ''}
+                    onChange={(e) => handleCampoChange(campo.id, e.target.value)}
+                    required={campo.required}
+                  >
+                    <option value="">Seleccione una opción</option>
+                    {campo.options.map((opcion, i) => (
+                      <option key={i} value={opcion}>
+                        {opcion}
+                      </option>
+                    ))}
+                  </select>
                 ) : (
                   <input
-                    type="text"
+                    type={campo.type === 'number' ? 'number' : 'text'}
                     className="form-control"
                     placeholder={campo.placeholder || ''}
                     value={respuestas[campo.id] || ""}
