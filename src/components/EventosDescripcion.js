@@ -123,7 +123,7 @@ const EventosDescripcion = () => {
         num_ninos: parseInt(numNinos) || 0
       };
 
-      const respuesta = await fetch('http://localhost:3001/guardar-formulario', {
+      const respuesta = await fetch('http://localhost:3001/formulario/guardar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datosFormulario)
@@ -228,9 +228,9 @@ const EventosDescripcion = () => {
                 ))}
               </div>
             </div>
-            
+
             {/* CONTENIDO DETALLES + FORMULARIO EN COLUMNAS */}
-             <div className="evento-texto-formulario">
+            <div className="evento-texto-formulario">
               <div className="evento-detalles mb-a">
                 <p><strong>Podrás disfrutar de:</strong></p>
                 <p className="descripcion-evento">{evento.descripcion || "Descripción no disponible"}</p>
@@ -244,180 +244,180 @@ const EventosDescripcion = () => {
                 </div>
               </div>
 
-          {/* FORMULARIO */}
-          <form className="formulario" onSubmit={handleSubmit}>
-            <h4>Rellene el cuestionario solicitado:</h4>
+              {/* FORMULARIO */}
+              <form className="formulario" onSubmit={handleSubmit}>
+                <h4>Rellene el cuestionario solicitado:</h4>
 
-            {/* Renderizar campos del formulario dinámico */}
-            {formularioParseado.map((campo, index) => (
-              <div className="form-group" key={campo.id || index}>
-                <label>{campo.label}{campo.required && <span className="text-danger">*</span>}</label>
+                {/* Renderizar campos del formulario dinámico */}
+                {formularioParseado.map((campo, index) => (
+                  <div className="form-group" key={campo.id || index}>
+                    <label>{campo.label}{campo.required && <span className="text-danger">*</span>}</label>
 
-                {campo.type === 'checkbox' ? (
-                  <div>
-                    {campo.options ? (
-                      campo.options.map((opcion, i) => (
-                        <div key={i} className="form-check">
-                          <input
-                            type="checkbox"
-                            id={`${campo.id}-${i}`}
-                            className="form-check-input"
-                            checked={respuestas[campo.id]?.includes(opcion) || false}
-                            onChange={(e) => {
-                              const selected = respuestas[campo.id] || [];
-                              let newSelected;
-                              if (e.target.checked) {
-                                newSelected = [...selected, opcion];
-                              } else {
-                                newSelected = selected.filter(item => item !== opcion);
-                              }
-                              handleCampoChange(campo.id, newSelected);
-                            }}
-                          />
-                          <label htmlFor={`${campo.id}-${i}`} className="form-check-label">
-                            {opcion}
-                          </label>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="form-check">
-                        <input
-                          type="checkbox"
-                          id={campo.id}
-                          className="form-check-input"
-                          checked={respuestas[campo.id] || false}
-                          onChange={(e) => handleCampoChange(campo.id, e.target.checked)}
-                        />
-                        <label htmlFor={campo.id} className="form-check-label">
-                          {campo.label}
-                        </label>
+                    {campo.type === 'checkbox' ? (
+                      <div>
+                        {campo.options ? (
+                          campo.options.map((opcion, i) => (
+                            <div key={i} className="form-check">
+                              <input
+                                type="checkbox"
+                                id={`${campo.id}-${i}`}
+                                className="form-check-input"
+                                checked={respuestas[campo.id]?.includes(opcion) || false}
+                                onChange={(e) => {
+                                  const selected = respuestas[campo.id] || [];
+                                  let newSelected;
+                                  if (e.target.checked) {
+                                    newSelected = [...selected, opcion];
+                                  } else {
+                                    newSelected = selected.filter(item => item !== opcion);
+                                  }
+                                  handleCampoChange(campo.id, newSelected);
+                                }}
+                              />
+                              <label htmlFor={`${campo.id}-${i}`} className="form-check-label">
+                                {opcion}
+                              </label>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="form-check">
+                            <input
+                              type="checkbox"
+                              id={campo.id}
+                              className="form-check-input"
+                              checked={respuestas[campo.id] || false}
+                              onChange={(e) => handleCampoChange(campo.id, e.target.checked)}
+                            />
+                            <label htmlFor={campo.id} className="form-check-label">
+                              {campo.label}
+                            </label>
+                          </div>
+                        )}
                       </div>
+                    ) : campo.type === 'select' ? (
+                      <select
+                        className="form-control"
+                        value={respuestas[campo.id] || ''}
+                        onChange={(e) => handleCampoChange(campo.id, e.target.value)}
+                        required={campo.required}
+                      >
+                        <option value="">Seleccione una opción</option>
+                        {campo.options.map((opcion, i) => (
+                          <option key={i} value={opcion}>
+                            {opcion}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <input
+                        type={campo.type === 'number' ? 'number' : 'text'}
+                        className="form-control"
+                        placeholder={campo.placeholder || ''}
+                        value={respuestas[campo.id] || ""}
+                        onChange={(e) => handleCampoChange(campo.id, e.target.value)}
+                        required={campo.required}
+                      />
                     )}
                   </div>
-                ) : campo.type === 'select' ? ( 
-                  <select
-                    className="form-control"
-                    value={respuestas[campo.id] || ''}
-                    onChange={(e) => handleCampoChange(campo.id, e.target.value)}
-                    required={campo.required}
-                  >
-                    <option value="">Seleccione una opción</option>
-                    {campo.options.map((opcion, i) => (
-                      <option key={i} value={opcion}>
-                        {opcion}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
+                ))}
+
+                {/* Otros campos */}
+
+                <div className="form-group">
+                  <label>Fecha del evento: <span className="text-danger">*</span></label>
                   <input
-                    type={campo.type === 'number' ? 'number' : 'text'}
+                    type="date"
                     className="form-control"
-                    placeholder={campo.placeholder || ''}
-                    value={respuestas[campo.id] || ""}
-                    onChange={(e) => handleCampoChange(campo.id, e.target.value)}
-                    required={campo.required}
+                    min={evento.fechaInicio.split('T')[0]}
+                    max={evento.fechaFinal.split('T')[0]}
+                    value={fechaEvento}
+                    onChange={(e) => setFechaEvento(e.target.value)}
+                    required
                   />
+                </div>
+
+                <div className="form-group">
+                  <label>Número de Boletos a adquirir: <span className="text-danger">*</span></label>
+                  <div className="boletos-group d-flex gap-2">
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Adultos"
+                      min="0"
+                      value={numAdultos}
+                      onChange={(e) => setNumAdultos(e.target.value)}
+                      required
+                    />
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Niñ@s"
+                      min="0"
+                      value={numNinos}
+                      onChange={(e) => setNumNinos(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                {errorFormulario && (
+                  <div className="alert alert-danger">{errorFormulario}</div>
                 )}
-              </div>
-            ))}
 
-            {/* Otros campos */}
+                {mensajeExito && (
+                  <div className="alert alert-success">{mensajeExito}</div>
+                )}
 
-            <div className="form-group">
-              <label>Fecha del evento: <span className="text-danger">*</span></label>
-              <input
-                type="date"
-                className="form-control"
-                min={evento.fechaInicio.split('T')[0]}
-                max={evento.fechaFinal.split('T')[0]}
-                value={fechaEvento}
-                onChange={(e) => setFechaEvento(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Número de Boletos a adquirir: <span className="text-danger">*</span></label>
-              <div className="boletos-group d-flex gap-2">
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Adultos"
-                  min="0"
-                  value={numAdultos}
-                  onChange={(e) => setNumAdultos(e.target.value)}
-                  required
-                />
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Niñ@s"
-                  min="0"
-                  value={numNinos}
-                  onChange={(e) => setNumNinos(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            {errorFormulario && (
-              <div className="alert alert-danger">{errorFormulario}</div>
-            )}
-
-            {mensajeExito && (
-              <div className="alert alert-success">{mensajeExito}</div>
-            )}
-
-            <button
-              className="boton"
-              type="submit"
-              disabled={enviando}
-            >
-              {enviando ? (
-                <>
-                  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                  Guardando...
-                </>
-              ) : "Obtener boletos"}
-            </button>
-          </form>
-        </div>
-      </div>
-        {mostrarQR && (
-          <div className="modal-backdrop-custom">
-            <div className="modal-qr-content">
-              <h4 className="text-center mb-3">¡Reserva Generada!</h4>
-              <p className="text-center">
-                <strong>Boletos:</strong><br />
-                Adultos: {numAdultos} <br />
-                Niños: {numNinos}
-              </p>
-
-              <div className="qr-container">
-                <QRCodeCanvas
-                  value={`ReservaID:${qrValue}`}  // usa qrValue que viene del backend
-                  size={220}
-                />
-              </div>
-
-              <p className="text-center mt-3">
-                Lleva este código el día del evento
-              </p>
-
-              <div className="text-center mt-4">
                 <button
-                  className="btn btn-success"
-                  onClick={() => setMostrarQR(false)}
+                  className="boton"
+                  type="submit"
+                  disabled={enviando}
                 >
-                  Cerrar
+                  {enviando ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      Guardando...
+                    </>
+                  ) : "Obtener boletos"}
                 </button>
-              </div>
+              </form>
             </div>
           </div>
-        )}
+          {mostrarQR && (
+            <div className="modal-backdrop-custom">
+              <div className="modal-qr-content">
+                <h4 className="text-center mb-3">¡Reserva Generada!</h4>
+                <p className="text-center">
+                  <strong>Boletos:</strong><br />
+                  Adultos: {numAdultos} <br />
+                  Niños: {numNinos}
+                </p>
+
+                <div className="qr-container">
+                  <QRCodeCanvas
+                    value={`ReservaID:${qrValue}`}  // usa qrValue que viene del backend
+                    size={220}
+                  />
+                </div>
+
+                <p className="text-center mt-3">
+                  Lleva este código el día del evento
+                </p>
+
+                <div className="text-center mt-4">
+                  <button
+                    className="btn btn-success"
+                    onClick={() => setMostrarQR(false)}
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
 
-      </div>
+        </div>
       </div>
       <Comp_Pie_pagina />
     </div>
