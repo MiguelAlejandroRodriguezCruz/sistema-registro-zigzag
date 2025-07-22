@@ -25,8 +25,8 @@ const EventosSeleccionar = () => {
 
   const obtenerEventosDisponibles = async (idVisitante) => {
     try {
-      const respuesta = await fetch(`http://localhost:3001/eventos-disponibles/${idVisitante}`);
-      
+      const respuesta = await fetch(`http://localhost:3001/eventos/disponibles/${idVisitante}`);
+
       if (!respuesta.ok) {
         // Si hay un error en la respuesta, intentar obtener todos los eventos
         if (respuesta.status === 404) {
@@ -35,7 +35,7 @@ const EventosSeleccionar = () => {
         }
         throw new Error('Error al obtener eventos disponibles');
       }
-      
+
       const datos = await respuesta.json();
       setEventos(datos);
     } catch (err) {

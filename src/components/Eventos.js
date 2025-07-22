@@ -13,7 +13,7 @@ export default function CrearEvento() {
     lugar: "",
     descripcion: "",
     formulario: [],
-    baner:""
+    baner: ""
   });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +36,7 @@ export default function CrearEvento() {
             throw new Error('Error al obtener el evento');
           }
           const data = await response.json();
-          
+
           // Formatear fechas para el input
           const formattedData = {
             ...data,
@@ -44,7 +44,7 @@ export default function CrearEvento() {
             fechaFinal: data.fechaFinal ? data.fechaFinal.split('T')[0] : "",
             formulario: data.formulario ? JSON.parse(data.formulario) : []
           };
-          
+
           setFormData(formattedData);
           setFormFields(formattedData.formulario);
 
@@ -61,7 +61,7 @@ export default function CrearEvento() {
       };
       fetchEvento();
 
-       // Cargar imágenes existentes
+      // Cargar imágenes existentes
       const fetchEventImages = async () => {
         try {
           const response = await fetch(`http://localhost:3001/eventos/${id}/imagenes`);
@@ -85,23 +85,23 @@ export default function CrearEvento() {
   };
 
   // Manejar selección de imágenes adicionales
-const handleImageChange = (e) => {
-  const files = Array.from(e.target.files);
-  
-  // Validar que sean imágenes y no excedan el tamaño
-  const validFiles = files.filter(file => 
-    file.type.match('image.*') && file.size <= 5 * 1024 * 1024
-  );
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
 
-  if (validFiles.length !== files.length) {
-    setError('Algunos archivos no son imágenes o son demasiado grandes (máx. 5MB)');
-  }
+    // Validar que sean imágenes y no excedan el tamaño
+    const validFiles = files.filter(file =>
+      file.type.match('image.*') && file.size <= 5 * 1024 * 1024
+    );
 
-  // Crear previsualizaciones
-  const newPreviews = validFiles.map(file => URL.createObjectURL(file));
-  setImagePreviews(prev => [...prev, ...newPreviews]);
-  setImageFiles(prev => [...prev, ...validFiles]);
-};
+    if (validFiles.length !== files.length) {
+      setError('Algunos archivos no son imágenes o son demasiado grandes (máx. 5MB)');
+    }
+
+    // Crear previsualizaciones
+    const newPreviews = validFiles.map(file => URL.createObjectURL(file));
+    setImagePreviews(prev => [...prev, ...newPreviews]);
+    setImageFiles(prev => [...prev, ...validFiles]);
+  };
 
   // Eliminar preview de imagen
   const removeImagePreview = (index) => {
@@ -112,7 +112,7 @@ const handleImageChange = (e) => {
   // Eliminar imagen ya guardada
   const removeEventImage = async (imageId) => {
     try {
-      const response = await fetch(`http://localhost:3001/imagenes/${imageId}`, {
+      const response = await fetch(`http://localhost:3001/eventos/imagenes/${imageId}`, {
         method: 'DELETE'
       });
       if (!response.ok) throw new Error('Error al eliminar imagen');
@@ -131,15 +131,15 @@ const handleImageChange = (e) => {
         setError('Solo se permiten archivos de imagen');
         return;
       }
-      
+
       // Validar tamaño (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setError('El archivo es demasiado grande (máximo 5MB)');
         return;
       }
-      
+
       setBannerFile(file);
-      
+
       // Crear vista previa
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -232,14 +232,14 @@ const handleImageChange = (e) => {
       }
 
       console.log(isEditing ? 'Evento actualizado' : 'Evento creado con ID:', eventoId);
-      
+
       // Redirigir con estado para mostrar notificación
-      navigate("/lista-eventos", { 
-        state: { 
-          [isEditing ? 'eventoActualizado' : 'eventoCreado']: true 
-        } 
+      navigate("/lista-eventos", {
+        state: {
+          [isEditing ? 'eventoActualizado' : 'eventoCreado']: true
+        }
       });
-      
+
     } catch (err) {
       console.error('Error:', err);
       setError(err.message || `Ocurrió un error al ${isEditing ? 'actualizar' : 'crear'} el evento`);
@@ -268,8 +268,8 @@ const handleImageChange = (e) => {
         throw new Error('Error al eliminar el evento');
       }
 
-      navigate("/lista-eventos", { 
-        state: { eventoEliminado: true } 
+      navigate("/lista-eventos", {
+        state: { eventoEliminado: true }
       });
     } catch (err) {
       console.error('Error:', err);
@@ -296,13 +296,13 @@ const handleImageChange = (e) => {
   };
 
   const updateFieldLabel = (id, value) => {
-    setFormFields(formFields.map(field => 
+    setFormFields(formFields.map(field =>
       field.id === id ? { ...field, label: value } : field
     ));
   };
 
   const toggleFieldRequired = (id) => {
-    setFormFields(formFields.map(field => 
+    setFormFields(formFields.map(field =>
       field.id === id ? { ...field, required: !field.required } : field
     ));
   };
@@ -319,9 +319,9 @@ const handleImageChange = (e) => {
   };
 
   const addOption = (fieldId) => {
-    setFormFields(formFields.map(field => 
-      field.id === fieldId 
-        ? { ...field, options: [...field.options, ""] } 
+    setFormFields(formFields.map(field =>
+      field.id === fieldId
+        ? { ...field, options: [...field.options, ""] }
         : field
     ));
   };
@@ -338,176 +338,201 @@ const handleImageChange = (e) => {
 
   return (
     <div>
-       {/* Encabezado */}
-      <Comp_encabezado/>
+      {/* Encabezado */}
+      <Comp_encabezado />
       <div style={{ backgroundColor: "#22a31f", color: "#fff", padding: "10px" }}>
-              <h2 style={{ margin: 0, backgroundColor: "#22a31f" }}>Eventos</h2>
-              <a href="#" onClick={handleCancel} style={{ color: "#fff", textDecoration: "underline", fontSize: "14px", cursor: "pointer" }}>← Regresar</a>
-            </div>
-        <div style={{ padding: "20px", maxWidth: "1000px", margin: "auto" }}>
-           
-            
+        <h2 style={{ margin: 0, backgroundColor: "#22a31f" }}>Eventos</h2>
+        <a href="#" onClick={handleCancel} style={{ color: "#fff", textDecoration: "underline", fontSize: "14px", cursor: "pointer" }}>← Regresar</a>
+      </div>
+      <div style={{ padding: "20px", maxWidth: "1000px", margin: "auto" }}>
 
-            {/* Texto de instrucciones */}
-            <p style={{ marginTop: "20px", fontSize: "22px" }}>
-              <strong>NOTA: {isEditing ? 'Edición' : 'Creación'} de un evento, favor de llenar todos los campos disponibles y revisar correctamente el contenido de los mismos.</strong>
-            </p>
 
-            {error && (
-              <div className="alert alert-danger" style={{ marginTop: "20px" }}>
-                {error}
+
+        {/* Texto de instrucciones */}
+        <p style={{ marginTop: "20px", fontSize: "22px" }}>
+          <strong>NOTA: {isEditing ? 'Edición' : 'Creación'} de un evento, favor de llenar todos los campos disponibles y revisar correctamente el contenido de los mismos.</strong>
+        </p>
+
+        {error && (
+          <div className="alert alert-danger" style={{ marginTop: "20px" }}>
+            {error}
+          </div>
+        )}
+
+        {/* Formulario */}
+        <form onSubmit={handleSubmit}>
+          <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+            {/* Columna izquierda */}
+            <div style={{ flex: 1, minWidth: "300px" }}>
+              <div className="mb-3">
+                <label>Nombre del evento:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Escriba un nombre"
+                  name="nombre"
+                  value={formData.nombre}
+                  onChange={handleChange}
+                  required
+                />
               </div>
-            )}
 
-            {/* Formulario */}
-            <form onSubmit={handleSubmit}>
-              <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-                {/* Columna izquierda */}
-                <div style={{ flex: 1, minWidth: "300px" }}>
-                  <div className="mb-3">
-                    <label>Nombre del evento:</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
-                      placeholder="Escriba un nombre" 
-                      name="nombre"
-                      value={formData.nombre}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label>Fecha del evento:</label>
-                    <div style={{ display: "flex", gap: "10px" }}>
-                      <input 
-                        type="date" 
-                        className="form-control" 
-                        name="fechaInicio"
-                        value={formData.fechaInicio}
-                        onChange={handleChange}
-                        required
-                      />
-                      <input 
-                        type="date" 
-                        className="form-control" 
-                        name="fechaFinal"
-                        value={formData.fechaFinal}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <label>Lugar del evento:</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
-                      placeholder="Ingrese una dirección" 
-                      name="lugar"
-                      value={formData.lugar}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="mb-3">
-                    <label>Descripción del evento:</label>
-                    <textarea 
-                      className="form-control" 
-                      rows="5" 
-                      placeholder="Escriba aquí" 
-                      name="descripcion"
-                      value={formData.descripcion}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+              <div className="mb-3">
+                <label>Fecha del evento:</label>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <input
+                    type="date"
+                    className="form-control"
+                    name="fechaInicio"
+                    value={formData.fechaInicio}
+                    onChange={handleChange}
+                    required
+                  />
+                  <input
+                    type="date"
+                    className="form-control"
+                    name="fechaFinal"
+                    value={formData.fechaFinal}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
+              </div>
 
-                {/* Columna derecha */}
-                <div style={{ flex: 1, minWidth: "300px" }}>
-                  <div className="mb-3">
-                    <label>Banner:</label>
-                    <div className="mb-2">
-                      <input 
-                        type="file" 
-                        id="banner-upload"
-                        accept="image/*"
-                        onChange={handleBannerChange}
-                        style={{ display: 'none' }}
+              <div className="mb-3">
+                <label>Lugar del evento:</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Ingrese una dirección"
+                  name="lugar"
+                  value={formData.lugar}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label>Descripción del evento:</label>
+                <textarea
+                  className="form-control"
+                  rows="5"
+                  placeholder="Escriba aquí"
+                  name="descripcion"
+                  value={formData.descripcion}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Columna derecha */}
+            <div style={{ flex: 1, minWidth: "300px" }}>
+              <div className="mb-3">
+                <label>Banner:</label>
+                <div className="mb-2">
+                  <input
+                    type="file"
+                    id="banner-upload"
+                    accept="image/*"
+                    onChange={handleBannerChange}
+                    style={{ display: 'none' }}
+                  />
+                  <label
+                    htmlFor="banner-upload"
+                    className="btn btn-secondary w-100"
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {bannerFile || bannerPreview ? 'Cambiar Banner' : 'Seleccionar Banner'}
+                  </label>
+                </div>
+                <div className="image-placeholder mb-3" style={placeholderStyle}>
+                  {/* Vista previa del banner */}
+                  {bannerPreview ? (
+                    <div className="mb-3" style={{ textAlign: 'center' }}>
+                      <img
+                        src={bannerPreview}
+                        alt="Vista previa del banner"
+                        style={{
+                          maxWidth: '100%',
+                          maxHeight: '200px',
+                          border: '1px solid #ddd',
+                          borderRadius: '4px',
+                          padding: '5px'
+                        }}
                       />
-                      <label 
-                        htmlFor="banner-upload" 
-                        className="btn btn-secondary w-100"
-                        style={{ cursor: 'pointer' }}
-                      >
-                        {bannerFile || bannerPreview ? 'Cambiar Banner' : 'Seleccionar Banner'}
-                      </label>
+                      <p className="mt-2 small text-muted">
+                        Vista previa del banner
+                      </p>
                     </div>
+                  ) : (
                     <div className="image-placeholder mb-3" style={placeholderStyle}>
-                      {/* Vista previa del banner */}
-                      {bannerPreview ? (
-                        <div className="mb-3" style={{ textAlign: 'center' }}>
-                          <img 
-                            src={bannerPreview} 
-                            alt="Vista previa del banner" 
-                            style={{ 
-                              maxWidth: '100%', 
-                              maxHeight: '200px', 
-                              border: '1px solid #ddd',
-                              borderRadius: '4px',
-                              padding: '5px'
-                            }} 
-                          />
-                          <p className="mt-2 small text-muted">
-                            Vista previa del banner
-                          </p>
-                        </div>
-                      ) : (
-                        <div className="image-placeholder mb-3" style={placeholderStyle}>
-                          {isEditing && formData.baner !== "banner temporal" 
-                            ? "Banner existente (no cambiará a menos que suba uno nuevo)" 
-                            : "Sin banner seleccionado"}
-                        </div>
-                      )}
+                      {isEditing && formData.baner !== "banner temporal"
+                        ? "Banner existente (no cambiará a menos que suba uno nuevo)"
+                        : "Sin banner seleccionado"}
                     </div>
-                    {/* Sección para imágenes adicionales */}
-                    <div className="mb-3">
-                      <label>Imágenes adicionales del evento:</label>
-                      <div className="mb-2">
-                        <input 
-                          type="file" 
-                          id="image-upload"
-                          accept="image/*"
-                          onChange={handleImageChange}
-                          multiple
-                          style={{ display: 'none' }}
-                        />
-                        <label 
-                          htmlFor="image-upload" 
-                          className="btn btn-secondary w-100"
-                          style={{ cursor: 'pointer' }}
-                        >
-                          Seleccionar Imágenes
-                        </label>
-                      </div>
+                  )}
+                </div>
+                {/* Sección para imágenes adicionales */}
+                <div className="mb-3">
+                  <label>Imágenes adicionales del evento:</label>
+                  <div className="mb-2">
+                    <input
+                      type="file"
+                      id="image-upload"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      multiple
+                      style={{ display: 'none' }}
+                    />
+                    <label
+                      htmlFor="image-upload"
+                      className="btn btn-secondary w-100"
+                      style={{ cursor: 'pointer' }}
+                    >
+                      Seleccionar Imágenes
+                    </label>
+                  </div>
 
-                      {/* Previsualización de imágenes nuevas */}
-                      <div className="d-flex flex-wrap gap-2 mb-3">
-                        {imagePreviews.map((preview, index) => (
-                          <div key={index} className="position-relative" style={{ width: '100px', height: '100px' }}>
-                            <img 
-                              src={preview} 
-                              alt={`Preview ${index}`}
+                  {/* Previsualización de imágenes nuevas */}
+                  <div className="d-flex flex-wrap gap-2 mb-3">
+                    {imagePreviews.map((preview, index) => (
+                      <div key={index} className="position-relative" style={{ width: '100px', height: '100px' }}>
+                        <img
+                          src={preview}
+                          alt={`Preview ${index}`}
+                          className="img-thumbnail"
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm position-absolute top-0 end-0"
+                          onClick={() => removeImagePreview(index)}
+                          style={{ padding: '2px 5px' }}
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Imágenes ya guardadas (solo en edición) */}
+                  {isEditing && eventImages.length > 0 && (
+                    <div>
+                      <h6>Imágenes del evento:</h6>
+                      <div className="d-flex flex-wrap gap-2">
+                        {eventImages.map(img => (
+                          <div key={img.id} className="position-relative" style={{ width: '100px', height: '100px' }}>
+                            <img
+                              src={img.ruta_imagen}
+                              alt={`Evento ${img.id}`}
                               className="img-thumbnail"
                               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
                             <button
                               type="button"
                               className="btn btn-danger btn-sm position-absolute top-0 end-0"
-                              onClick={() => removeImagePreview(index)}
+                              onClick={() => removeEventImage(img.id)}
                               style={{ padding: '2px 5px' }}
                             >
                               &times;
@@ -515,190 +540,165 @@ const handleImageChange = (e) => {
                           </div>
                         ))}
                       </div>
-
-                      {/* Imágenes ya guardadas (solo en edición) */}
-                      {isEditing && eventImages.length > 0 && (
-                        <div>
-                          <h6>Imágenes del evento:</h6>
-                          <div className="d-flex flex-wrap gap-2">
-                            {eventImages.map(img => (
-                              <div key={img.id} className="position-relative" style={{ width: '100px', height: '100px' }}>
-                                <img 
-                                  src={img.ruta_imagen} 
-                                  alt={`Evento ${img.id}`}
-                                  className="img-thumbnail"
-                                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                />
-                                <button
-                                  type="button"
-                                  className="btn btn-danger btn-sm position-absolute top-0 end-0"
-                                  onClick={() => removeEventImage(img.id)}
-                                  style={{ padding: '2px 5px' }}
-                                >
-                                  &times;
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
                     </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <label>Formulario:</label>
-                    <button 
-                      type="button" 
-                      className="btn btn-warning w-100 mb-2"
-                      onClick={() => setShowFormBuilder(!showFormBuilder)}
-                    >
-                      {showFormBuilder ? 'Ocultar Constructor' : 'Crear formulario de evento'}
-                    </button>
-                    
-                    {showFormBuilder && (
-                      <div className="form-builder" style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '5px', marginBottom: '15px' }}>
-                        <div className="mb-3">
-                          <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('text')}>
-                            + Texto
-                          </button>
-                          <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('number')}>
-                            + Número
-                          </button>
-                          <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('select')}>
-                            + Selección
-                          </button>
-                          <button type="button" className="btn btn-sm btn-primary" onClick={() => addFormField('checkbox')}>
-                            + Checkbox
-                          </button>
-                        </div>
-
-                        {formFields.map((field) => (
-                          <div key={field.id} className="card mb-3">
-                            <div className="card-body">
-                              <div className="d-flex justify-content-between mb-2">
-                                <div>
-                                  <strong>{getFieldTypeName(field.type)}</strong>
-                                </div>
-                                <button 
-                                  type="button" 
-                                  className="btn btn-sm btn-danger"
-                                  onClick={() => removeFormField(field.id)}
-                                >
-                                  Eliminar
-                                </button>
-                              </div>
-                              
-                              <div className="mb-2">
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Etiqueta del campo"
-                                  value={field.label}
-                                  onChange={(e) => updateFieldLabel(field.id, e.target.value)}
-                                />
-                              </div>
-                              
-                              <div className="form-check mb-2">
-                                <input
-                                  type="checkbox"
-                                  className="form-check-input"
-                                  checked={field.required}
-                                  onChange={() => toggleFieldRequired(field.id)}
-                                />
-                                <label className="form-check-label">Requerido</label>
-                              </div>
-                              
-                              {field.type === 'select' && (
-                                <div>
-                                  <label>Opciones:</label>
-                                  {field.options.map((option, idx) => (
-                                    <div key={idx} className="d-flex mb-2">
-                                      <input
-                                        type="text"
-                                        className="form-control"
-                                        value={option}
-                                        onChange={(e) => updateOption(field.id, idx, e.target.value)}
-                                      />
-                                      <button 
-                                        type="button" 
-                                        className="btn btn-sm btn-danger ms-2"
-                                        onClick={() => removeOption(field.id, idx)}
-                                      >
-                                        -
-                                      </button>
-                                    </div>
-                                  ))}
-                                  <button 
-                                    type="button" 
-                                    className="btn btn-sm btn-secondary"
-                                    onClick={() => addOption(field.id)}
-                                  >
-                                    + Agregar opción
-                                  </button>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    
-                    <div className="preview mb-3" style={placeholderStyle}>
-                      <h5>Vista previa del formulario:</h5>
-                      {formFields.length === 0 ? (
-                        <p>No hay campos definidos</p>
-                      ) : (
-                        <div>
-                          {formFields.map((field) => (
-                            <div key={field.id} className="mb-2">
-                              <label>
-                                {field.label || "(Sin etiqueta)"} 
-                                {field.required && <span className="text-danger">*</span>}
-                              </label>
-                              {renderPreviewField(field)}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
 
-              {/* Botones */}
-              <div className="mt-4" style={{ display: "flex", gap: "10px" }}>
-              {isEditing && (
-                <button 
-                  type="button" 
-                  className="btn btn-danger"
-                  onClick={handleDelete}
-                  disabled={isLoading}
+              <div className="mb-3">
+                <label>Formulario:</label>
+                <button
+                  type="button"
+                  className="btn btn-warning w-100 mb-2"
+                  onClick={() => setShowFormBuilder(!showFormBuilder)}
                 >
-                  {isLoading ? 'Eliminando...' : 'Eliminar Evento'}
+                  {showFormBuilder ? 'Ocultar Constructor' : 'Crear formulario de evento'}
                 </button>
-              )}
-              
-              <button 
-                type="button" 
+
+                {showFormBuilder && (
+                  <div className="form-builder" style={{ border: '1px solid #ddd', padding: '15px', borderRadius: '5px', marginBottom: '15px' }}>
+                    <div className="mb-3">
+                      <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('text')}>
+                        + Texto
+                      </button>
+                      <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('number')}>
+                        + Número
+                      </button>
+                      <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('select')}>
+                        + Selección
+                      </button>
+                      <button type="button" className="btn btn-sm btn-primary" onClick={() => addFormField('checkbox')}>
+                        + Checkbox
+                      </button>
+                    </div>
+
+                    {formFields.map((field) => (
+                      <div key={field.id} className="card mb-3">
+                        <div className="card-body">
+                          <div className="d-flex justify-content-between mb-2">
+                            <div>
+                              <strong>{getFieldTypeName(field.type)}</strong>
+                            </div>
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-danger"
+                              onClick={() => removeFormField(field.id)}
+                            >
+                              Eliminar
+                            </button>
+                          </div>
+
+                          <div className="mb-2">
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Etiqueta del campo"
+                              value={field.label}
+                              onChange={(e) => updateFieldLabel(field.id, e.target.value)}
+                            />
+                          </div>
+
+                          <div className="form-check mb-2">
+                            <input
+                              type="checkbox"
+                              className="form-check-input"
+                              checked={field.required}
+                              onChange={() => toggleFieldRequired(field.id)}
+                            />
+                            <label className="form-check-label">Requerido</label>
+                          </div>
+
+                          {field.type === 'select' && (
+                            <div>
+                              <label>Opciones:</label>
+                              {field.options.map((option, idx) => (
+                                <div key={idx} className="d-flex mb-2">
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={option}
+                                    onChange={(e) => updateOption(field.id, idx, e.target.value)}
+                                  />
+                                  <button
+                                    type="button"
+                                    className="btn btn-sm btn-danger ms-2"
+                                    onClick={() => removeOption(field.id, idx)}
+                                  >
+                                    -
+                                  </button>
+                                </div>
+                              ))}
+                              <button
+                                type="button"
+                                className="btn btn-sm btn-secondary"
+                                onClick={() => addOption(field.id)}
+                              >
+                                + Agregar opción
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="preview mb-3" style={placeholderStyle}>
+                  <h5>Vista previa del formulario:</h5>
+                  {formFields.length === 0 ? (
+                    <p>No hay campos definidos</p>
+                  ) : (
+                    <div>
+                      {formFields.map((field) => (
+                        <div key={field.id} className="mb-2">
+                          <label>
+                            {field.label || "(Sin etiqueta)"}
+                            {field.required && <span className="text-danger">*</span>}
+                          </label>
+                          {renderPreviewField(field)}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Botones */}
+          <div className="mt-4" style={{ display: "flex", gap: "10px" }}>
+            {isEditing && (
+              <button
+                type="button"
                 className="btn btn-danger"
-                onClick={handleCancel}
-              >
-                Cancelar
-              </button>
-              
-              <button 
-                type="submit" 
-                className="btn btn-success"
+                onClick={handleDelete}
                 disabled={isLoading}
               >
-                {isLoading ? 'Guardando...' : isEditing ? 'Actualizar Evento' : 'Guardar Evento'}
+                {isLoading ? 'Eliminando...' : 'Eliminar Evento'}
               </button>
-            </div>
-            </form>
+            )}
+
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={handleCancel}
+            >
+              Cancelar
+            </button>
+
+            <button
+              type="submit"
+              className="btn btn-success"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Guardando...' : isEditing ? 'Actualizar Evento' : 'Guardar Evento'}
+            </button>
           </div>
-        <Comp_Pie_pagina/>
+        </form>
+      </div>
+      <Comp_Pie_pagina />
     </div>
-   
+
   );
 }
 
