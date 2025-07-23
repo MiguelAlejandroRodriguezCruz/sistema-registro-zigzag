@@ -24,12 +24,10 @@ export function ReservasLista({ reservas, pestanaActiva, actualizarEstadoReserva
         <>
             {/* Mostrar calendario solo si estamos en las aprobadas */}
             {pestanaActiva === "aprobadas" && (
-                <div className=" mt-4 ">
-                    <h4>Fechas ocupadas del calendario</h4>
-                    <div className="calendario-admin">
-                        <CalendarioFechasOcupadas/>
-                    </div>
-                </div>
+            <div className="mt-4">
+                <h4>Fechas ocupadas del calendario</h4>
+                <CalendarioFechasOcupadas />
+            </div>
             )}
 
             

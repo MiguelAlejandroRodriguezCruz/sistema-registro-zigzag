@@ -46,10 +46,21 @@ const CalendarioOcupado = () => {
                     if (view === "month" && estaOcupada(date)) {
                         return "ocupada-verde";
                     }
+
+                    // Sábado = 6, Domingo = 0
+                    const dia = date.getDay();
+                    if (dia === 0 || dia === 6) {
+                        return "fin-de-semana";
+                    }
                     return null;
                 }}
+
+
                 className="border p-2 rounded"
                 locale="es-ES"
+
+                
+            
             />
         </div>
     );

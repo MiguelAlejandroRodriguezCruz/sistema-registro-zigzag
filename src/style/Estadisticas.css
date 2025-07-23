@@ -1,0 +1,74 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  color: #212529;
+}
+
+.estadistica-box {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Reset visual de fines de semana, sin afectar el seleccionado */
+.react-calendar__tile.fin-de-semana {
+  color: #212529;
+  background-color: transparent;
+}
+
+/* Cuando el día es seleccionado, que se vea como seleccionado */
+.react-calendar__tile.fin-de-semana.react-calendar__tile--active,
+.react-calendar__tile.fin-de-semana.react-calendar__tile--hasActive {
+  background: #0d6efd !important; /* color azulito de Bootstrap */
+  color: white !important;
+  font-weight: bold;
+}
+
+.estadistica-box h4 {
+  font-weight: bold;
+}
+
+.estadistica-box .form-label {
+  font-size: 1rem;
+}
+
+.estadistica-box .form-select {
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.estadistica-box .table th,
+.estadistica-box .table td {
+  vertical-align: middle;
+  font-size: 0.95rem;
+}
+
+.estadistica-box .btn-info {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.75rem;
+}
+
+.estadistica-box .bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.estadistica-box .react-calendar {
+  width: 100%;
+  max-width: 100%;
+  font-size: 1.25rem;
+  border: none;
+  background-color: transparent;
+}
+
+/* Responsive: columnas en filas en pantallas pequeñas */
+@media (max-width: 768px) {
+  .estadistica-box .row {
+    flex-direction: column;
+  }
+
+  .estadistica-box .col-md-6 {
+    width: 100%;
+  }
+}

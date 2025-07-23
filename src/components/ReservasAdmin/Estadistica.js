@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import Calendar from "react-calendar";
+import "../../style/Estadisticas.css"
 import React from 'react';
 
 export default function Estadistica({ reservas }) {
@@ -10,6 +10,7 @@ export default function Estadistica({ reservas }) {
     const [estadisticas, setEstadisticas] = useState([]);
     const [detalles, setDetalles] = useState(null);
     const [totalGeneral, setTotalGeneral] = useState(0);
+    const [vistaCalendario, setVistaCalendario] = useState('month');
 
     // Obtener registros de la API
     useEffect(() => {
@@ -45,6 +46,7 @@ export default function Estadistica({ reservas }) {
         return false;
         });
 
+      
         // Calcular total general
         const total = registrosFiltrados.reduce((sum, reg) => sum + parseInt(reg.cantidad), 0);
         setTotalGeneral(total);
@@ -68,6 +70,16 @@ export default function Estadistica({ reservas }) {
 
         setEstadisticas(stats);
     }, [registros, fecha, agrupacion]);
+
+    useEffect(() => {
+          if (agrupacion === 'dia') {
+            setVistaCalendario('month'); // muestra días del mes
+          } else if (agrupacion === 'mes') {
+            setVistaCalendario('year'); // muestra los 12 meses
+          } else if (agrupacion === 'ano') {
+            setVistaCalendario('decade'); // muestra los años por década
+          }
+        }, [agrupacion]);
 
    // Formatear fecha según la agrupación
     const formatoFecha = () => {
@@ -96,10 +108,35 @@ export default function Estadistica({ reservas }) {
             <option value="ano">Año</option>
           </select>
           <Calendar
-            onChange={setFecha}
+            onChange={(value) => {
+              setFecha(value);
+            }}
+            onClickMonth={(value) => {
+              if (agrupacion === 'mes') setFecha(value);
+            }}
+            onClickYear={(value) => {
+              if (agrupacion === 'ano') setFecha(value);
+            }}
             value={fecha}
             locale="es-ES"
+            view={vistaCalendario}
+            maxDetail={
+              agrupacion === 'dia'
+              ? 'month'
+              : agrupacion === 'mes'
+              ? 'year'
+              : 'decade'
+            }
             className="border rounded p-2"
+            tileClassName={({ date, view }) => {
+                if (view === 'month') {
+                  const dia = date.getDay();
+                  if (dia === 0 || dia === 6) {
+                    return 'fin-de-semana'; // Aplica clase para sábado y domingo
+                  }
+                }
+                return null;
+              }}
           />
         </div>
 
