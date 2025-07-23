@@ -11,10 +11,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "db": "file:",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.1",
     "mysql2": "^3.14.0",
-    "nodemailer": "^7.0.4"
+    "nodemailer": "^7.0.4",
+    "qrcode": "^1.5.4"
   }
 }

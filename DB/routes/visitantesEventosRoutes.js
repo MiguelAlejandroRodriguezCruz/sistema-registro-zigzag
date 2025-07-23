@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const visitantesEventosController = require('../controllers/visitantesEventosController');
+const auth = require('../middlewares/auth');
 
-router.get('/', visitantesEventosController.obtenerVisitantesEventos);
+// Rutas protegidas con JWT
+router.get('/', auth, visitantesEventosController.obtenerVisitantesEventos);
+router.put('/:id', auth, visitantesEventosController.actualizarVisitanteEvento);
+router.delete('/:id', auth, visitantesEventosController.eliminarVisitanteEvento);
+
+// Rutas públicas
 router.post('/', visitantesEventosController.agregarVisitanteEvento);
-router.put('/:id', visitantesEventosController.actualizarVisitanteEvento);
-router.delete('/:id', visitantesEventosController.eliminarVisitanteEvento);
 router.post('/login', visitantesEventosController.loginVisitanteEvento);
 
 module.exports = router;

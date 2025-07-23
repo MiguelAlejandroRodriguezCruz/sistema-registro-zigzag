@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const bcrypt = require('bcryptjs');
 
 const VisitanteEvento = {
 
@@ -8,7 +9,9 @@ const VisitanteEvento = {
 
     create: (datos, callback) => {
         const query = `INSERT INTO visitanteseventos (nombre, correo, edad, contrasena) VALUES (?, ?, ?, ?)`;
-        const values = [datos.nombre, datos.correo, datos.edad, datos.contrasena];
+        // Encriptar la contraseña antes de insertar
+        const hash = bcrypt.hashSync(datos.contrasena, 10);
+        const values = [datos.nombre, datos.correo, datos.edad, hash];
         db.query(query, values, callback);
     },
 
@@ -19,6 +22,9 @@ const VisitanteEvento = {
 
         Object.keys(datos).forEach((key) => {
             if (datos[key] !== "" && datos[key] !== undefined) {
+                if (key === 'contrasena') {
+                    datos[key] = bcrypt.hashSync(datos[key], 10);
+                }
                 fields.push(`${key} = ?`);
                 values.push(datos[key]);
             }
