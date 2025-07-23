@@ -38,6 +38,10 @@ const VisitanteEvento = {
 
     findByCorreo: (correo, callback) => {
         db.query('SELECT * FROM visitanteseventos WHERE correo = ? LIMIT 1', [correo], callback);
+    },
+
+    findByCorreoById: (id, callback) => {
+        db.query('SELECT * FROM visitanteseventos WHERE id = ?', [id], callback);
     }
 
 };

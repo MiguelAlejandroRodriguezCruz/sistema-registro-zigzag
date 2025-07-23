@@ -13,9 +13,9 @@ const formulariosModel = {
         return result.insertId;
     },
 
-    async actualizarCodigoQR(idFormulario, codigoQR) {
+    async actualizarCodigoQR(idFormulario, qrRelativePath) {
         const sql = `UPDATE formularios SET codigo_qr = ? WHERE id = ?`;
-        await db.promise().execute(sql, [codigoQR, idFormulario]);
+        await db.promise().execute(sql, [qrRelativePath, idFormulario]);
     }
 };
 
