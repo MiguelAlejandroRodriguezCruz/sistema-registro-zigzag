@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react"; // Agrega useRef
 import { useParams } from "react-router-dom";
 import { Comp_encabezado } from "./Comp_encabezado";
 import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
@@ -22,11 +22,13 @@ const EventosDescripcion = () => {
   const [mensajeExito, setMensajeExito] = useState("");
   const [errorFormulario, setErrorFormulario] = useState("");
   const [user, setUser] = useState(null);
+  const [indiceImagenActual, setIndiceImagenActual] = useState(0);
 
   const [mostrarQR, setMostrarQR] = useState(false);
   const [idReserva, setIdReserva] = useState(null);
   const [qrValue, setQrValue] = useState("");
 
+  const intervalRef = useRef(null); // ← Referencia al interval
 
   // Función para formatear fechas (igual que en EventosSeleccionar)
   const formatearFecha = (fechaISO) => {
@@ -42,6 +44,17 @@ const EventosDescripcion = () => {
       return 'Fecha inválida';
     }
   };
+
+  const cambiarImagen = (nuevoIndex) => {
+  setIndiceImagenActual(nuevoIndex);
+
+  // Reinicia el intervalo
+  clearInterval(intervalRef.current);
+  intervalRef.current = setInterval(() => {
+    setIndiceImagenActual((prev) => (prev + 1) % imagenes.length);
+  }, 3000);
+};
+
 
   useEffect(() => {
     // Recuperar usuario del localStorage
@@ -91,6 +104,21 @@ const EventosDescripcion = () => {
 
     cargarEvento();
   }, [id]);
+
+  useEffect(() => {
+    if (imagenes.length === 0) return;
+
+    const iniciarIntervalo = () => {
+      intervalRef.current = setInterval(() => {
+        setIndiceImagenActual((prev) => (prev + 1) % imagenes.length);
+      }, 3000);
+    };
+
+    iniciarIntervalo();
+
+    return () => clearInterval(intervalRef.current);
+  }, [imagenes]);
+
 
   // Manejar cambios en campos dinámicos
   const handleCampoChange = (campoId, value) => {
@@ -212,16 +240,53 @@ const EventosDescripcion = () => {
 
               {/* Imágenes adicionales */}
               <div className="img-small-grid">
-                {imagenes.map((imagen, index) => (
-                  <div key={imagen.id} className="img-small-container">
-                    <img
-                      src={imagen.ruta_imagen}
-                      alt={`Imagen ${index + 1} de ${evento.nombre}`}
-                      className="img-small"
-                    />
+                {imagenes.length > 0 && (
+                  <div className="carrusel-contenedor">
+                    <div className="img-small-container carrusel-imagen">
+                      <img
+                        src={imagenes[indiceImagenActual].ruta_imagen}
+                        alt={`Imagen ${indiceImagenActual + 1} de ${evento.nombre}`}
+                        className="img-small"
+                      />
+                    </div>
+
+                    {/* Controles de navegación */}
+                    <div className="carrusel-controles">
+                      <button
+                        className="carrusel-btn"
+                        onClick={() =>
+                          cambiarImagen(indiceImagenActual === 0 ? imagenes.length - 1 : indiceImagenActual - 1)
+                        }
+                      >
+                        «
+                      </button>
+
+                      {imagenes.map((_, index) => (
+                        <button
+                          key={index}
+                          className={`carrusel-indicador ${
+                            index === indiceImagenActual ? "activo" : ""
+                          }`}
+                          onClick={() => cambiarImagen(index)}
+                        >
+                          {index + 1}
+                        </button>
+                      ))}
+
+                      <button
+                        className="carrusel-btn"
+                        onClick={() =>
+                          cambiarImagen((indiceImagenActual + 1) % imagenes.length)
+                        }
+                      >
+                        »
+                      </button>
+                    </div>
                   </div>
-                ))}
+                )}
+
               </div>
+
 
             </div>
 
