@@ -212,7 +212,7 @@ const EventosDescripcion = () => {
 
               {/* Imágenes adicionales */}
               <div className="img-small-grid">
-                {imagenes.slice(0, 4).map((imagen, index) => (
+                {imagenes.map((imagen, index) => (
                   <div key={imagen.id} className="img-small-container">
                     <img
                       src={imagen.ruta_imagen}
@@ -221,12 +221,8 @@ const EventosDescripcion = () => {
                     />
                   </div>
                 ))}
-
-                {/* Placeholders si hay menos de 4 imágenes */}
-                {Array.from({ length: 4 - Math.min(imagenes.length, 4) }).map((_, i) => (
-                  <div key={`placeholder-${i}`} className="img-placeholder small"></div>
-                ))}
               </div>
+
             </div>
 
             {/* CONTENIDO DETALLES + FORMULARIO EN COLUMNAS */}
