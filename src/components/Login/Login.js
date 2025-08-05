@@ -42,6 +42,8 @@ const LoginForm = () => {
 
       // Guardar información del usuario en localStorage
       localStorage.setItem('user', JSON.stringify(data.visitante));
+      localStorage.setItem('token', data.token); // ← Guarda el token
+
       
       // Redirigir a la página de eventos
       navigate("/eventos-visitantes");

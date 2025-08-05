@@ -13,6 +13,7 @@ import Registro from '../components/Login/Registro'
 import NuevaContrasena from '../components/Login/NuevaContrasena';
 import SolicitarCodigo from '../components/Login/SolicitarCodigo';
 import VerificarCodigo from '../components/Login/VerificarCodigo';
+import PrivateRoute from '../components/PrivateRoute';
 
 const AppRoutes = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -29,8 +30,8 @@ const AppRoutes = () => {
                 <Route path="/eventos" element={<Eventos />} />
                 <Route path="/eventos/:id" element={<Eventos />} />
                 <Route path="/lista-eventos" element={<ListaEventos />} />
-                <Route path="/eventos-visitantes" element={<EventosVisitantes />} />
-                <Route path="/eventos-descripcion/:id" element={<EventosDescripcion />} />
+                <Route path="/eventos-visitantes" element={<PrivateRoute><EventosVisitantes /></PrivateRoute>} />
+                <Route path="/eventos-descripcion/:id" element={<PrivateRoute><EventosDescripcion /></PrivateRoute>} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/registro' element={<Registro />} />
                 <Route path='/nueva-contrasena' element={<NuevaContrasena />} />
