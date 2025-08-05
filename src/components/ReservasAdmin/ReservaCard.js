@@ -128,20 +128,47 @@ export function ReservaCard({ reserva, actualizarEstadoReserva }) {
                 <Modal.Body>
                     <div className="mb-2">
                         <label>Institución:</label>
-                        <input type="text" name="institucion" className="uniforme-reservas" value={formData.nombreOrg} onChange={handleChange} />
-                    </div>
+                        <input 
+                            type="text" 
+                            name="institucion" 
+                            className="uniforme-reservas" 
+                            value={formData.nombreOrg} 
+                            onChange={handleChange} />
+                        </div>
                     <div className="mb-2">
                         <label>Solicitante:</label>
-                        <input type="text" name="solicitante" className="uniforme-reservas" value={formData.nombreSoli} onChange={handleChange} />
-                    </div>
+                        <input 
+                            type="text" 
+                            name="solicitante" 
+                            className="uniforme-reservas" 
+                            value={formData.nombreSoli} 
+                            onChange={(e) => {
+                                const soloLetras = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "");
+                                handleChange({ target: { name: "solicitante", value: soloLetras } });
+                            }} />
+                        </div>
                     <div className="mb-2">
                         <label>Teléfono:</label>
-                        <input type="tel" name="telefono" className="uniforme-reservas" value={formData.telefono} onChange={handleChange} />
-                    </div>
+                        <input 
+                            type="tel" 
+                            name="telefono" 
+                            className="uniforme-reservas" 
+                            value={formData.telefono} 
+                            maxLength="10"
+                            onChange={(e) => {
+                                const soloNumeros = e.target.value.replace(/[^0-9]/g, "");
+                                handleChange({ target: { name: "telefono", value: soloNumeros } });
+                            }} />
+                        </div>
                     <div className="mb-2">
                         <label>Fecha: </label>
-                        <input type="date" name="fecha" className="uniforme-reservas" value={formData.fecha} onChange={handleChange} />
-                    </div>
+                        <input 
+                            type="date" 
+                            name="fecha" 
+                            className="uniforme-reservas" 
+                            value={formData.fecha} 
+                            onChange={handleChange} />
+                        </div>
                     <div className="mb-2">
                         <label>Horario: </label>
                         <select

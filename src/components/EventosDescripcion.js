@@ -15,8 +15,8 @@ const EventosDescripcion = () => {
 
   // Estados para el formulario
   const [fechaEvento, setFechaEvento] = useState("");
-  const [numAdultos, setNumAdultos] = useState(0);
-  const [numNinos, setNumNinos] = useState(0);
+  const [numAdultos, setNumAdultos] = useState("");
+  const [numNinos, setNumNinos] = useState("");
   const [respuestas, setRespuestas] = useState({});
   const [enviando, setEnviando] = useState(false);
   const [mensajeExito, setMensajeExito] = useState("");
@@ -340,21 +340,31 @@ const EventosDescripcion = () => {
                   <label>Número de Boletos a adquirir: <span className="text-danger">*</span></label>
                   <div className="boletos-group d-flex gap-2">
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="Adultos"
                       min="0"
                       value={numAdultos}
-                      onChange={(e) => setNumAdultos(e.target.value)}
+                      onChange={(e) => {
+                        const soloNumeros = e.target.value.replace(/[^0-9]/g, "");
+                        setNumAdultos(soloNumeros);
+                      }}
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       required
                     />
                     <input
-                      type="number"
+                      type="text"
                       className="form-control"
                       placeholder="Niñ@s"
                       min="0"
                       value={numNinos}
-                      onChange={(e) => setNumNinos(e.target.value)}
+                      onChange={(e) => {
+                        const soloNumeros = e.target.value.replace(/[^0-9]/g, "");
+                        setNumNinos(soloNumeros);
+                      }}
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       required
                     />
                   </div>

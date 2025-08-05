@@ -104,6 +104,13 @@ const FormularioVisitas = () => {
       return;
     }
 
+    const regexNumero = /^[0-9]+$/;
+
+    if (!regexNumero.test(formData.noVisitantesA) || !regexNumero.test(formData.noVisitantesD)) {
+      alert("El número de visitantes debe ser un valor numérico.");
+      return;
+    }
+
     const datosAEnviar = {
       ...formData,
       fecha: fechaFijada.toISOString().split("T")[0],
@@ -181,20 +188,32 @@ const FormularioVisitas = () => {
 
             <label style={{ fontSize: "19px" }} className="form-label">No. de visitantes (alumnos)</label>
             <input
-              type="number"
+              type="text"
               name="noVisitantesA"
               className="form-control mb-2"
               value={formData.noVisitantesA}
-              onChange={manejarCambio}
+              onChange={(e) => {
+                const soloNumeros = e.target.value.replace(/[^0-9]/g, "");
+                manejarCambio({ target: { name: "noVisitantesA", value: soloNumeros } });
+              }}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              required
             />
 
             <label style={{ fontSize: "19px" }} className="form-label">No. de visitantes (docentes)</label>
             <input
-              type="number"
+              type="text"
               name="noVisitantesD"
               className="form-control mb-2"
               value={formData.noVisitantesD}
-              onChange={manejarCambio}
+              onChange={(e) => {
+                const soloNumeros = e.target.value.replace(/[^0-9]/g, "");
+                manejarCambio({ target: { name: "noVisitantesD", value: soloNumeros } });
+              }}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              required
             />
 
             <label style={{ fontSize: "19px" }} className="form-label">Teléfono</label>
