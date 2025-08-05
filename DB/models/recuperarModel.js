@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const bcrypt = require('bcryptjs');
 
 const recuperarModel = {
     buscarCorreo: async (correo) => {
@@ -25,11 +26,14 @@ const recuperarModel = {
     },
 
     cambiarContrasena: async (correo, nuevaContrasena) => {
-        await db.promise().query(
-            'UPDATE visitanteseventos SET contrasena = ? WHERE correo = ?',
-            [nuevaContrasena, correo]
-        );
-    }
+    // Encriptar la nueva contraseña antes de guardarla
+    const hash = bcrypt.hashSync(nuevaContrasena, 10);
+
+    await db.promise().query(
+        'UPDATE visitanteseventos SET contrasena = ? WHERE correo = ?',
+        [hash, correo]
+    );
+}
 };
 
 module.exports = recuperarModel;

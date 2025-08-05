@@ -8,26 +8,31 @@ export default function SolicitarCodigo() {
   const navigate = useNavigate();
 
   const handleEnviarCodigo = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const res = await fetch('http://localhost:3001/recuperar/enviar-codigo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ correo }),
-      });
+  // Navegar inmediatamente
+  navigate('/verificar-codigo', { state: { correo } });
 
-      const data = await res.json();
+  // Enviar solicitud sin bloquear la navegación
+  try {
+    const res = await fetch('http://localhost:3001/recuperar/enviar-codigo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ correo }),
+    });
 
-      if (!res.ok) throw new Error(data.mensaje);
+    const data = await res.json();
 
-      alert('Código enviado a tu correo ');
-      navigate('/verificar-codigo', { state: { correo } });
+    if (!res.ok) throw new Error(data.mensaje);
 
-    } catch (err) {
-      alert(`Error: ${err.message}`);
-    }
-  };
+    // Esto ya no se verá a menos que navegues de nuevo o lo muestres en la siguiente página
+    console.log('Código enviado con éxito');
+  } catch (err) {
+    console.error(`Error: ${err.message}`);
+    // Opcional: podrías almacenar este error en algún contexto o estado global para mostrarlo luego
+  }
+};
+
 
 
   return (

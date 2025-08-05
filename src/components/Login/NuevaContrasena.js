@@ -5,11 +5,17 @@ import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
 
 export default function NuevaContrasena() {
   const [nueva, setNueva] = useState("");
+  const [confirmar, setConfirmar] = useState("");
   const navigate = useNavigate();
   const { state } = useLocation();
 
   const handleCambiar = async (e) => {
     e.preventDefault();
+
+    if (nueva !== confirmar) {
+      alert("Las contraseñas no coinciden");
+      return;
+    }
 
     try {
       const res = await fetch('http://localhost:3001/recuperar/cambiar-contrasena', {
@@ -24,12 +30,10 @@ export default function NuevaContrasena() {
 
       alert('Contraseña actualizada, inicia sesión');
       navigate('/login');
-
     } catch (err) {
       alert(`Error: ${err.message}`);
     }
   };
-
 
   return (
     <div className="d-flex flex-column min-vh-100 bg-light">
@@ -51,7 +55,26 @@ export default function NuevaContrasena() {
           />
         </div>
 
-        <button type="submit" className="login-button btn btn-primary w-100">
+        <div className="mb-3">
+          <label className="login-label">Confirma tu nueva contraseña:</label>
+          <input
+            type="password"
+            className="uniforme"
+            value={confirmar}
+            onChange={(e) => setConfirmar(e.target.value)}
+            minLength="6"
+            required
+          />
+          {confirmar && nueva !== confirmar && (
+            <small className="text-danger">Las contraseñas no coinciden</small>
+          )}
+        </div>
+
+        <button
+          type="submit"
+          className="login-button btn btn-primary w-100"
+          disabled={nueva !== confirmar}
+        >
           Guardar nueva contraseña
         </button>
       </form>
