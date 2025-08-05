@@ -40,7 +40,7 @@ exports.loginVisitanteEvento = (req, res) => {
     VisitanteEvento.findByCorreo(correo, (err, visitante) => {
         if (err) return res.status(500).send(err.message);
 
-        if (!visitante) {
+        if (!visitante || visitante.length === 0) {
             return res.status(401).json({ mensaje: 'Correo no registrado' });
         }
         const usuario = visitante[0];
