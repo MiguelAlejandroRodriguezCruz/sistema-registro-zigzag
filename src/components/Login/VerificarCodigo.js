@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Comp_encabezado } from "../Comp_encabezado";
 import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { API_BASE_URL } from "../../config/api";
 
 export default function VerificarCodigo() {
   const [codigo, setCodigo] = useState("");
@@ -12,7 +13,7 @@ export default function VerificarCodigo() {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:3001/recuperar/verificar-codigo', {
+      const res = await fetch(`${API_BASE_URL}/recuperar/verificar-codigo`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ correo: state?.correo, codigo }),

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../style/App.css";
+import { API_BASE_URL } from "../../config/api";
 
 const GroupAgeForm = ({ idRegistro, onClose, onShowDatosGuardados }) => {
   const [rows, setRows] = useState([
@@ -31,7 +32,7 @@ const GroupAgeForm = ({ idRegistro, onClose, onShowDatosGuardados }) => {
       // Filtrar solo las filas con cantidad > 0
       const datosEnviar = rows.filter(row => row.cantidad > 0);
       
-      const response = await fetch("http://localhost:3001/registro-visitantes", {
+      const response = await fetch(`${API_BASE_URL}/registro-visitantes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

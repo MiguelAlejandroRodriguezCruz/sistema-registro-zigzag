@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
 import { Comp_encabezado } from './Comp_encabezado';
 import { Comp_Pie_pagina } from './Comp_Pie_pagina';
-
+import { API_BASE_URL } from "../config/api";
 
 const EventosSeleccionar = () => {
   const [eventos, setEventos] = useState([]);
@@ -25,7 +25,7 @@ const EventosSeleccionar = () => {
 
   const obtenerEventosDisponibles = async (idVisitante) => {
     try {
-      const respuesta = await fetch(`http://localhost:3001/eventos/disponibles/${idVisitante}`);
+      const respuesta = await fetch(`${API_BASE_URL}/eventos/disponibles/${idVisitante}`);
 
       if (!respuesta.ok) {
         // Si hay un error en la respuesta, intentar obtener todos los eventos
@@ -48,7 +48,7 @@ const EventosSeleccionar = () => {
 
   const obtenerTodosEventos = async () => {
     try {
-      const respuesta = await fetch('http://localhost:3001/eventos');
+      const respuesta = await fetch(`${API_BASE_URL}/eventos`);
       if (!respuesta.ok) {
         throw new Error('Error al obtener eventos');
       }

@@ -5,6 +5,7 @@ import FormularioDatos from "./FormularioDatos";
 import DatosGuardados from "./DatosGuardados";
 import { Comp_encabezado } from "../Comp_encabezado";
 import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { API_BASE_URL } from "../../config/api";
 
 const Taquilla = () => {
   const [showEntradasConfirmadas, setEntradasConfirmadas] = useState(false);
@@ -16,7 +17,7 @@ const Taquilla = () => {
 
   useEffect(() => {
     // Hacer la solicitud GET para obtener los registros de la API
-    fetch("http://localhost:3001/visitantes") // Ajusta la URL de la API si es necesario
+    fetch(`${API_BASE_URL}/visitantes`) // Ajusta la URL de la API si es necesario
       .then((response) => response.json())
       .then((data) => {
         // Filtrar los registros donde el estatus es "aprobadas"

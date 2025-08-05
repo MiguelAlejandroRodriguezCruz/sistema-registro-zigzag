@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Comp_encabezado } from "../Comp_encabezado";
 import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { API_BASE_URL } from "../../config/api";
 
 export default function NuevaContrasena() {
   const [nueva, setNueva] = useState("");
@@ -18,7 +19,7 @@ export default function NuevaContrasena() {
     }
 
     try {
-      const res = await fetch('http://localhost:3001/recuperar/cambiar-contrasena', {
+      const res = await fetch(`${API_BASE_URL}/recuperar/cambiar-contrasena`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ correo: state?.correo, nuevaContrasena: nueva }),

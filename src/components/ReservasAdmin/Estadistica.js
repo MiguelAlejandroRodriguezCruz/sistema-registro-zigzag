@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Calendar from "react-calendar";
 import "../../style/Estadisticas.css"
 import React from 'react';
+import { API_BASE_URL } from "../../config/api";
 
 export default function Estadistica({ reservas }) {
     const [fecha, setFecha] = useState(new Date());
@@ -16,7 +17,7 @@ export default function Estadistica({ reservas }) {
     useEffect(() => {
         const obtenerRegistros = async () => {
         try {
-            const response = await fetch('http://localhost:3001/registro');
+            const response = await fetch(`${API_BASE_URL}/registro`);
             const data = await response.json();
             setRegistros(data);
         } catch (error) {

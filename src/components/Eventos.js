@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Comp_encabezado } from "./Comp_encabezado";
 import { Comp_Pie_pagina } from "./Comp_Pie_pagina"
+import { API_BASE_URL } from "../config/api";
 
 export default function CrearEvento() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function CrearEvento() {
     if (id) {
       const fetchEvento = async () => {
         try {
-          const response = await fetch(`http://localhost:3001/eventos/${id}`);
+          const response = await fetch(`${API_BASE_URL}/eventos/${id}`);
           if (!response.ok) {
             throw new Error('Error al obtener el evento');
           }
@@ -64,7 +65,7 @@ export default function CrearEvento() {
       // Cargar imágenes existentes
       const fetchEventImages = async () => {
         try {
-          const response = await fetch(`http://localhost:3001/eventos/${id}/imagenes`);
+          const response = await fetch(`${API_BASE_URL}/eventos/${id}/imagenes`);
           if (!response.ok) throw new Error('Error al obtener imágenes');
           const data = await response.json();
           setEventImages(data);
@@ -112,7 +113,7 @@ export default function CrearEvento() {
   // Eliminar imagen ya guardada
   const removeEventImage = async (imageId) => {
     try {
-      const response = await fetch(`http://localhost:3001/eventos/imagenes/${imageId}`, {
+      const response = await fetch(`${API_BASE_URL}/eventos/imagenes/${imageId}`, {
         method: 'DELETE'
       });
       if (!response.ok) throw new Error('Error al eliminar imagen');
@@ -185,7 +186,7 @@ export default function CrearEvento() {
 
       if (isEditing) {
         // Actualizar evento existente
-        response = await fetch(`http://localhost:3001/eventos/${id}`, {
+        response = await fetch(`${API_BASE_URL}/eventos/${id}`, {
           method: 'PUT',
           body: formDataToSend
         });
@@ -197,7 +198,7 @@ export default function CrearEvento() {
         eventoId = id;
       } else {
         // Crear nuevo evento
-        response = await fetch('http://localhost:3001/eventos', {
+        response = await fetch(`${API_BASE_URL}/eventos`, {
           method: 'POST',
           body: formDataToSend
         });
@@ -217,7 +218,7 @@ export default function CrearEvento() {
           formDataImages.append('imagenes', file);
         });
 
-        const uploadResponse = await fetch(`http://localhost:3001/eventos/${eventoId}/imagenes`, {
+        const uploadResponse = await fetch(`${API_BASE_URL}/eventos/${eventoId}/imagenes`, {
           method: 'POST',
           body: formDataImages
         });
@@ -260,7 +261,7 @@ export default function CrearEvento() {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/eventos/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/eventos/${id}`, {
         method: 'DELETE'
       });
 

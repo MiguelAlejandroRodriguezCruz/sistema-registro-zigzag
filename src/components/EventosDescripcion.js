@@ -4,6 +4,7 @@ import { Comp_encabezado } from "./Comp_encabezado";
 import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
 import { QRCodeCanvas } from 'qrcode.react';
 import "../style/EventosDescripcion.css"
+import { API_BASE_URL } from "../config/api";
 
 const EventosDescripcion = () => {
   const { id } = useParams();
@@ -66,7 +67,7 @@ const EventosDescripcion = () => {
 
     const cargarEvento = async () => {
       try {
-        const respuesta = await fetch(`http://localhost:3001/eventos/${id}`);
+        const respuesta = await fetch(`${API_BASE_URL}/eventos/${id}`);
         if (!respuesta.ok) {
           throw new Error('Error al cargar el evento');
         }
@@ -74,7 +75,7 @@ const EventosDescripcion = () => {
         setEvento(datos);
 
         // Cargar imágenes adicionales del evento
-        const imagenesResponse = await fetch(`http://localhost:3001/eventos/${id}/imagenes`);
+        const imagenesResponse = await fetch(`${API_BASE_URL}/eventos/${id}/imagenes`);
         if (!imagenesResponse.ok) {
           throw new Error('Error al cargar las imágenes del evento');
         }
@@ -152,7 +153,7 @@ const EventosDescripcion = () => {
         num_ninos: parseInt(numNinos) || 0
       };
 
-      const respuesta = await fetch('http://localhost:3001/formulario/guardar', {
+      const respuesta = await fetch(`${API_BASE_URL}/formulario/guardar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datosFormulario)

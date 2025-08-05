@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Comp_encabezado } from "../Comp_encabezado";
 import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { API_BASE_URL } from "../../config/api";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const LoginForm = () => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3001/visitantes-eventos/login', {
+      const response = await fetch(`${API_BASE_URL}/visitantes-eventos/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

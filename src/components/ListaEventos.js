@@ -4,6 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; //debes instalarla con npm install react-toastify
 import { Comp_encabezado } from './Comp_encabezado';
 import { Comp_Pie_pagina } from './Comp_Pie_pagina';
+import { API_BASE_URL } from "../config/api";
 
 const Eventos = () => {
   const [eventos, setEventos] = useState([]);
@@ -16,7 +17,7 @@ const Eventos = () => {
   useEffect(() => {
     const fetchEventos = async () => {
       try {
-        const response = await fetch('http://localhost:3001/eventos');
+        const response = await fetch(`${API_BASE_URL}/eventos`);
         if (!response.ok) {
           throw new Error('Error al obtener eventos');
         }

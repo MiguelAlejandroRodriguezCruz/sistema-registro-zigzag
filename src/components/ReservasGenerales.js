@@ -3,10 +3,7 @@ import { ReservasTabs } from './ReservasAdmin/ReservasTabs';
 import { ReservasLista } from './ReservasAdmin/ReservasLista';
 import { Comp_encabezado } from './Comp_encabezado';
 import { Comp_Pie_pagina } from './Comp_Pie_pagina';
-
-
-
-
+import { API_BASE_URL } from "../config/api";
 
 function ReservasGenerales() {
     const [reservas, setReservas] = useState([]);
@@ -14,7 +11,7 @@ function ReservasGenerales() {
 
     // Cargar reservas desde el backend
     useEffect(() => {
-        fetch('http://localhost:3001/visitantes')
+        fetch(`${API_BASE_URL}/visitantes`)
             .then(response => response.json())
             .then(data => {
                 setReservas(data);
@@ -25,7 +22,7 @@ function ReservasGenerales() {
     }, []);
 
     const actualizarEstadoReserva = (id, nuevoEstado) => {
-        fetch(`http://localhost:3001/visitantes/${id}`, {
+        fetch(`${API_BASE_URL}/visitantes/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +48,7 @@ function ReservasGenerales() {
 
     const resetearReservas = () => {
         // Enviar petición PUT para actualizar el estatus de todas las reservas a "nuevo"
-        fetch('http://localhost:3001/visitantes', {
+        fetch(`${API_BASE_URL}/visitantes`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -69,8 +66,6 @@ function ReservasGenerales() {
                 console.error("Error en resetearReservas:", error);
             });
     };
-
-
 
     const reservasFiltradas = reservas.filter(r => r.estatus === pestanaActiva);
 

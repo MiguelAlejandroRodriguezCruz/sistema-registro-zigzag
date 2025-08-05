@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "../style/CalendarioOcupado.css"
-
+import { API_BASE_URL } from "../config/api";
 
 const CalendarioOcupado = () => {
     const [fechasOcupadas, setFechasOcupadas] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/visitantes")
+        fetch(`${API_BASE_URL}/visitantes`)
             .then(res => res.json())
             .then(data => {
                 const hoy = new Date();

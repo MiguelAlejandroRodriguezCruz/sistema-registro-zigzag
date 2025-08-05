@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Comp_encabezado } from "../Comp_encabezado";
 import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { API_BASE_URL } from "../../config/api";
 
 export default function SolicitarCodigo() {
   const [correo, setCorreo] = useState("");
@@ -15,7 +16,7 @@ export default function SolicitarCodigo() {
 
   // Enviar solicitud sin bloquear la navegación
   try {
-    const res = await fetch('http://localhost:3001/recuperar/enviar-codigo', {
+    const res = await fetch(`${API_BASE_URL}/recuperar/enviar-codigo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ correo }),

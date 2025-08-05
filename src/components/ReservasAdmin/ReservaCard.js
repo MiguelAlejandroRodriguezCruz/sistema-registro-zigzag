@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-
+import { API_BASE_URL } from "../../config/api";
 
 export function ReservaCard({ reserva, actualizarEstadoReserva }) {
 
@@ -17,7 +17,7 @@ export function ReservaCard({ reserva, actualizarEstadoReserva }) {
 
     const guardarCambios = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/visitantes/${reserva.id}`, {
+            const response = await fetch(`${API_BASE_URL}/visitantes/${reserva.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

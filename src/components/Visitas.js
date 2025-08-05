@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Comp_encabezado } from "./Comp_encabezado";
 import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
 import CalendarioVisitas from "./CalendarioVisitas";
+import { API_BASE_URL } from "../config/api";
 
 const FormularioVisitas = () => {
   const [fechaFijada, setFechaFijada] = useState(null);
@@ -119,7 +120,7 @@ const FormularioVisitas = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3001/visitantes", {
+      const response = await fetch(`${API_BASE_URL}/visitantes`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(datosAEnviar)
