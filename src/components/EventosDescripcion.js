@@ -5,7 +5,6 @@ import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
 import { QRCodeCanvas } from 'qrcode.react';
 import "../style/EventosDescripcion.css"
 
-
 const EventosDescripcion = () => {
   const { id } = useParams();
   const [evento, setEvento] = useState(null);
@@ -23,6 +22,8 @@ const EventosDescripcion = () => {
   const [errorFormulario, setErrorFormulario] = useState("");
   const [user, setUser] = useState(null);
   const [indiceImagenActual, setIndiceImagenActual] = useState(0);
+  const [imagenExpandida, setImagenExpandida] = useState(false);
+
 
   const [mostrarQR, setMostrarQR] = useState(false);
   const [idReserva, setIdReserva] = useState(null);
@@ -242,7 +243,7 @@ const EventosDescripcion = () => {
               <div className="img-small-grid">
                 {imagenes.length > 0 && (
                   <div className="carrusel-contenedor">
-                    <div className="img-small-container carrusel-imagen">
+                    <div className="img-small-container" onClick={() => setImagenExpandida(true)} style={{ cursor: 'pointer' }}>
                       <img
                         src={imagenes[indiceImagenActual].ruta_imagen}
                         alt={`Imagen ${indiceImagenActual + 1} de ${evento.nombre}`}
@@ -454,6 +455,19 @@ const EventosDescripcion = () => {
               </form>
             </div>
           </div>
+
+          {imagenExpandida && (
+            <div className="modal-expandida" onClick={() => setImagenExpandida(false)}>
+              <div className="modal-contenido" onClick={(e) => e.stopPropagation()}>
+                <img
+                  src={imagenes[indiceImagenActual].ruta_imagen}
+                  alt={`Imagen ampliada ${indiceImagenActual + 1}`}
+                  className="imagen-ampliada"
+                />
+              </div>
+            </div>
+          )}
+
           {mostrarQR && (
             <div className="modal-backdrop-custom">
               <div className="modal-qr-content">
