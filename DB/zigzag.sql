@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 29-04-2025 a las 01:31:41
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.0.30
+-- Host: 127.0.0.1
+-- Generation Time: Aug 06, 2025 at 08:22 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,39 +18,175 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `zigzag`
+-- Database: `zigzag`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `visitantesidependientes`
+-- Table structure for table `codigos_recuperacion`
 --
 
-CREATE TABLE `visitantesidependientes` (
+CREATE TABLE `codigos_recuperacion` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(100) DEFAULT NULL,
-  `fecha` date DEFAULT NULL,
-  `hora` varchar(20) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `correo` varchar(100) DEFAULT NULL,
-  `medioEnterado` varchar(100) DEFAULT NULL,
-  `monto` decimal(10,2) DEFAULT NULL,
-  `codigo` varchar(50) DEFAULT NULL,
-  `estatus` varchar(10) DEFAULT NULL
+  `correo` varchar(255) DEFAULT NULL,
+  `codigo` int(11) DEFAULT NULL,
+  `expiracion` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `visitantesidependientes`
+-- Dumping data for table `codigos_recuperacion`
 --
 
-INSERT INTO `visitantesidependientes` (`id`, `nombre`, `fecha`, `hora`, `telefono`, `correo`, `medioEnterado`, `monto`, `codigo`, `estatus`) VALUES
-(1, 'Pedro López', '2025-04-05', '10:30 AM', '5551234567', 'pedro@example.com', 'Publicidad', 100.00, 'ABCD1234', 'nuevo');
+INSERT INTO `codigos_recuperacion` (`id`, `correo`, `codigo`, `expiracion`) VALUES
+(1, 'miguel.ale.rodri.cruz@gmail.com', 812751, '2025-07-02 19:07:01'),
+(2, 'miguel.ale.rodri.cruz@gmail.com', 676734, '2025-07-02 19:14:32'),
+(3, 'miguel.ale.rodri.cruz@gmail.com', 655382, '2025-07-16 19:47:19'),
+(4, 'miguel.ale.rodri.cruz@gmail.com', 237578, '2025-08-05 12:02:00'),
+(5, 'miguel.ale.rodri.cruz@gmail.com', 476487, '2025-08-05 12:09:22'),
+(6, 'miguel.ale.rodri.cruz@gmail.com', 593860, '2025-08-05 12:18:18'),
+(7, 'miguel.ale.rodri.cruz@gmail.com', 198599, '2025-08-05 12:18:43'),
+(8, 'miguel.ale.rodri.cruz@gmail.com', 929781, '2025-08-05 12:31:46'),
+(9, 'miguel.ale.rodri.cruz@gmail.com', 165443, '2025-08-05 12:32:56'),
+(10, 'miguel.ale.rodri.cruz@gmail.com', 895658, '2025-08-05 12:36:05');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `visitantesinstitucion`
+-- Table structure for table `evento`
+--
+
+CREATE TABLE `evento` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `fechaInicio` date NOT NULL,
+  `fechaFinal` date NOT NULL,
+  `lugar` varchar(50) NOT NULL,
+  `descripcion` varchar(500) NOT NULL,
+  `formulario` varchar(500) NOT NULL,
+  `baner` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `evento`
+--
+
+INSERT INTO `evento` (`id`, `nombre`, `fechaInicio`, `fechaFinal`, `lugar`, `descripcion`, `formulario`, `baner`) VALUES
+(19, 'Evento1', '2025-07-05', '2025-07-06', 'casa del pana', 'ejemplo de descripcion larga, hvdeioufhdwibd cdhwilbdhb bhiqobnobc vjefiqpfhvu jn[w hdj9pqinvdjb vunjiqepbvdb vfejipbqvjdfbvp vjiqpvbnjefi vbrejipqvnjfd bvujefipbvndfjk bvfejipvbjndk bvufejipanfv vnefjipvnjcdsip bvfejipabvdjks bvjefipandsjkvn bvjciepanjvpn vjefipahfjenav[ nvre[aovdjocnjao[ uvjoeapvnjoanv vrjeorahfieoasnv fhcrioaj[sfdjcns hfreai[fjosadn hfio[awhfnerjna fjeario[fjcrjevn[ hvreioa[hfreaojfnfhrh hreo[ahv hfroeaphf freaofhreohf[or   fhro[eahfiahf frhio[eahf fheao[hfrjh[f hofa', '[{\"id\":1751503649560,\"type\":\"checkbox\",\"label\":\"si marcas esta casilla es porque aceptas que asisitiras baniado y arreglado y no como te despertaste hoy por la maniana todo crudo y desvelado\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1751503655418-6343986.jpeg'),
+(20, 'Evento2', '2025-07-07', '2025-07-09', 'casa del pana', 'evento aca super genial bien jelou chido mega padre del zigzag', '[{\"id\":1751503719685,\"type\":\"checkbox\",\"label\":\"si marcas esta casilla es porque aceptas que asisitiras baniado y arreglado y no como te despertaste hoy por la maniana todo crudo y desvelado\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1751503762806-80455044.jpeg'),
+(21, 'Fiesta', '2025-07-14', '2025-07-18', 'No se ', 'Hola', '[{\"id\":1752712868390,\"type\":\"text\",\"label\":\"Hola\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1752712874894-549289001.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `formularios`
+--
+
+CREATE TABLE `formularios` (
+  `id` int(11) NOT NULL,
+  `id_visitante` int(11) NOT NULL,
+  `id_evento` int(11) NOT NULL,
+  `formulario` varchar(500) NOT NULL,
+  `fecha_evento` date NOT NULL,
+  `num_adultos` int(11) NOT NULL,
+  `num_ninos` int(11) NOT NULL,
+  `codigo_qr` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `formularios`
+--
+
+INSERT INTO `formularios` (`id`, `id_visitante`, `id_evento`, `formulario`, `fecha_evento`, `num_adultos`, `num_ninos`, `codigo_qr`) VALUES
+(17, 9, 20, '{\"1751503719685\":true}', '2025-07-08', 2, 2, 'uploads\\qrcode-17-1754503615137.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `imagenes`
+--
+
+CREATE TABLE `imagenes` (
+  `id` int(11) NOT NULL,
+  `evento_id` int(11) NOT NULL,
+  `ruta_imagen` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `imagenes`
+--
+
+INSERT INTO `imagenes` (`id`, `evento_id`, `ruta_imagen`) VALUES
+(17, 19, 'http://localhost:3001/uploads/imagenes-1751503655437-754359859.jpeg'),
+(18, 20, 'http://localhost:3001/uploads/imagenes-1751503762827-620082890.jpeg'),
+(20, 21, 'http://localhost:3001/uploads/imagenes-1752715773153-240889153.png'),
+(21, 19, 'http://localhost:3001/uploads/imagenes-1754414744548-896133794.jpg'),
+(25, 20, 'http://localhost:3001/uploads/imagenes-1754414896885-683748217.jpg'),
+(29, 20, 'http://localhost:3001/uploads/imagenes-1754502447298-690484407.png'),
+(30, 20, 'http://localhost:3001/uploads/imagenes-1754502447300-795737231.png'),
+(31, 20, 'http://localhost:3001/uploads/imagenes-1754502447301-268149763.png'),
+(32, 20, 'http://localhost:3001/uploads/imagenes-1754502447303-341909390.png');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `registrovisitas`
+--
+
+CREATE TABLE `registrovisitas` (
+  `id` int(11) NOT NULL,
+  `id_institucion` int(11) NOT NULL,
+  `tipo` enum('Niño','Niña','Hombre','Mujer','Maestro') NOT NULL,
+  `rango` enum('5-10','10-15','15-18','20-30','30-40','40+') NOT NULL,
+  `cantidad` int(3) NOT NULL,
+  `fecha_registro` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `registrovisitas`
+--
+
+INSERT INTO `registrovisitas` (`id`, `id_institucion`, `tipo`, `rango`, `cantidad`, `fecha_registro`) VALUES
+(30, 4, 'Niño', '5-10', 10, '2025-07-16'),
+(31, 4, 'Niño', '10-15', 20, '2025-07-16'),
+(32, 4, 'Niña', '15-18', 20, '2025-07-16'),
+(33, 4, 'Hombre', '30-40', 20, '2025-07-16'),
+(34, 4, 'Mujer', '20-30', 20, '2025-07-16'),
+(35, 4, 'Maestro', '20-30', 10, '2025-07-16'),
+(36, 1, 'Niño', '5-10', 1, '2025-07-31'),
+(37, 1, 'Niño', '10-15', 2, '2025-07-31'),
+(38, 1, 'Niña', '10-15', 3, '2025-07-31'),
+(39, 1, 'Hombre', '30-40', 4, '2025-07-31'),
+(40, 1, 'Hombre', '40+', 5, '2025-07-31'),
+(41, 1, 'Mujer', '20-30', 6, '2025-07-31'),
+(42, 1, 'Mujer', '40+', 7, '2025-07-31'),
+(43, 1, 'Maestro', '20-30', 8, '2025-07-31');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `visitanteseventos`
+--
+
+CREATE TABLE `visitanteseventos` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `correo` varchar(100) NOT NULL,
+  `edad` int(3) NOT NULL,
+  `contrasena` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `visitanteseventos`
+--
+
+INSERT INTO `visitanteseventos` (`id`, `nombre`, `correo`, `edad`, `contrasena`) VALUES
+(9, 'Miguel Alejandro', 'miguel.ale.rodri.cruz@gmail.com', 22, '$2b$10$FeHQpNqdTfULxpfgsBxprOVYGALDYGlr43/19Ji4Kr6xCOWeFHXnO');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `visitantesinstitucion`
 --
 
 CREATE TABLE `visitantesinstitucion` (
@@ -73,49 +209,131 @@ CREATE TABLE `visitantesinstitucion` (
   `medioEnterado` varchar(100) DEFAULT NULL,
   `comentarios` text DEFAULT NULL,
   `precioEntrada` decimal(10,2) DEFAULT NULL,
-  `estatus` varchar(10) DEFAULT NULL
+  `estatus` varchar(20) DEFAULT 'pendientes' CHECK (`estatus` in ('nuevo','pendientes','aprobadas','rechazadas','registradas'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `visitantesinstitucion`
+-- Dumping data for table `visitantesinstitucion`
 --
 
 INSERT INTO `visitantesinstitucion` (`id`, `nombreSoli`, `nombreOrg`, `noVisitantesA`, `noVisitantesD`, `telefono`, `direccion`, `colonia`, `municipio`, `autobus`, `correo`, `tipoRecorrido`, `gradoEscolar`, `autorizaFotos`, `fecha`, `horario`, `medioEnterado`, `comentarios`, `precioEntrada`, `estatus`) VALUES
-(1, 'Juan Pérez', 'Escuela Primaria XYZ', 25, 5, '1234567890', 'Calle Falsa 123', 'Centro', 'Ciudad Ejemplo', 'Sí', 'juan.perez@example.com', 'Educativo', 'Primaria', 'Sí', '2025-04-17', '10:00 AM', 'Redes Sociales', 'Grupo de alumnos de primaria.', 50.00, 'aprobadas'),
-(2, 'a', 'a', 1, 2, '2447854632', '4 norte', 'a', 'a', 'No', 'miguel.ale.rodri.cruz@gmail.com', 'Virtual', 'aa', 'Si', '2025-04-29', '03:00', 'Amigos', 'a', 50.00, 'rechazadas'),
-(3, 'a', 'a', 12, 12, '2447854632', '4 norte', 'q', 'a', 'No', 'miguel.ale.rodri.cruz@gmail.com', 'Virtual', 'a', 'Si', '2025-04-29', '01:00', 'Amigos', '', 50.00, 'aprobadas');
+(1, 'Juan Pérez', 'Escuela Primaria XYZ', 25, 5, '1234567890', 'Calle Falsa 123', 'Centro', 'Ciudad Ejemplo', 'Sí', 'juan.perez@example.com', 'Educativo', 'Primaria', 'Sí', '2025-04-17', '10:00 AM', 'Redes Sociales', 'Grupo de alumnos de primaria.', 50.00, 'registradas'),
+(2, 'a', 'a', 1, 2, '2447854632', '4 norte', 'a', 'a', 'Si', 'miguel.ale.rodri.cruz@gmail.com', 'Virtual', 'aa', 'Si', '2025-04-29', '01:00', 'Amigos', 'a', 50.00, 'aprobadas'),
+(3, 'a', 'a', 12, 12, '2447854632', '4 norte', 'q', 'a', 'No', 'miguel.ale.rodri.cruz@gmail.com', 'Virtual', 'a', 'Si', '2025-04-29', '01:00', 'Amigos', '', 50.00, 'aprobadas'),
+(4, 'axel', 'IPN', 100, 5, '5 5555 5555', 'ejemplo', 'ejemplo', 'ejemplo', 'Si', 'ejemplo@ejemplo.com', 'Presencial', 'primaria', 'Si', '2025-07-16', '01:00', 'Amigos', 'vamos a loquear con ciencia', 50.00, 'registradas'),
+(5, 'q', 'q', 12, 12, '1234567890', 'q', 'q', 'q', 'Si', 'miguel.ale.rodri.cruz@gmail.com', 'Presencial', 'q', 'Si', '2025-08-14', '01:00', 'Amigos', 'q', 50.00, 'aprobadas');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `visitantesidependientes`
+-- Indexes for table `codigos_recuperacion`
 --
-ALTER TABLE `visitantesidependientes`
+ALTER TABLE `codigos_recuperacion`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `visitantesinstitucion`
+-- Indexes for table `evento`
+--
+ALTER TABLE `evento`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `formularios`
+--
+ALTER TABLE `formularios`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_visitante` (`id_visitante`),
+  ADD KEY `id_evento` (`id_evento`);
+
+--
+-- Indexes for table `imagenes`
+--
+ALTER TABLE `imagenes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `evento_id` (`evento_id`);
+
+--
+-- Indexes for table `registrovisitas`
+--
+ALTER TABLE `registrovisitas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `visitanteseventos`
+--
+ALTER TABLE `visitanteseventos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `visitantesinstitucion`
 --
 ALTER TABLE `visitantesinstitucion`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `visitantesidependientes`
+-- AUTO_INCREMENT for table `codigos_recuperacion`
 --
-ALTER TABLE `visitantesidependientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `codigos_recuperacion`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT de la tabla `visitantesinstitucion`
+-- AUTO_INCREMENT for table `evento`
+--
+ALTER TABLE `evento`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT for table `formularios`
+--
+ALTER TABLE `formularios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT for table `imagenes`
+--
+ALTER TABLE `imagenes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
+-- AUTO_INCREMENT for table `registrovisitas`
+--
+ALTER TABLE `registrovisitas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+
+--
+-- AUTO_INCREMENT for table `visitanteseventos`
+--
+ALTER TABLE `visitanteseventos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `visitantesinstitucion`
 --
 ALTER TABLE `visitantesinstitucion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `formularios`
+--
+ALTER TABLE `formularios`
+  ADD CONSTRAINT `formularios_ibfk_1` FOREIGN KEY (`id_visitante`) REFERENCES `visitanteseventos` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `formularios_ibfk_2` FOREIGN KEY (`id_evento`) REFERENCES `evento` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `imagenes`
+--
+ALTER TABLE `imagenes`
+  ADD CONSTRAINT `imagenes_ibfk_1` FOREIGN KEY (`evento_id`) REFERENCES `evento` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
