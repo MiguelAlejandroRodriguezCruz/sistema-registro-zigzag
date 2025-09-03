@@ -89,19 +89,19 @@ const Taquilla = () => {
             ))}
           </tbody>
         </table>
-        <div className="mt-5 text-center">
+        {/*<div className="mt-5 text-center">
           <button className="btn custom-green" onClick={() => setEntradasConfirmadas(true)}>Validar Entradas</button>
-        </div>
+        </div>*/}
       </div>
 
       {/* Modal: EntradasConfirmadas */}
-      {showEntradasConfirmadas && (
+      {/*showEntradasConfirmadas && (
         <div className="modal-overlay d-flex justify-content-center align-items-center">
           <div className="modal-content-custom p-4 bg-white rounded shadow">
             <EntradasConfirmadas onClose={() => setEntradasConfirmadas(false)} onProcesar={handleProcesarEntradas} />
           </div>
         </div>
-      )}
+      )*/}
 
       {/* Modal: FormularioDatos */}
       {showFormulario && (

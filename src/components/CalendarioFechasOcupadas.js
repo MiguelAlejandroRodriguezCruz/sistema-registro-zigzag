@@ -44,23 +44,21 @@ const CalendarioOcupado = () => {
                 maxDate={fechaMaxima}
                 tileClassName={({ date, view }) => {
                     if (view === "month" && estaOcupada(date)) {
-                        return "ocupada-verde";
+                        return "ocupada-roja";
                     }
-
-                    // Sábado = 6, Domingo = 0
+                    // Domingo = 0, Lunes = 1
                     const dia = date.getDay();
-                    if (dia === 0 || dia === 6) {
-                        return "fin-de-semana";
+                    if (dia === 0 || dia === 1) {
+                    return "fin-de-semana";
                     }
                     return null;
                 }}
-
-
+                tileDisabled={({ date }) => {
+                    const dia = date.getDay();
+                    return estaOcupada(date) || dia === 0 || dia === 1;
+                }}
                 className="border p-2 rounded"
                 locale="es-ES"
-
-                
-            
             />
         </div>
     );

@@ -35,6 +35,7 @@ const eventosRoutes = require('./routes/eventosRoutes');
 const formulariosRoutes = require('./routes/formulariosRoutes');
 const recuperarRoutes = require('./routes/recuperarRoutes');
 const visitantesEventosRoutes = require('./routes/visitantesEventosRoutes');
+const usuariosAdminRoutes = require('./routes/usuariosAdminRoutes')
 const upload = require('./middlewares/upload');
 
 require('./config/db'); // solo para que se conecte
@@ -64,6 +65,7 @@ app.use('/eventos', eventosRoutes);
 app.use('/formulario', formulariosRoutes);
 app.use('/recuperar', recuperarRoutes);
 app.use('/visitantes-eventos', visitantesEventosRoutes);
+app.use('/usuarios-admin', usuariosAdminRoutes);
 
 // Ruta raíz para redirigir a la documentación
 app.get('/', (req, res) => {

@@ -43,7 +43,7 @@ const CalendarioVisitas = ({ onFechaFijada }) => {
 
     const esFinDeSemana = (date) => {
         const day = date.getDay();
-        return day === 0 || day === 6;
+        return day === 0 || day === 1;
     };
 
     const manejarFijarFecha = () => {

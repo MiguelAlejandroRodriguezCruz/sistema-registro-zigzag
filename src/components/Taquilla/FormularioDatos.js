@@ -32,7 +32,7 @@ const GroupAgeForm = ({ idRegistro, onClose, onShowDatosGuardados }) => {
       // Filtrar solo las filas con cantidad > 0
       const datosEnviar = rows.filter(row => row.cantidad > 0);
       
-      const response = await fetch(`${API_BASE_URL}/registro-visitantes`, {
+      const response = await fetch(`${API_BASE_URL}/registro`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -96,10 +96,11 @@ const GroupAgeForm = ({ idRegistro, onClose, onShowDatosGuardados }) => {
         <span><strong>Adultos:</strong> $40</span>
         <span><strong>Maestros:</strong> gratis</span>
       </div>
+<div className="d-flex justify-content-between mt-3">
+  <button className="btn btn-danger" onClick={onClose}>Cancelar</button>
+  <button className="btn btn-secondary" onClick={handleGuardar}>Guardar</button>
+</div>
 
-      <div className="text-end mt-3">
-        <button className="btn btn-secondary" onClick={handleGuardar}>Guardar</button>
-      </div>
     </div>
   );
 };

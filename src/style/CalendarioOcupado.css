@@ -32,17 +32,28 @@ body {
   font-size: 1.3rem;
 }
 
-/* Día ocupado */
 .ocupada-verde {
   background-color: #28a745 !important;
   color: #fff !important;
   border-radius: 50%;
 }
 
+.ocupada-roja {
+  background-color: #28a745 !important;
+  color: #fff !important;
+  border-radius: 50%;
+}
+
+/* Días pasados (disabled) y sábados/domingos (fin-de-semana) */
+.react-calendar__tile--disabled,
 .react-calendar__tile.fin-de-semana {
-  color: #212529; /* Un gris neutro */
-  font-weight: normal;
-  background-color: transparent;
+  color: #999 !important;
+  background-color: #f0f0f0 !important; /* mismo gris que usa react-calendar */
+  opacity: 0.8;
+}
+
+.react-calendar__month-view__days__day {
+  color: black !important; /* todos los días en negro */
 }
 
 /* Responsivo */
