@@ -62,7 +62,7 @@ body {
   background-color: transparent;
 }
 
-/* Responsive: columnas en filas en pantallas pequeñas */
+/* Responsivo: columnas en filas en pantallas pequeñas */
 @media (max-width: 768px) {
   .estadistica-box .row {
     flex-direction: column;
@@ -70,5 +70,53 @@ body {
 
   .estadistica-box .col-md-6 {
     width: 100%;
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px; /* No se hace gigante en pantallas muy grandes */
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.row{
+  display: flex;
+  flex-wrap: wrap;
+}
+.col {
+  flex: 1; /* que todas las columnas ocupen el mismo espacio */
+}
+
+/* Para móvil */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+}
+
+h1 {
+  font: 2rem;
+}
+@media (min-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+.table-responsive{
+  overflow-x: auto;
+}
+
+table {
+  min-width: 600px; /* para que no se achique demasiado */
+}
+
+.btn {
+  padding: 0.75rem 1 rem;
+}
+@media (max-width: 768px){
+  .btn {
+    width: 100%; /* botones de ancho completo en móvil */
   }
 }

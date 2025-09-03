@@ -149,5 +149,67 @@
 }
 
 input.uniforme-reservas {
-  max-width: 100%
+  max-width: 100%;
+}
+
+
+
+/*-------------------Responsivo------------------------------*/
+.container-reservas {
+  display: flex;
+  flex-direction: column; /* por defecto en móvil */
+  padding: 1rem;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container-reservas {
+    flex-direction: row; /* en pantallas más grandes, lado a lado */
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.btn-pendiente, .btn-aprobada, .btn-rechazada {
+  width: 100%; /* por defecto en móvil */
+}
+
+@media (min-width: 768px) {
+  .btn-pendiente, .btn-aprobada, .btn-rechazada {
+    width: auto; /* en pantallas más grandes, tamaño automático */
+    min-width: 120px; /* ancho mínimo para que no se achiquen mucho */
+  }
+}
+
+/*Pantallas muy grnades*/
+@media (min-width: 1200px) {
+  .container-reservas {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+/* Calendario responsivo */
+.react-calendar {
+  width: 100% !important;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.react-calendar__tile {
+  font-size: 0.9rem; /* más chico en móvil */
+}
+
+@media (min-width: 768px) {
+  .react-calendar__tile {
+    font-size: 1rem;
+  }
+}
+
+/* Inputs responsivos */
+input.uniforme-reservas {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
 }

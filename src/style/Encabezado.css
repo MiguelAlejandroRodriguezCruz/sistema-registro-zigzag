@@ -2,7 +2,8 @@
 
 .comp_encabezado {
   display: flex;
-  range: center;
+  align-items: center;   /* Corrige esto */
+  justify-content: space-between; /* Logo a la izq, menú o vacío a la der */
   padding: 10px 20px;
   background-color: #f8f9fa;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -22,5 +23,16 @@
   .comp_encabezado {
     justify-content: center;
     padding: 8px 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .comp_encabezado {
+    justify-content: center; /* Logo centrado en pantallas pequeñas */
+    padding: 8px 10px;
+  }
+
+  .encabezado__logo {
+    height: 40px;
   }
 }

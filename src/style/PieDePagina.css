@@ -2,7 +2,6 @@
 
 .pie-pagina {
   background-color: #f8f9fa;
-  /* Gris claro */
   color: #212529;
   /* Texto oscuro */
   padding: 16px 24px;
@@ -12,6 +11,8 @@
 }
 
 .pie-contenido {
+  max-width: 1200px; /* evita que quede estirado en pantallas muy grandes */
+  margin: 0 auto; /* centra el contenido */
   display: flex;
   flex-direction: column;
   align-items: center;

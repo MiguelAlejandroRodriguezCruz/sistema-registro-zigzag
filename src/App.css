@@ -37,9 +37,43 @@
   }
 }
 
-/*Calendario*/
+/*Calendario base*/
 .react-calendar {
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   border: none;
   font-family: Arial, sans-serif;
+  font-size: 1rem;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+/* Vista móvil */
+@media (max-width: 600px) {
+  .react-calendar {
+    font-size: 0.85rem;   /* letras más pequeñas */
+    padding: 0.5rem;
+    border-radius: 8px;
+  }
+
+  .react-calendar__tile {
+    padding: 0.5rem 0.25rem; /* celdas más compactas */
+  }
+}
+
+/* Vista tablet */
+@media (min-width: 601px) and (max-width: 992px) {
+  .react-calendar {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+}
+
+/* Vista escritorio */
+@media (min-width: 993px) {
+  .react-calendar {
+    font-size: 1.1rem;
+  }
 }
