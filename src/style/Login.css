@@ -149,3 +149,155 @@
   border-radius: 6px;
   cursor: pointer;
 }
+
+/*---------------------------------- login admin ---------------------------------- */
+
+.loginAdmin-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.loginAdmin-header {
+  background-color: #2ecad5;
+  color: white;
+  padding: 1rem;
+}
+
+.loginAdmin-logo {
+  width: 20%;
+  margin-bottom: 1rem;
+}
+
+.loginAdmin-title {
+  font-weight: bold;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.loginAdmin-box {
+  margin: 2rem auto;
+  background-color: #e9e9e9;
+  padding: 2rem;
+  max-width: 400px;
+  border-radius: 20px;
+  text-align: left;
+}
+
+.loginAdmin-label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.loginAdmin-input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #777;
+  border-radius: 4px;
+}
+
+.loginAdmin-links {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.loginAdmin-links a {
+  color: #2e6fd5;
+  text-decoration: none;
+}
+
+.loginAdmin-links a:hover {
+  text-decoration: underline;
+}
+
+.loginAdmin-button {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.8rem;
+  font-size: 1.2rem;
+  background-color: #60d260;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.loginAdmin-button:hover {
+  background-color: #4cc74c;
+}
+
+.loginAdmin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+}
+
+.loginAdmin-header {
+  width: 100%;
+  background-color: #2cc2d6;
+  color: white;
+  text-align: center;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+}
+
+.loginAdmin-box {
+  background-color: #eee;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.loginAdmin-label {
+  font-weight: bold;
+  margin-top: 1rem;
+  display: block;
+}
+
+.loginAdmin-input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.loginAdmin-links {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.loginAdmin-links a {
+  color: #2c6ad6;
+  text-decoration: none;
+}
+
+.loginAdmin-button {
+  background-color: #68d86d;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  color: white;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  width: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.loginAdmin-button-gray {
+  background-color: #bcbcbc;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  color: white;
+  font-weight: bold;
+  width: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+}

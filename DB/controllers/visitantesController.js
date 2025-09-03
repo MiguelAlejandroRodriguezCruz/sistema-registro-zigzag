@@ -16,16 +16,21 @@ exports.createVisitante = (req, res) => {
 };
 
 exports.updateVisitante = (req, res) => {
-    const id = req.params.id;
-    Visitantes.update(id, req.body, (err, result) => {
-        if (err) {
-            if (err.message.includes("No se enviaron")) {
-                return res.status(400).json({ mensaje: err.message });
-            }
-            return res.status(500).json({ error: err.message });
-        }
-        res.json({ mensaje: "Visitante actualizado correctamente" });
+  const id = req.params.id;
+  Visitantes.update(id, req.body, (err, result) => {
+    if (err) {
+      if (err.message.includes("No se enviaron")) {
+        return res.status(400).json({ mensaje: err.message });
+      }
+      return res.status(500).json({ error: err.message });
+    }
+
+    // Trae la fila actualizada y la devuelve
+    Visitantes.getById(id, (err2, updatedRow) => {
+      if (err2) return res.status(500).json({ error: err2.message });
+      res.json({ mensaje: "Visitante actualizado correctamente", updated: updatedRow });
     });
+  });
 };
 
 exports.updateAllStatus = (req, res) => {

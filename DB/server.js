@@ -2,6 +2,33 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const port = 3001;
+
+// Swagger
+const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require('swagger-jsdoc');
+
+const swaggerDefinition = {
+    openapi: '3.0.0',
+    info: {
+        title: 'API Sistema Registro Zigzag',
+        version: '1.0.0',
+        description: 'Documentación de la API para el sistema de registro Zigzag',
+    },
+    servers: [
+        {
+            url: 'http://localhost:3001',
+        },
+    ],
+};
+
+const options = {
+    swaggerDefinition,
+    apis: [
+        path.join(__dirname, './routes/*.js'),
+    ],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
 const visitantesRoutes = require('./routes/visitantesRoutes');
 const registroRoutes = require('./routes/registroRoutes');
 const eventosRoutes = require('./routes/eventosRoutes');
@@ -12,8 +39,12 @@ const upload = require('./middlewares/upload');
 
 require('./config/db'); // solo para que se conecte
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Ruta de documentación Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // CORS
 app.use((req, res, next) => {
@@ -33,6 +64,11 @@ app.use('/eventos', eventosRoutes);
 app.use('/formulario', formulariosRoutes);
 app.use('/recuperar', recuperarRoutes);
 app.use('/visitantes-eventos', visitantesEventosRoutes);
+
+// Ruta raíz para redirigir a la documentación
+app.get('/', (req, res) => {
+    res.redirect('/api-docs');
+});
 
 
 
