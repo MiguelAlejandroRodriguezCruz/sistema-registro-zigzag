@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import logo from "../images/zig_zag_logo.png";
+import logo from "../../images/zig_zag_logo.png";
 
 export function Comp_encabezado() {
   return (

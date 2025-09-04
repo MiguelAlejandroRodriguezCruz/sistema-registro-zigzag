@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Comp_encabezado } from "../Comp_encabezado";
-import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { Comp_encabezado } from "../Comp/Comp_encabezado";
+import { Comp_Pie_pagina } from "../Comp/Comp_Pie_pagina";
 import { API_BASE_URL } from "../../config/api";
 
 export default function NuevaContrasena() {
@@ -19,9 +19,13 @@ export default function NuevaContrasena() {
     }
 
     try {
+      const resetToken = localStorage.getItem("resetToken");
       const res = await fetch(`${API_BASE_URL}/recuperar/cambiar-contrasena`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${resetToken}`
+         },
         body: JSON.stringify({ correo: state?.correo, nuevaContrasena: nueva }),
       });
 

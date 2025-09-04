@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Comp_encabezado } from "../Comp_encabezado";
-import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { Comp_encabezado } from "../Comp/Comp_encabezado";
+import { Comp_Pie_pagina } from "../Comp/Comp_Pie_pagina";
 import { API_BASE_URL } from "../../config/api";
 
 const LoginFormAdmin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    correo: "",
+    nombre: "",
     contrasena: ""
   });
   const [error, setError] = useState(null);
@@ -27,7 +27,7 @@ const LoginFormAdmin = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/visitantes-eventos/login`, {
+      const response = await fetch(`${API_BASE_URL}/usuarios-admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,10 +42,9 @@ const LoginFormAdmin = () => {
       }
 
       localStorage.setItem('admin', JSON.stringify(data.admin));
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('rol', data.admin.rol);
+      localStorage.setItem('tokenAdmin', data.token);
 
-      navigate("/lista-eventos"); 
+      navigate("/ReservasGenerales"); 
       
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
@@ -66,16 +65,17 @@ const LoginFormAdmin = () => {
         {error && <div className="alert alert-danger">{error}</div>}
 
         <div className="mb-3">
-          <label className="loginAdmin-label">Correo</label>
+          <label className="loginAdmin-label">Usuario</label>
           <input 
-            type="email" 
-            name="correo"
-            placeholder="correo@ejemplo.com" 
-            className="uniforme" 
-            value={formData.correo}
-            onChange={handleChange}
-            required
-          />
+          type="text" 
+          name="nombre"
+          placeholder="usuario" 
+          className="uniforme" 
+          value={formData.nombre}
+          onChange={handleChange}
+          required
+        />
+
         </div>
 
         <div className="mb-3">
@@ -88,7 +88,6 @@ const LoginFormAdmin = () => {
             value={formData.contrasena}
             onChange={handleChange}
             required
-            minLength="6"
           />
         </div>
 

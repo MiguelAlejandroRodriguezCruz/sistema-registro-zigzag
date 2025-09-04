@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Comp_encabezado } from "../Comp_encabezado";
-import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { Comp_encabezado } from "../Comp/Comp_encabezado";
+import { Comp_Pie_pagina } from "../Comp/Comp_Pie_pagina";
 import { API_BASE_URL } from "../../config/api";
 
 export default function VerificarCodigo() {
@@ -22,6 +22,8 @@ export default function VerificarCodigo() {
       const data = await res.json();
 
       if (!res.ok) throw new Error(data.mensaje);
+
+      localStorage.setItem("resetToken", data.resetToken);
 
       alert('Código correcto');
       navigate('/nueva-contrasena', { state: { correo: state?.correo } });

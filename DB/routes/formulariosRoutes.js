@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const formulariosController = require('../controllers/formulariosController');
+const auth = require('../middlewares/auth');
 
 /**
  * @swagger
@@ -19,6 +20,6 @@ const formulariosController = require('../controllers/formulariosController');
  *       201:
  *         description: Formulario guardado
  */
-router.post('/guardar', formulariosController.guardarFormulario);
+router.post('/guardar',auth, formulariosController.guardarFormulario);
 
 module.exports = router;

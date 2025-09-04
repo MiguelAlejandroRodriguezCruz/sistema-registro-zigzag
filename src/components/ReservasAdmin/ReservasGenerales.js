@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { ReservasTabs } from './ReservasAdmin/ReservasTabs';
-import { ReservasLista } from './ReservasAdmin/ReservasLista';
-import { Comp_encabezado } from './Comp_encabezado';
-import { Comp_Pie_pagina } from './Comp_Pie_pagina';
-import { API_BASE_URL } from "../config/api";
+import { ReservasTabs } from './ReservasTabs';
+import { ReservasLista } from './ReservasLista';
+import { Comp_encabezado } from '../Comp/Comp_encabezado';
+import { Comp_Pie_pagina } from '../Comp/Comp_Pie_pagina';
+import { API_BASE_URL } from "../../config/api";
 
 function ReservasGenerales() {
     const [reservas, setReservas] = useState([]);
@@ -11,61 +11,75 @@ function ReservasGenerales() {
 
     // Cargar reservas desde el backend
     useEffect(() => {
-        fetch(`${API_BASE_URL}/visitantes`)
+        const token = localStorage.getItem("tokenAdmin");
+
+        fetch(`${API_BASE_URL}/visitantes`, {
+            headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
+        })
             .then(response => response.json())
             .then(data => {
-                setReservas(data);
+            setReservas(data);
             })
             .catch(error => {
-                console.error("Error al cargar reservas:", error);
+            console.error("Error al cargar reservas:", error);
             });
-    }, []);
+        }, []);
 
-    const actualizarEstadoReserva = (id, nuevoEstado) => {
+
+        const actualizarEstadoReserva = (id, nuevoEstado) => {
+        const token = localStorage.getItem("tokenAdmin");
+
         fetch(`${API_BASE_URL}/visitantes/${id}`, {
-            method: 'PUT',
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json',
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({ estatus: nuevoEstado }),
+            body: JSON.stringify({ estatus: nuevoEstado })
         })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error("Error al actualizar el estatus");
-                }
-                // Actualizamos el estado local solo si el backend responde correctamente
-                setReservas(prev =>
-                    prev.map(reserva =>
-                        reserva.id === id ? { ...reserva, estatus: nuevoEstado } : reserva
-                    )
-                );
+            if (!response.ok) {
+                throw new Error("Error al actualizar el estatus");
+            }
+            setReservas(prev =>
+                prev.map(reserva =>
+                reserva.id === id ? { ...reserva, estatus: nuevoEstado } : reserva
+                )
+            );
             })
             .catch(error => {
-                console.error("Error en actualizarEstadoReserva:", error);
+            console.error("Error en actualizarEstadoReserva:", error);
             });
-    };
+        };
 
 
-    const resetearReservas = () => {
-        // Enviar petición PUT para actualizar el estatus de todas las reservas a "nuevo"
+        const resetearReservas = () => {
+        const token = localStorage.getItem("tokenAdmin");
+
         fetch(`${API_BASE_URL}/visitantes`, {
-            method: 'PUT',
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json',
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
             },
-            body: JSON.stringify({ estatus: "nuevo" }),  // Establecer el estatus de todas las reservas como "nuevo"
+            body: JSON.stringify({ estatus: "nuevo" })
         })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error("Error al actualizar el estatus de todas las reservas");
-                }
-                // Si la actualización es exitosa, actualizamos el estado local
-                setReservas(prev => prev.map(reserva => ({ ...reserva, estatus: "nuevo" })));
+            if (!response.ok) {
+                throw new Error("Error al actualizar el estatus de todas las reservas");
+            }
+            setReservas(prev =>
+                prev.map(reserva => ({ ...reserva, estatus: "nuevo" }))
+            );
             })
             .catch(error => {
-                console.error("Error en resetearReservas:", error);
+            console.error("Error en resetearReservas:", error);
             });
-    };
+        };
+
 
     const reservasFiltradas = reservas.filter(r => r.estatus === pestanaActiva);
 

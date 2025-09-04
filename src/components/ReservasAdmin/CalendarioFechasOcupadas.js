@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import "../style/CalendarioOcupado.css"
-import { API_BASE_URL } from "../config/api";
+import "../../style/CalendarioOcupado.css"
+import { API_BASE_URL } from "../../config/api";
 
 const CalendarioOcupado = () => {
     const [fechasOcupadas, setFechasOcupadas] = useState([]);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/visitantes`)
+        const token = localStorage.getItem("tokenAdmin");
+        fetch(`${API_BASE_URL}/visitantes`, {
+                headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+                }
+            })
             .then(res => res.json())
             .then(data => {
                 const hoy = new Date();

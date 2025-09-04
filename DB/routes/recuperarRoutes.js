@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const recuperarController = require('../controllers/recuperarController');
+const authReset = require('../middlewares/authReset');
 
 /**
  * @swagger
@@ -55,6 +56,6 @@ router.post('/verificar-codigo', recuperarController.verificarCodigo);
  *       200:
  *         description: Contraseña cambiada
  */
-router.post('/cambiar-contrasena', recuperarController.cambiarContrasena);
+router.post('/cambiar-contrasena', authReset, recuperarController.cambiarContrasena);
 
 module.exports = router;

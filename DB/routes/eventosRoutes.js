@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const eventosController = require('../controllers/eventosController');
 const upload = require('../middlewares/upload');
-
+const auth = require('../middlewares/auth');
 
 /**
  * @swagger
@@ -14,7 +14,7 @@ const upload = require('../middlewares/upload');
  *       200:
  *         description: Lista de eventos
  */
-router.get('/', eventosController.getTodos);
+router.get('/',auth, eventosController.getTodos);
 
 /**
  * @swagger
@@ -32,7 +32,7 @@ router.get('/', eventosController.getTodos);
  *       200:
  *         description: Lista de eventos disponibles
  */
-router.get('/disponibles/:idVisitante', eventosController.getNoRegistrados);
+router.get('/disponibles/:idVisitante',auth, eventosController.getNoRegistrados);
 
 /**
  * @swagger
@@ -50,7 +50,7 @@ router.get('/disponibles/:idVisitante', eventosController.getNoRegistrados);
  *       200:
  *         description: Evento encontrado
  */
-router.get('/:id', eventosController.getPorId);
+router.get('/:id',auth, eventosController.getPorId);
 
 /**
  * @swagger
@@ -68,7 +68,7 @@ router.get('/:id', eventosController.getPorId);
  *       201:
  *         description: Evento creado
  */
-router.post('/', upload.single('baner'), eventosController.crear);
+router.post('/',auth, upload.single('baner'), eventosController.crear);
 
 /**
  * @swagger
@@ -92,7 +92,7 @@ router.post('/', upload.single('baner'), eventosController.crear);
  *       200:
  *         description: Evento actualizado
  */
-router.put('/:id', upload.single('baner'), eventosController.actualizar);
+router.put('/:id',auth, upload.single('baner'), eventosController.actualizar);
 
 /**
  * @swagger
@@ -110,7 +110,7 @@ router.put('/:id', upload.single('baner'), eventosController.actualizar);
  *       200:
  *         description: Evento eliminado
  */
-router.delete('/:id', eventosController.eliminar);
+router.delete('/:id',auth, eventosController.eliminar);
 
 /**
  * @swagger
@@ -134,7 +134,7 @@ router.delete('/:id', eventosController.eliminar);
  *       201:
  *         description: Imágenes subidas
  */
-router.post('/:idEvento/imagenes', upload.array('imagenes', 10), eventosController.subirImagenesEvento);
+router.post('/:idEvento/imagenes',auth, upload.array('imagenes', 10), eventosController.subirImagenesEvento);
 
 /**
  * @swagger
@@ -152,7 +152,7 @@ router.post('/:idEvento/imagenes', upload.array('imagenes', 10), eventosControll
  *       200:
  *         description: Lista de imágenes
  */
-router.get('/:idEvento/imagenes', eventosController.obtenerImagenesEvento);
+router.get('/:idEvento/imagenes',auth, eventosController.obtenerImagenesEvento);
 
 /**
  * @swagger
@@ -170,6 +170,6 @@ router.get('/:idEvento/imagenes', eventosController.obtenerImagenesEvento);
  *       200:
  *         description: Imagen eliminada
  */
-router.delete('/imagenes/:idImagen', eventosController.eliminarImagen);
+router.delete('/imagenes/:idImagen',auth, eventosController.eliminarImagen);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { API_BASE_URL } from "../config/api";
+import { API_BASE_URL } from "../../config/api";
 
 const CalendarioVisitas = ({ onFechaFijada }) => {
     const [fecha, setFecha] = useState(new Date());
@@ -9,26 +9,27 @@ const CalendarioVisitas = ({ onFechaFijada }) => {
     const [fechasOcupadas, setFechasOcupadas] = useState([]);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/visitantes`)
-            .then(res => res.json())
-            .then(data => {
-                const hoy = new Date();
-                hoy.setHours(0, 0, 0, 0);
+    fetch(`${API_BASE_URL}/visitantes/fechasOcupadas`)
+        .then(res => res.json())
+        .then(data => {
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0);
 
-                const ocupadas = data
-                    .filter(r => r.estatus === "aprobadas" && new Date(r.fecha) >= hoy)
-                    .map(r => {
-                        const f = new Date(r.fecha);
-                        f.setHours(0, 0, 0, 0); // Normalizar
-                        return f;
-                    });
+            const ocupadas = data
+                .map(r => {
+                    const f = new Date(r.fecha);
+                    f.setHours(0, 0, 0, 0); // Normalizar
+                    return f;
+                })
+                .filter(f => f >= hoy); // Solo fechas a partir de hoy
 
-                setFechasOcupadas(ocupadas);
-            })
-            .catch(err => {
-                console.error("Error al cargar fechas ocupadas:", err);
-            });
-    }, []);
+            setFechasOcupadas(ocupadas);
+        })
+        .catch(err => {
+            console.error("Error al cargar fechas ocupadas:", err);
+        });
+}, []);
+
 
     const fechaMaxima = new Date();
     fechaMaxima.setMonth(fechaMaxima.getMonth() + 6);

@@ -40,12 +40,14 @@ export function ReservaCard({ reserva, actualizarEstadoReserva, onReservaActuali
   const guardarCambios = async () => {
     try {
       const payload = { ...formData };
+      const token = localStorage.getItem("tokenAdmin");
 
       const response = await fetch(`${API_BASE_URL}/visitantes/${reserva.id}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
-        },
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            },
         body: JSON.stringify(payload),
       });
 

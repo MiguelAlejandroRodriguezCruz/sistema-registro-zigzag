@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from "react"; // Agrega useRef
 import { useParams } from "react-router-dom";
-import { Comp_encabezado } from "./Comp_encabezado";
-import { Comp_Pie_pagina } from "./Comp_Pie_pagina";
+import { Comp_encabezado } from "../Comp/Comp_encabezado";
+import { Comp_Pie_pagina } from "../Comp/Comp_Pie_pagina";
 import { QRCodeCanvas } from 'qrcode.react';
-import "../style/EventosDescripcion.css"
-import { API_BASE_URL } from "../config/api";
+import "../../style/EventosDescripcion.css"
+import { API_BASE_URL } from "../../config/api";
+import { useNavigate } from "react-router-dom";
 
 const EventosDescripcion = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [evento, setEvento] = useState(null);
   const [cargando, setCargando] = useState(true);
@@ -67,7 +69,13 @@ const EventosDescripcion = () => {
 
     const cargarEvento = async () => {
       try {
-        const respuesta = await fetch(`${API_BASE_URL}/eventos/${id}`);
+        const token = localStorage.getItem("tokenUsuario");
+        const respuesta = await fetch(`${API_BASE_URL}/eventos/${id}`,{
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
+        });
         if (!respuesta.ok) {
           throw new Error('Error al cargar el evento');
         }
@@ -75,7 +83,12 @@ const EventosDescripcion = () => {
         setEvento(datos);
 
         // Cargar imágenes adicionales del evento
-        const imagenesResponse = await fetch(`${API_BASE_URL}/eventos/${id}/imagenes`);
+        const imagenesResponse = await fetch(`${API_BASE_URL}/eventos/${id}/imagenes`,{
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
+        });
         if (!imagenesResponse.ok) {
           throw new Error('Error al cargar las imágenes del evento');
         }
@@ -152,10 +165,13 @@ const EventosDescripcion = () => {
         num_adultos: parseInt(numAdultos) || 0,
         num_ninos: parseInt(numNinos) || 0
       };
-
+      const token = localStorage.getItem("tokenUsuario");
       const respuesta = await fetch(`${API_BASE_URL}/formulario/guardar`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
+         },
         body: JSON.stringify(datosFormulario)
       });
 
@@ -165,6 +181,8 @@ const EventosDescripcion = () => {
       setMensajeExito('¡Formulario guardado exitosamente!');
       setQrValue(resultado.codigo_qr);  // lo que viene de la BD
       setMostrarQR(true);
+
+            
 
     } catch (err) {
       setErrorFormulario(err.message);
@@ -493,7 +511,10 @@ const EventosDescripcion = () => {
                 <div className="text-center mt-4">
                   <button
                     className="btn btn-success"
-                    onClick={() => setMostrarQR(false)}
+                    onClick={() => {
+                      setMostrarQR(false);   // cerrar modal
+                      navigate("/eventos-visitantes"); // redirigir
+                    }}
                   >
                     Cerrar
                   </button>

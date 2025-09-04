@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; //debes instalarla con npm install react-toastify
-import { Comp_encabezado } from './Comp_encabezado';
-import { Comp_Pie_pagina } from './Comp_Pie_pagina';
-import { API_BASE_URL } from "../config/api";
+import { Comp_encabezado } from '../Comp/Comp_encabezado';
+import { Comp_Pie_pagina } from '../Comp/Comp_Pie_pagina';
+import { API_BASE_URL } from "../../config/api";
 
 const Eventos = () => {
   const [eventos, setEventos] = useState([]);
@@ -17,7 +17,13 @@ const Eventos = () => {
   useEffect(() => {
     const fetchEventos = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/eventos`);
+        const token = localStorage.getItem("tokenAdmin");
+        const response = await fetch(`${API_BASE_URL}/eventos`,{
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
+        });
         if (!response.ok) {
           throw new Error('Error al obtener eventos');
         }

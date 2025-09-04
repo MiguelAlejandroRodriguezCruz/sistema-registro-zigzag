@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Comp_encabezado } from "../Comp_encabezado";
-import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { Comp_encabezado } from "../Comp/Comp_encabezado";
+import { Comp_Pie_pagina } from "../Comp/Comp_Pie_pagina";
 import { API_BASE_URL } from "../../config/api";
 
 export default function SolicitarCodigo() {

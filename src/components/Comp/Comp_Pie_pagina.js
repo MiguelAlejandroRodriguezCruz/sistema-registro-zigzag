@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from "../images/zig_zag_logo.png";
+import logo from "../../images/zig_zag_logo.png";
 
 export function Comp_Pie_pagina() {
   return (

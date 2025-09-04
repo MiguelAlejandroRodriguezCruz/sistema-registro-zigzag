@@ -1,5 +1,7 @@
 const recuperarModel = require('../models/recuperarModel');
 const transporter = require('../config/mailer');
+const jwt = require('jsonwebtoken');
+const { SECRET_KEY, EXPIRES_IN_RESET } = require('../config/jwt');
 
 const recuperarController = {
     enviarCodigo: async (req, res) => {
@@ -20,7 +22,7 @@ const recuperarController = {
             await recuperarModel.guardarCodigo(correo, codigo, expiracion);
 
             const mailOptions = {
-                from: 'tucorreo@gmail.com',
+                from: 'yomiguel250@gmail.com',
                 to: correo,
                 subject: 'Código de recuperación',
                 text: `Tu código de recuperación es: ${codigo}. Este código expirará en 10 minutos.`
@@ -52,7 +54,17 @@ const recuperarController = {
                 return res.status(401).json({ mensaje: 'Código expirado' });
             }
 
-            return res.json({ mensaje: 'Código válido' });
+            const resetToken = jwt.sign(
+            { correo },              
+            SECRET_KEY,              
+            { expiresIn: EXPIRES_IN_RESET } 
+            );
+
+            return res.json({ 
+            mensaje: 'Código válido',
+            resetToken
+            });
+
 
         } catch (err) {
             console.error('Error:', err.message);

@@ -1,38 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Inicio from '../components/Inicio'
-import ReservasGenerales  from '../components/ReservasGenerales';
+import ReservasGenerales  from '../components/ReservasAdmin/ReservasGenerales';
 import Taquilla from '../components/Taquilla/Taquilla';
-import Visitas from '../components/Visitas';
-import Eventos from '../components/Eventos';
-import ListaEventos from '../components/ListaEventos';
-import EventosVisitantes from '../components/EventosVisitantes';
-import EventosDescripcion from '../components/EventosDescripcion';
+import Visitas from '../components/Visitas/Visitas';
+import Eventos from '../components/EventosAdmin/Eventos';
+import ListaEventos from '../components/EventosAdmin/ListaEventos';
+import EventosVisitantes from '../components/EventosUsuario/EventosVisitantes';
+import EventosDescripcion from '../components/EventosUsuario/EventosDescripcion';
 import Login from '../components/Login/Login';
 import LoginAdmin from '../components/Login/LoginAdmin';
 import Registro from '../components/Login/Registro'
 import NuevaContrasena from '../components/Login/NuevaContrasena';
 import SolicitarCodigo from '../components/Login/SolicitarCodigo';
 import VerificarCodigo from '../components/Login/VerificarCodigo';
-import PrivateRoute from '../components/PrivateRoute';
+import PrivateRouteUsuario from '../components/PrivateRoutes/PrivateRouteUsuario';
+import PrivateRouteAdmin from '../components/PrivateRoutes/PrivateRouteAdmin';
 
 const AppRoutes = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     return (
         <Router>
             <Routes>
                 <Route path="/inicio" element={<Inicio />} />
-                <Route path="/ReservasGenerales" element={<ReservasGenerales />} />
+                <Route path="/ReservasGenerales" element={<PrivateRouteAdmin><ReservasGenerales /></PrivateRouteAdmin>} />
                 <Route path='/taquilla' element={<Taquilla />} />
                 <Route path="/" element={<Inicio />} />
                 <Route path="*" element={<Navigate to="/inicio" />} />
                 <Route path="/visitas" element={<Visitas />} />
-                <Route path="/eventos" element={<Eventos />} />
-                <Route path="/eventos/:id" element={<Eventos />} />
-                <Route path="/lista-eventos" element={<ListaEventos />} />
-                <Route path="/eventos-visitantes" element={<PrivateRoute><EventosVisitantes /></PrivateRoute>} />
-                <Route path="/eventos-descripcion/:id" element={<PrivateRoute><EventosDescripcion /></PrivateRoute>} />
+                <Route path="/eventos" element={<PrivateRouteAdmin><Eventos /></PrivateRouteAdmin>} />
+                <Route path="/eventos/:id" element={<PrivateRouteAdmin><Eventos /></PrivateRouteAdmin>} />
+                <Route path="/lista-eventos" element={<PrivateRouteAdmin><ListaEventos /></PrivateRouteAdmin>} />
+                <Route path="/eventos-visitantes" element={<PrivateRouteUsuario><EventosVisitantes /></PrivateRouteUsuario>} />
+                <Route path="/eventos-descripcion/:id" element={<PrivateRouteUsuario><EventosDescripcion /></PrivateRouteUsuario>} />
                 <Route path='/login' element={<Login />} />
                 <Route path='/login-admin' element={<LoginAdmin />} />
                 <Route path='/registro' element={<Registro />} />

@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const registroController = require('../controllers/registroController');
+const auth = require('../middlewares/auth');
 
 /**
  * @swagger
@@ -13,7 +14,7 @@ const registroController = require('../controllers/registroController');
  *       200:
  *         description: Lista de registros
  */
-router.get('/', registroController.getAllRegistros);
+router.get('/', auth,registroController.getAllRegistros);
 
 /**
  * @swagger

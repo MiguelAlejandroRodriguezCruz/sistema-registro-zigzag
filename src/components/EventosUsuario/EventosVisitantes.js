@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
-import { Comp_encabezado } from './Comp_encabezado';
-import { Comp_Pie_pagina } from './Comp_Pie_pagina';
-import { API_BASE_URL } from "../config/api";
+import { Comp_encabezado } from '../Comp/Comp_encabezado';
+import { Comp_Pie_pagina } from '../Comp/Comp_Pie_pagina';
+import { API_BASE_URL } from "../../config/api";
 
 const EventosSeleccionar = () => {
   const [eventos, setEventos] = useState([]);
@@ -25,7 +25,13 @@ const EventosSeleccionar = () => {
 
   const obtenerEventosDisponibles = async (idVisitante) => {
     try {
-      const respuesta = await fetch(`${API_BASE_URL}/eventos/disponibles/${idVisitante}`);
+      const token = localStorage.getItem("tokenUsuario");
+      const respuesta = await fetch(`${API_BASE_URL}/eventos/disponibles/${idVisitante}`,{
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
+        });
 
       if (!respuesta.ok) {
         // Si hay un error en la respuesta, intentar obtener todos los eventos
@@ -48,7 +54,13 @@ const EventosSeleccionar = () => {
 
   const obtenerTodosEventos = async () => {
     try {
-      const respuesta = await fetch(`${API_BASE_URL}/eventos`);
+      const token = localStorage.getItem("tokenUsuario");
+      const respuesta = await fetch(`${API_BASE_URL}/eventos`,{
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
+        });
       if (!respuesta.ok) {
         throw new Error('Error al obtener eventos');
       }

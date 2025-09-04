@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const visitantesController = require('../controllers/visitantesController');
+const auth = require('../middlewares/auth');
 
 /**
  * @swagger
@@ -14,7 +15,19 @@ const visitantesController = require('../controllers/visitantesController');
  *       200:
  *         description: Lista de visitantes
  */
-router.get('/', visitantesController.getVisitantes);
+router.get('/',auth, visitantesController.getVisitantes);
+
+/**
+ * @swagger
+ * /visitantes:
+ *   get:
+ *     summary: Obtener todas las fechas ocupadas
+ *     tags: [Visitantes]
+ *     responses:
+ *       200:
+ *         description: Lista de fechas ocupadas
+ */
+router.get('/fechasOcupadas', visitantesController.getVisitantesFechasOcupadas);
 
 /**
  * @swagger
@@ -56,7 +69,7 @@ router.post('/', visitantesController.createVisitante);
  *       200:
  *         description: Visitante actualizado
  */
-router.put('/:id', visitantesController.updateVisitante);
+router.put('/:id',auth, visitantesController.updateVisitante);
 
 /**
  * @swagger
@@ -68,7 +81,7 @@ router.put('/:id', visitantesController.updateVisitante);
  *       200:
  *         description: Estados actualizados
  */
-router.put('/', visitantesController.updateAllStatus);
+router.put('/',auth, visitantesController.updateAllStatus);
 
 /**
  * @swagger
@@ -86,6 +99,6 @@ router.put('/', visitantesController.updateAllStatus);
  *       200:
  *         description: Visitante eliminado
  */
-router.delete('/:id', visitantesController.deleteVisitante);
+router.delete('/:id',auth, visitantesController.deleteVisitante);
 
 module.exports = router;

@@ -6,6 +6,10 @@ const Visitantes = {
         db.query('SELECT * FROM visitantesinstitucion', callback);
     },
 
+    getAllFechasOcupadas: (callback) => {
+        db.query('SELECT fecha FROM visitantesinstitucion WHERE estatus = "aprobadas"', callback);
+    },
+
     getById: (id, callback) => {
         db.query('SELECT * FROM visitantesinstitucion WHERE id = ?', [id], (err, results) => {
         if (err) return callback(err);

@@ -115,13 +115,13 @@ const eventosController = {
     eliminar: async (req, res) => {
         const eventoId = req.params.id;
         try {
-            const [evento] = await eventosModel.obtenerBanner(eventoId);
-            if (evento.length === 0) {
+            const evento = await eventosModel.obtenerBanner(eventoId);
+            if (!evento || evento.length === 0) {
                 return res.status(404).json({ message: 'Evento no encontrado' });
             }
 
             // Obtener imágenes desde el modelo
-            const [imagenes] = await eventosModel.obtenerImagenesPorEvento(eventoId);
+            const imagenes = await eventosModel.obtenerImagenesPorEvento(eventoId);
 
             // Eliminar archivos físicos
             const files = [

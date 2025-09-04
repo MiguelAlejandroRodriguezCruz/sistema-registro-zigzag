@@ -3,8 +3,8 @@ import "../../style/App.css";
 import EntradasConfirmadas from "./EntradasConfirmadas";
 import FormularioDatos from "./FormularioDatos";
 import DatosGuardados from "./DatosGuardados";
-import { Comp_encabezado } from "../Comp_encabezado";
-import { Comp_Pie_pagina } from "../Comp_Pie_pagina";
+import { Comp_encabezado } from "../Comp/Comp_encabezado";
+import { Comp_Pie_pagina } from "../Comp/Comp_Pie_pagina";
 import { API_BASE_URL } from "../../config/api";
 
 const Taquilla = () => {

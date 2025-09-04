@@ -8,6 +8,13 @@ exports.getVisitantes = (req, res) => {
     });
 };
 
+exports.getVisitantesFechasOcupadas = (req, res) => {
+    Visitantes.getAllFechasOcupadas((err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+};
+
 exports.createVisitante = (req, res) => {
     Visitantes.create(req.body, (err, result) => {
         if (err) return res.status(500).json({ error: err.message });

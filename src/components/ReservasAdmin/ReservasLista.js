@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ReservaCard } from "./ReservaCard";
-import CalendarioFechasOcupadas from "../CalendarioFechasOcupadas";
+import CalendarioFechasOcupadas from "./CalendarioFechasOcupadas";
 import Estadistica from "./Estadistica";
 
 /**

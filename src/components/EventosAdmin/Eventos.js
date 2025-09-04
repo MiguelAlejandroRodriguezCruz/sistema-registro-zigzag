@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Comp_encabezado } from "./Comp_encabezado";
-import { Comp_Pie_pagina } from "./Comp_Pie_pagina"
-import { API_BASE_URL } from "../config/api";
+import { Comp_encabezado } from "../Comp/Comp_encabezado";
+import { Comp_Pie_pagina } from "../Comp/Comp_Pie_pagina"
+import { API_BASE_URL } from "../../config/api";
 
 export default function CrearEvento() {
   const navigate = useNavigate();
@@ -32,7 +32,13 @@ export default function CrearEvento() {
     if (id) {
       const fetchEvento = async () => {
         try {
-          const response = await fetch(`${API_BASE_URL}/eventos/${id}`);
+          const token = localStorage.getItem("tokenAdmin");
+          const response = await fetch(`${API_BASE_URL}/eventos/${id}`,{
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
+        });
           if (!response.ok) {
             throw new Error('Error al obtener el evento');
           }
@@ -65,7 +71,13 @@ export default function CrearEvento() {
       // Cargar imágenes existentes
       const fetchEventImages = async () => {
         try {
-          const response = await fetch(`${API_BASE_URL}/eventos/${id}/imagenes`);
+          const token = localStorage.getItem("tokenAdmin");
+          const response = await fetch(`${API_BASE_URL}/eventos/${id}/imagenes`,{
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
+        });
           if (!response.ok) throw new Error('Error al obtener imágenes');
           const data = await response.json();
           setEventImages(data);
@@ -113,8 +125,13 @@ export default function CrearEvento() {
   // Eliminar imagen ya guardada
   const removeEventImage = async (imageId) => {
     try {
+      const token = localStorage.getItem("tokenAdmin");
       const response = await fetch(`${API_BASE_URL}/eventos/imagenes/${imageId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
       });
       if (!response.ok) throw new Error('Error al eliminar imagen');
       setEventImages(prev => prev.filter(img => img.id !== imageId));
@@ -186,9 +203,13 @@ export default function CrearEvento() {
 
       if (isEditing) {
         // Actualizar evento existente
+        const token = localStorage.getItem("tokenAdmin");
         response = await fetch(`${API_BASE_URL}/eventos/${id}`, {
           method: 'PUT',
-          body: formDataToSend
+          body: formDataToSend,
+          headers: {
+            "Authorization": `Bearer ${token}`
+            }
         });
 
         if (!response.ok) {
@@ -198,9 +219,13 @@ export default function CrearEvento() {
         eventoId = id;
       } else {
         // Crear nuevo evento
+        const token = localStorage.getItem("tokenAdmin");
         response = await fetch(`${API_BASE_URL}/eventos`, {
           method: 'POST',
-          body: formDataToSend
+          body: formDataToSend,
+          headers: {
+            "Authorization": `Bearer ${token}`
+            }
         });
 
         if (!response.ok) {
@@ -217,10 +242,13 @@ export default function CrearEvento() {
         imageFiles.forEach(file => {
           formDataImages.append('imagenes', file);
         });
-
+        const token = localStorage.getItem("tokenAdmin");
         const uploadResponse = await fetch(`${API_BASE_URL}/eventos/${eventoId}/imagenes`, {
           method: 'POST',
-          body: formDataImages
+          body: formDataImages,
+          headers: {
+            "Authorization": `Bearer ${token}`
+            }
         });
 
         if (!uploadResponse.ok) {
@@ -231,8 +259,6 @@ export default function CrearEvento() {
       if (!response.ok) {
         throw new Error(isEditing ? 'Error al actualizar el evento' : 'Error al crear el evento');
       }
-
-      console.log(isEditing ? 'Evento actualizado' : 'Evento creado con ID:', eventoId);
 
       // Redirigir con estado para mostrar notificación
       navigate("/lista-eventos", {
@@ -261,8 +287,13 @@ export default function CrearEvento() {
 
     setIsLoading(true);
     try {
+      const token = localStorage.getItem("tokenAdmin");
       const response = await fetch(`${API_BASE_URL}/eventos/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+            }
       });
 
       if (!response.ok) {

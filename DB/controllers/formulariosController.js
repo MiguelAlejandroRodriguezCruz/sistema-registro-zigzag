@@ -77,7 +77,7 @@ const formulariosController = {
                     if (error) {
                         console.error('Error enviando correo:', error);
                     } else {
-                        console.log('Correo enviado:', info.response);
+                        
                     }
                 });
             }
