@@ -53,6 +53,27 @@
   /* Azul Bootstrap */
 }
 
+.pie-equipo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+.pie-equipo h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.pie-equipo ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pie-equipo li {
+  font-size: 0.85rem;
+}
+
 /* Responsivo en pantallas medianas y grandes */
 @media (min-width: 768px) {
   .pie-contenido {
@@ -68,5 +89,8 @@
 
   .pie-enlaces {
     justify-content: flex-end;
+  }
+  .pie-equipo {
+    text-align: left;
   }
 }

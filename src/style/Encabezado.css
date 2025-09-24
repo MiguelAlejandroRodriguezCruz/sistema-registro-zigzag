@@ -1,34 +1,44 @@
 /* Header */
 
 .comp_encabezado {
-  display: flex;
-  align-items: center;   /* Corrige esto */
-  justify-content: space-between; /* Logo a la izq, menú o vacío a la der */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* tres zonas */
+  align-items: center;            /* centrados verticalmente */
+  gap: 80px;                      /* espacio entre logos */
   padding: 10px 20px;
   background-color: #f8f9fa;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .encabezado__logo {
-  height: 60px;
+  height: 80px;
   cursor: pointer;
   max-width: 100%;
 }
 
-@media (max-width: 600px) {
-  .encabezado__logo {
-    height: 40px;
-  }
-
-  .comp_encabezado {
-    justify-content: center;
-    padding: 8px 10px;
-  }
+/* Izquierda */
+.comp_encabezado .logo-left {
+  justify-self: start;
 }
 
+/* Centro */
+.comp_encabezado .logo-center {
+  justify-self: center;
+  height: 120px;
+}
+
+/* Derecha */
+.comp_encabezado .logo-right {
+  justify-self: end;
+  height: 100px;
+}
+
+/* Móvil */
 @media (max-width: 600px) {
   .comp_encabezado {
-    justify-content: center; /* Logo centrado en pantallas pequeñas */
+    grid-template-columns: 1fr; /* solo una columna */
+    gap: 10px;
+    justify-items: center;       /* todos centrados */
     padding: 8px 10px;
   }
 
