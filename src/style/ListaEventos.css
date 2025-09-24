@@ -54,15 +54,22 @@
   justify-content: center;
   margin-top: 10px;
   background-color: #f5f5f5;
-  padding: 10px;
-  border-radius: 5px;
-  max-width: 100%; /* Para que no se salga de la pantalla en moviles */
+  padding: 15px;
+  border-radius: 8px;
+  max-width: 100%;
 }
 
-imagenes-banner img {
-  max-width: 100%;
-  height: auto; /* 🔹 Mantiene proporción */
-  border-radius: 5px;
+.imagenes-banner img {
+  max-width: 400px; 
+  max-height: 250px;
+  width: 100%;
+  height: auto;
+  object-fit: cover; 
+  object-position: center;
+  border-radius: 6px;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease;
 }
 
 .evento-descripcion {

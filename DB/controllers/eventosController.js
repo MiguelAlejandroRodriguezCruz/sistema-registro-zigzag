@@ -39,7 +39,7 @@ const eventosController = {
     crear: async (req, res) => {
         try {
             const datos = req.body;
-            if (!datos.nombre || !datos.fechaInicio || !datos.fechaFinal || !datos.lugar || !datos.descripcion) {
+            if (!datos.nombre || !datos.fechaInicio || !datos.fechaFinal || !datos.lugar || !datos.descripcion || !datos.formulario) {
                 return res.status(400).json({ message: 'Faltan campos obligatorios' });
             }
             if (!req.file) {
@@ -56,7 +56,8 @@ const eventosController = {
                 lugar: datos.lugar,
                 descripcion: datos.descripcion,
                 formulario,
-                baner: urlBaner
+                baner: urlBaner,
+                maxPersonas: datos.maxPersonas
             });
 
             res.status(201).json({ idInsertado, banerUrl: urlBaner });
@@ -73,7 +74,7 @@ const eventosController = {
             const datos = req.body;
 
             // Validación básica de campos obligatorios
-            if (!datos.nombre || !datos.fechaInicio || !datos.fechaFinal || !datos.lugar || !datos.descripcion) {
+            if (!datos.nombre || !datos.fechaInicio || !datos.fechaFinal || !datos.lugar || !datos.descripcion, !datos.formulario) {
                 return res.status(400).json({ message: 'Faltan campos obligatorios' });
             }
 
@@ -100,7 +101,8 @@ const eventosController = {
                 lugar: datos.lugar,
                 descripcion: datos.descripcion,
                 formulario,
-                baner: bannerFinal
+                baner: bannerFinal,
+                maxPersonas: datos.maxPersonas
             });
 
             res.json({ message: 'Evento actualizado correctamente', banerUrl: bannerFinal });

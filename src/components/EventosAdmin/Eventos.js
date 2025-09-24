@@ -14,7 +14,8 @@ export default function CrearEvento() {
     lugar: "",
     descripcion: "",
     formulario: [],
-    baner: ""
+    baner: "",
+    maxPersonas: 0
   });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -191,6 +192,7 @@ export default function CrearEvento() {
       formDataToSend.append('lugar', formData.lugar);
       formDataToSend.append('descripcion', formData.descripcion);
       formDataToSend.append('formulario', JSON.stringify(formFields));
+      formDataToSend.append('maxPersonas', formData.maxPersonas);
 
       // Agregar archivo si existe
       if (bannerFile) {
@@ -452,6 +454,19 @@ export default function CrearEvento() {
                   placeholder="Escriba aquí"
                   name="descripcion"
                   value={formData.descripcion}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label>Numero maximo de personas que pueden asistir:</label>
+                <input
+                  type="integer"
+                  className="form-control"
+                  placeholder="0"
+                  name="maxPersonas"
+                  value={formData.maxPersonas}
                   onChange={handleChange}
                   required
                 />

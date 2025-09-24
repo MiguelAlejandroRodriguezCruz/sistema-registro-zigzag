@@ -28,8 +28,8 @@ const eventosModel = {
     insertar: async (evento) => {
         const query = `
             INSERT INTO evento (
-                nombre, fechaInicio, fechaFinal, lugar, descripcion, formulario, baner
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                nombre, fechaInicio, fechaFinal, lugar, descripcion, formulario, baner, maxPersonas
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
         const [result] = await db.promise().query(query, [
             evento.nombre,
@@ -38,7 +38,8 @@ const eventosModel = {
             evento.lugar,
             evento.descripcion,
             evento.formulario,
-            evento.baner
+            evento.baner,
+            evento.maxPersonas
         ]);
         return result.insertId;
     },
@@ -46,7 +47,7 @@ const eventosModel = {
     actualizar: async (id, evento) => {
         const query = `
             UPDATE evento 
-            SET nombre = ?, fechaInicio = ?, fechaFinal = ?, lugar = ?, descripcion = ?, formulario = ?, baner = ?
+            SET nombre = ?, fechaInicio = ?, fechaFinal = ?, lugar = ?, descripcion = ?, formulario = ?, baner = ?, maxPersonas = ?
             WHERE id = ?
         `;
         await db.promise().query(query, [
@@ -57,6 +58,7 @@ const eventosModel = {
             evento.descripcion,
             evento.formulario,
             evento.baner,
+            evento.maxPersonas,
             id
         ]);
     },
