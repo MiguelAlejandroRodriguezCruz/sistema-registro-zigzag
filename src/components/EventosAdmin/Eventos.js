@@ -34,12 +34,12 @@ export default function CrearEvento() {
       const fetchEvento = async () => {
         try {
           const token = localStorage.getItem("tokenAdmin");
-          const response = await fetch(`${API_BASE_URL}/eventos/${id}`,{
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+          const response = await fetch(`${API_BASE_URL}/eventos/${id}`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
             }
-        });
+          });
           if (!response.ok) {
             throw new Error('Error al obtener el evento');
           }
@@ -73,12 +73,12 @@ export default function CrearEvento() {
       const fetchEventImages = async () => {
         try {
           const token = localStorage.getItem("tokenAdmin");
-          const response = await fetch(`${API_BASE_URL}/eventos/${id}/imagenes`,{
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+          const response = await fetch(`${API_BASE_URL}/eventos/${id}/imagenes`, {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
             }
-        });
+          });
           if (!response.ok) throw new Error('Error al obtener imágenes');
           const data = await response.json();
           setEventImages(data);
@@ -130,9 +130,9 @@ export default function CrearEvento() {
       const response = await fetch(`${API_BASE_URL}/eventos/imagenes/${imageId}`, {
         method: 'DELETE',
         headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-            }
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
       });
       if (!response.ok) throw new Error('Error al eliminar imagen');
       setEventImages(prev => prev.filter(img => img.id !== imageId));
@@ -211,7 +211,7 @@ export default function CrearEvento() {
           body: formDataToSend,
           headers: {
             "Authorization": `Bearer ${token}`
-            }
+          }
         });
 
         if (!response.ok) {
@@ -227,7 +227,7 @@ export default function CrearEvento() {
           body: formDataToSend,
           headers: {
             "Authorization": `Bearer ${token}`
-            }
+          }
         });
 
         if (!response.ok) {
@@ -250,7 +250,7 @@ export default function CrearEvento() {
           body: formDataImages,
           headers: {
             "Authorization": `Bearer ${token}`
-            }
+          }
         });
 
         if (!uploadResponse.ok) {
@@ -292,10 +292,10 @@ export default function CrearEvento() {
       const token = localStorage.getItem("tokenAdmin");
       const response = await fetch(`${API_BASE_URL}/eventos/${id}`, {
         method: 'DELETE',
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-            }
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        }
       });
 
       if (!response.ok) {
@@ -320,7 +320,10 @@ export default function CrearEvento() {
       type,
       label: "",
       required: false,
-      options: type === 'select' ? [""] : null
+      options: type === 'select' ? [""] : null,
+      ...(type === 'file' && {
+        acceptedTypes: "*"
+      })
     };
     setFormFields([...formFields, newField]);
   };
@@ -368,6 +371,12 @@ export default function CrearEvento() {
       }
       return field;
     }));
+  };
+
+  const updateFileConfig = (fieldId, configKey, value) => {
+    setFormFields(formFields.map(field =>
+      field.id === fieldId ? { ...field, [configKey]: value } : field
+    ));
   };
 
   return (
@@ -614,8 +623,12 @@ export default function CrearEvento() {
                       <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('select')}>
                         + Selección
                       </button>
-                      <button type="button" className="btn btn-sm btn-primary" onClick={() => addFormField('checkbox')}>
+                      <button type="button" className="btn btn-sm btn-primary me-2" onClick={() => addFormField('checkbox')}>
                         + Checkbox
+                      </button>
+                      {/* 🔹 BOTÓN PARA ARCHIVOS - SIEMPRE UN SOLO ARCHIVO */}
+                      <button type="button" className="btn btn-sm btn-primary" onClick={() => addFormField('file')}>
+                        + Archivo
                       </button>
                     </div>
 
@@ -655,33 +668,26 @@ export default function CrearEvento() {
                             <label className="form-check-label">Requerido</label>
                           </div>
 
-                          {field.type === 'select' && (
+                          {field.type === 'file' && (
                             <div>
-                              <label>Opciones:</label>
-                              {field.options.map((option, idx) => (
-                                <div key={idx} className="d-flex mb-2">
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    value={option}
-                                    onChange={(e) => updateOption(field.id, idx, e.target.value)}
-                                  />
-                                  <button
-                                    type="button"
-                                    className="btn btn-sm btn-danger ms-2"
-                                    onClick={() => removeOption(field.id, idx)}
-                                  >
-                                    -
-                                  </button>
-                                </div>
-                              ))}
-                              <button
-                                type="button"
-                                className="btn btn-sm btn-secondary"
-                                onClick={() => addOption(field.id)}
-                              >
-                                + Agregar opción
-                              </button>
+                              <div className="mb-2">
+                                <label className="form-label">Tipos de archivo aceptados:</label>
+                                <select
+                                  className="form-select"
+                                  value={field.acceptedTypes || "*"}
+                                  onChange={(e) => updateFileConfig(field.id, 'acceptedTypes', e.target.value)}
+                                >
+                                  <option value="*">Todos los archivos</option>
+                                  <option value=".pdf,.doc,.docx">Documentos (PDF, Word)</option>
+                                  <option value=".jpg,.jpeg,.png,.gif">Imágenes</option>
+                                  <option value=".pdf">Solo PDF</option>
+                                  <option value=".jpg,.jpeg,.png">Solo imágenes</option>
+                                </select>
+                              </div>
+                              {/* 🔹 MENSAJE INFORMATIVO */}
+                              <div className="text-info small">
+                                ⓘ Este campo permitirá subir solo un archivo
+                              </div>
                             </div>
                           )}
                         </div>
@@ -755,7 +761,8 @@ const getFieldTypeName = (type) => {
     text: 'Texto',
     number: 'Número',
     select: 'Selección',
-    checkbox: 'Checkbox'
+    checkbox: 'Checkbox',
+    file: 'Archivo'
   };
   return names[type] || type;
 };
@@ -776,6 +783,17 @@ const renderPreviewField = (field) => {
       );
     case 'checkbox':
       return <input type="checkbox" disabled />;
+    case 'file':
+      return (
+        <input
+          type="file"
+          className="form-control"
+          disabled
+          accept={field.acceptedTypes || "*"}
+          // 🔹 multiple={false} es el valor por defecto, pero lo dejamos explícito
+          multiple={false}
+        />
+      );
     default:
       return <input type="text" className="form-control" disabled />;
   }

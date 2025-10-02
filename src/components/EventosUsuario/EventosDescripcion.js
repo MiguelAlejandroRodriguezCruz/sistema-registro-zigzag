@@ -20,6 +20,7 @@ const EventosDescripcion = () => {
   const [numAdultos, setNumAdultos] = useState("");
   const [numNinos, setNumNinos] = useState("");
   const [respuestas, setRespuestas] = useState({});
+  const [archivos, setArchivos] = useState({});
   const [enviando, setEnviando] = useState(false);
   const [mensajeExito, setMensajeExito] = useState("");
   const [errorFormulario, setErrorFormulario] = useState("");
@@ -143,7 +144,7 @@ const EventosDescripcion = () => {
     });
   };
 
-  // Enviar formulario
+ // Enviar formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     setEnviando(true);
@@ -157,32 +158,37 @@ const EventosDescripcion = () => {
         throw new Error("Debes iniciar sesión para realizar reservas");
       }
 
-      const datosFormulario = {
-        id_visitante: user.id,
-        id_evento: evento.id,
-        formulario: JSON.stringify(respuestas),
-        fecha_evento: fechaEvento,
-        num_adultos: parseInt(numAdultos) || 0,
-        num_ninos: parseInt(numNinos) || 0
-      };
+      // Crear FormData para enviar archivos
+      const formData = new FormData();
+      formData.append('id_visitante', user.id);
+      formData.append('id_evento', evento.id);
+      formData.append('formulario', JSON.stringify(respuestas));
+      formData.append('fecha_evento', fechaEvento);
+      formData.append('num_adultos', parseInt(numAdultos) || 0);
+      formData.append('num_ninos', parseInt(numNinos) || 0);
+
+      // Agregar archivos al FormData
+      Object.keys(archivos).forEach(campoId => {
+        if (archivos[campoId]) {
+          formData.append(`archivos_${campoId}`, archivos[campoId]);
+        }
+      });
+
       const token = localStorage.getItem("tokenUsuario");
       const respuesta = await fetch(`${API_BASE_URL}/formulario/guardar`, {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
+        headers: {
           "Authorization": `Bearer ${token}`
-         },
-        body: JSON.stringify(datosFormulario)
+        },
+        body: formData
       });
 
       const resultado = await respuesta.json();
       if (!respuesta.ok) throw new Error(resultado.error || 'Error al guardar formulario');
 
       setMensajeExito('¡Formulario guardado exitosamente!');
-      setQrValue(resultado.codigo_qr);  // lo que viene de la BD
+      setQrValue(resultado.codigo_qr);
       setMostrarQR(true);
-
-            
 
     } catch (err) {
       setErrorFormulario(err.message);
@@ -191,7 +197,19 @@ const EventosDescripcion = () => {
     }
   };
 
-
+  // Manejar cambio de archivos
+  const handleArchivoChange = (campoId, archivosSeleccionados) => {
+    setArchivos(prev => ({
+      ...prev,
+      [campoId]: archivosSeleccionados[0] // Solo tomar el primer archivo
+    }));
+    
+    // También guardar el nombre del archivo en las respuestas
+    setRespuestas(prev => ({
+      ...prev,
+      [campoId]: archivosSeleccionados[0] ? archivosSeleccionados[0].name : ''
+    }));
+  };
 
   if (cargando) {
     return (
@@ -332,7 +350,10 @@ const EventosDescripcion = () => {
                 {/* Renderizar campos del formulario dinámico */}
                 {formularioParseado.map((campo, index) => (
                   <div className="form-group" key={campo.id || index}>
-                    <label>{campo.label}{campo.required && <span className="text-danger">*</span>}</label>
+                    <label>
+                      {campo.label}
+                      {campo.required && <span className="text-danger">*</span>}
+                    </label>
 
                     {campo.type === 'checkbox' ? (
                       <div>
@@ -389,6 +410,33 @@ const EventosDescripcion = () => {
                           </option>
                         ))}
                       </select>
+                    ) : campo.type === 'file' ? (
+                      // 🔹 NUEVO: Campo para archivos
+                      <div>
+                        <input
+                          type="file"
+                          className="form-control"
+                          accept={campo.acceptedTypes || "*"}
+                          onChange={(e) => handleArchivoChange(campo.id, e.target.files)}
+                          required={campo.required}
+                        />
+                        {archivos[campo.id] && (
+                          <div className="mt-2">
+                            <small className="text-success">
+                              ✅ Archivo seleccionado: {archivos[campo.id].name}
+                            </small>
+                            <br />
+                            <small className="text-muted">
+                              Tamaño: {(archivos[campo.id].size / 1024 / 1024).toFixed(2)} MB
+                            </small>
+                          </div>
+                        )}
+                        {campo.acceptedTypes && campo.acceptedTypes !== "*" && (
+                          <small className="text-muted">
+                            Tipos permitidos: {campo.acceptedTypes}
+                          </small>
+                        )}
+                      </div>
                     ) : (
                       <input
                         type={campo.type === 'number' ? 'number' : 'text'}

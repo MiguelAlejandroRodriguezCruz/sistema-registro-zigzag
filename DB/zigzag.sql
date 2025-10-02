@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-09-2025 a las 04:25:55
+-- Tiempo de generación: 02-10-2025 a las 18:02:31
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,6 +20,33 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `zigzag`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `archivos_formulario`
+--
+
+CREATE TABLE `archivos_formulario` (
+  `id` int(11) NOT NULL,
+  `id_formulario` int(11) NOT NULL,
+  `campo_id` varchar(100) NOT NULL,
+  `nombre_original` varchar(255) NOT NULL,
+  `nombre_guardado` varchar(255) NOT NULL,
+  `ruta` varchar(500) NOT NULL,
+  `ruta_relativa` varchar(500) NOT NULL,
+  `tamaño` int(11) NOT NULL,
+  `tipo` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `archivos_formulario`
+--
+
+INSERT INTO `archivos_formulario` (`id`, `id_formulario`, `campo_id`, `nombre_original`, `nombre_guardado`, `ruta`, `ruta_relativa`, `tamaño`, `tipo`, `created_at`) VALUES
+(1, 21, '1759417824388', 'BRWBCF4D40386AB_000015.pdf', 'doc_1759420428300_791915253_BRWBCF4D40386AB_000015.pdf', 'C:\\Users\\Lenovo\\Documents\\servicio\\sistema-registro-zigzag\\DB\\docs_eventos\\19_Evento1\\doc_1759420428300_791915253_BRWBCF4D40386AB_000015.pdf', 'docs_eventos/19_Evento1/doc_1759420428300_791915253_BRWBCF4D40386AB_000015.pdf', 3062921, 'application/pdf', '2025-10-02 15:53:48'),
+(2, 21, '1759417836942', 'BRWBCF4D40386AB_000040.pdf', 'doc_1759420428303_129725105_BRWBCF4D40386AB_000040.pdf', 'C:\\Users\\Lenovo\\Documents\\servicio\\sistema-registro-zigzag\\DB\\docs_eventos\\19_Evento1\\doc_1759420428303_129725105_BRWBCF4D40386AB_000040.pdf', 'docs_eventos/19_Evento1/doc_1759420428303_129725105_BRWBCF4D40386AB_000040.pdf', 394968, 'application/pdf', '2025-10-02 15:53:48');
 
 -- --------------------------------------------------------
 
@@ -71,17 +98,18 @@ CREATE TABLE `evento` (
   `lugar` varchar(50) NOT NULL,
   `descripcion` varchar(500) NOT NULL,
   `formulario` varchar(500) NOT NULL,
-  `baner` varchar(100) NOT NULL
+  `baner` varchar(100) NOT NULL,
+  `maxPersonas` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `evento`
 --
 
-INSERT INTO `evento` (`id`, `nombre`, `fechaInicio`, `fechaFinal`, `lugar`, `descripcion`, `formulario`, `baner`) VALUES
-(19, 'Evento1', '2025-07-05', '2025-07-06', 'casa del pana', 'ejemplo de descripcion larga y yo, hvdeioufhdwibd cdhwilbdhb bhiqobnobc vjefiqpfhvu jn[w hdj9pqinvdjb vunjiqepbvdb vfejipbqvjdfbvp vjiqpvbnjefi vbrejipqvnjfd bvujefipbvndfjk bvfejipvbjndk bvufejipanfv vnefjipvnjcdsip bvfejipabvdjks bvjefipandsjkvn bvjciepanjvpn vjefipahfjenav[ nvre[aovdjocnjao[ uvjoeapvnjoanv vrjeorahfieoasnv fhcrioaj[sfdjcns hfreai[fjosadn hfio[awhfnerjna fjeario[fjcrjevn[ hvreioa[hfreaojfnfhrh hreo[ahv hfroeaphf freaofhreohf[or   fhro[eahfiahf frhio[eahf fheao[hfrjh[f hofa', '[{\"id\":1751503649560,\"type\":\"checkbox\",\"label\":\"si marcas esta casilla es porque aceptas que asisitiras baniado y arreglado y no como te despertaste hoy por la maniana todo crudo y desvelado\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1751503655418-6343986.jpeg'),
-(20, 'Evento2', '2025-07-07', '2025-07-09', 'casa del pana', 'evento aca super genial bien jelou chido mega padre del zigzag', '[{\"id\":1751503719685,\"type\":\"checkbox\",\"label\":\"si marcas esta casilla es porque aceptas que asisitiras baniado y arreglado y no como te despertaste hoy por la maniana todo crudo y desvelado\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1751503762806-80455044.jpeg'),
-(21, 'Fiesta', '2025-07-14', '2025-07-18', 'No se ', 'Hola', '[{\"id\":1752712868390,\"type\":\"text\",\"label\":\"Hola\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1752712874894-549289001.png');
+INSERT INTO `evento` (`id`, `nombre`, `fechaInicio`, `fechaFinal`, `lugar`, `descripcion`, `formulario`, `baner`, `maxPersonas`) VALUES
+(19, 'Evento1', '2025-07-05', '2025-07-06', 'casa del pana', 'ejemplo de descripcion larga y yo, hvdeioufhdwibd cdhwilbdhb bhiqobnobc vjefiqpfhvu jn[w hdj9pqinvdjb vunjiqepbvdb vfejipbqvjdfbvp vjiqpvbnjefi vbrejipqvnjfd bvujefipbvndfjk bvfejipvbjndk bvufejipanfv vnefjipvnjcdsip bvfejipabvdjks bvjefipandsjkvn bvjciepanjvpn vjefipahfjenav[ nvre[aovdjocnjao[ uvjoeapvnjoanv vrjeorahfieoasnv fhcrioaj[sfdjcns hfreai[fjosadn hfio[awhfnerjna fjeario[fjcrjevn[ hvreioa[hfreaojfnfhrh hreo[ahv hfroeaphf freaofhreohf[or   fhro[eahfiahf frhio[eahf fheao[hfrjh[f hofa', '[{\"id\":1759417824388,\"type\":\"file\",\"label\":\"CURP\",\"required\":true,\"options\":null,\"acceptedTypes\":\".pdf\"},{\"id\":1759417836942,\"type\":\"file\",\"label\":\"Acta de nacimiento\",\"required\":true,\"options\":null,\"acceptedTypes\":\".pdf\"}]', 'http://localhost:3001/uploads/baner-1751503655418-6343986.jpeg', 10),
+(20, 'Evento2', '2025-07-07', '2025-07-09', 'casa del pana', 'evento aca super genial bien jelou chido mega padre del zigzag', '[{\"id\":1751503719685,\"type\":\"checkbox\",\"label\":\"si marcas esta casilla es porque aceptas que asisitiras baniado y arreglado y no como te despertaste hoy por la maniana todo crudo y desvelado\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1751503762806-80455044.jpeg', 20),
+(21, 'Fiesta', '2025-07-14', '2025-07-18', 'No se ', 'Hola', '[{\"id\":1752712868390,\"type\":\"text\",\"label\":\"Hola\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1752712874894-549289001.png', NULL);
 
 -- --------------------------------------------------------
 
@@ -105,7 +133,9 @@ CREATE TABLE `formularios` (
 --
 
 INSERT INTO `formularios` (`id`, `id_visitante`, `id_evento`, `formulario`, `fecha_evento`, `num_adultos`, `num_ninos`, `codigo_qr`) VALUES
-(20, 9, 21, '{\"1752712868390\":\"q\"}', '2025-07-16', 12, 12, 'uploads\\qrcode-20-1757005854442.png');
+(20, 9, 21, '{\"1752712868390\":\"q\"}', '2025-07-16', 12, 12, 'uploads\\qrcode-20-1757005854442.png'),
+(21, 10, 19, '{\"1759417824388\":\"BRWBCF4D40386AB_000015.pdf\",\"1759417836942\":\"BRWBCF4D40386AB_000040.pdf\"}', '2025-07-06', 3, 9, 'uploads\\qrcode-21-1759420428317.png'),
+(22, 10, 21, '{\"1752712868390\":\"hola\"}', '2025-07-18', 1, 1, 'uploads\\qrcode-22-1759420823879.png');
 
 -- --------------------------------------------------------
 
@@ -216,7 +246,8 @@ CREATE TABLE `visitanteseventos` (
 --
 
 INSERT INTO `visitanteseventos` (`id`, `nombre`, `correo`, `edad`, `contrasena`) VALUES
-(9, 'Miguel Alejandro', 'miguel.ale.rodri.cruz@gmail.com', 22, '$2b$10$dsMalG1rV7m9pJcMj/7HM.rSxFbdWOho6Kd9ZyZPH2fxZ6U2YllFK');
+(9, 'Miguel Alejandro', 'miguel.ale.rodri.cruz@gmail.com', 22, '$2b$10$dsMalG1rV7m9pJcMj/7HM.rSxFbdWOho6Kd9ZyZPH2fxZ6U2YllFK'),
+(10, 'axel', 'axelojedahernandez64@gmail.com', 22, '$2b$10$1H8ge3O42si7eRuzmZMM3.196tCfHzl233/7EUdUaeZ091mgUhozS');
 
 -- --------------------------------------------------------
 
@@ -263,6 +294,13 @@ INSERT INTO `visitantesinstitucion` (`id`, `nombreSoli`, `nombreOrg`, `noVisitan
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `archivos_formulario`
+--
+ALTER TABLE `archivos_formulario`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_formulario` (`id_formulario`);
 
 --
 -- Indices de la tabla `codigos_recuperacion`
@@ -320,6 +358,12 @@ ALTER TABLE `visitantesinstitucion`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `archivos_formulario`
+--
+ALTER TABLE `archivos_formulario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `codigos_recuperacion`
 --
 ALTER TABLE `codigos_recuperacion`
@@ -335,7 +379,7 @@ ALTER TABLE `evento`
 -- AUTO_INCREMENT de la tabla `formularios`
 --
 ALTER TABLE `formularios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes`
@@ -359,7 +403,7 @@ ALTER TABLE `usuariosadmin`
 -- AUTO_INCREMENT de la tabla `visitanteseventos`
 --
 ALTER TABLE `visitanteseventos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `visitantesinstitucion`
@@ -370,6 +414,12 @@ ALTER TABLE `visitantesinstitucion`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `archivos_formulario`
+--
+ALTER TABLE `archivos_formulario`
+  ADD CONSTRAINT `archivos_formulario_ibfk_1` FOREIGN KEY (`id_formulario`) REFERENCES `formularios` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `formularios`
