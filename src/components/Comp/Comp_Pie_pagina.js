@@ -1,11 +1,21 @@
-import logo from "../../images/zig_zag_logo.png";
+
+import logo_labsol from "../../images/Logos_Labsol_2023_02.png";
+import logo_GPL from "../../images/GPLv3_Logo.svg.png";
 
 export function Comp_Pie_pagina() {
   return (
     <footer className="pie-pagina">
       <div className="pie-contenido">
         <div className="pie-logo-texto">
-          <img src={logo} alt="Logo Zig Zag" className="pie-logo" />
+           <a href="https://labsol.cozcyt.gob.mx/" target="_blank" rel="noopener noreferrer">
+          <img 
+            src={logo_labsol}
+            alt="Logo Labsol Network"
+            className='encabezado__logo logo-center '
+          />
+        </a>
+    
+        
           <span className="pie-derechos">&copy; 2025 Zig Zag. Todos los derechos reservados.</span>
         </div>
         {/* Nombres del equipo */}
@@ -21,6 +31,13 @@ export function Comp_Pie_pagina() {
           <a href="#">Aviso legal</a>
           <a href="#">Contacto</a>
         </div>
+        <a href="https://www.gnu.org/licenses/gpl-3.0.html" target="_blank" rel="noopener noreferrer">
+          <img 
+            src={logo_GPL}
+            alt="Logo GPL3 Free Software"
+            className='encabezado__logo logo-right'
+          />
+        </a>
       </div>  
     </footer>
   );
