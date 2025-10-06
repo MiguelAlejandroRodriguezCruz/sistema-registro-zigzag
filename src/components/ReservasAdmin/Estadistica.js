@@ -17,7 +17,7 @@ export default function Estadistica({ reservas }) {
     useEffect(() => {
         const obtenerRegistros = async () => {
         try {
-            const token = localStorage.getItem("token");
+            const token = localStorage.getItem("tokenAdmin");
             const response = await fetch(`${API_BASE_URL}/registro`, {
               headers: {
                 "Content-Type": "application/json",
