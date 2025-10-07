@@ -347,7 +347,8 @@ export default function CrearEvento() {
   const updateOption = (fieldId, optionIndex, value) => {
     setFormFields(formFields.map(field => {
       if (field.id === fieldId) {
-        const newOptions = [...field.options];
+        const currentOptions = Array.isArray(field.options) ? field.options : [];
+        const newOptions = [...currentOptions];
         newOptions[optionIndex] = value;
         return { ...field, options: newOptions };
       }
@@ -358,7 +359,7 @@ export default function CrearEvento() {
   const addOption = (fieldId) => {
     setFormFields(formFields.map(field =>
       field.id === fieldId
-        ? { ...field, options: [...field.options, ""] }
+        ? { ...field, options: Array.isArray(field.options) ? [...field.options, ""] : [""] }
         : field
     ));
   };
@@ -366,7 +367,8 @@ export default function CrearEvento() {
   const removeOption = (fieldId, optionIndex) => {
     setFormFields(formFields.map(field => {
       if (field.id === fieldId) {
-        const newOptions = field.options.filter((_, idx) => idx !== optionIndex);
+        const currentOptions = Array.isArray(field.options) ? field.options : [];
+        const newOptions = currentOptions.filter((_, idx) => idx !== optionIndex);
         return { ...field, options: newOptions };
       }
       return field;
@@ -690,6 +692,32 @@ export default function CrearEvento() {
                               </div>
                             </div>
                           )}
+
+                          {field.type === 'select' && (
+                            <div>
+                              <label className="form-label">Opciones:</label>
+                              {Array.isArray(field.options) && field.options.map((opt, idx) => (
+                                <div key={idx} className="input-group mb-2">
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={opt}
+                                    onChange={(e) => updateOption(field.id, idx, e.target.value)}
+                                  />
+                                  <button
+                                    type="button"
+                                    className="btn btn-outline-danger"
+                                    onClick={() => removeOption(field.id, idx)}
+                                  >
+                                    Eliminar
+                                  </button>
+                                </div>
+                              ))}
+                              <button type="button" className="btn btn-sm btn-secondary" onClick={() => addOption(field.id)}>
+                                + Agregar opción
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}
@@ -776,7 +804,7 @@ const renderPreviewField = (field) => {
     case 'select':
       return (
         <select className="form-control" disabled>
-          {field.options.map((opt, idx) => (
+          {(Array.isArray(field.options) && field.options.length > 0 ? field.options : ["(Sin opciones)"]).map((opt, idx) => (
             <option key={idx} value={opt}>{opt}</option>
           ))}
         </select>
