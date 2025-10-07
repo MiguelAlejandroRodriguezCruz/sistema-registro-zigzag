@@ -14,13 +14,13 @@ const formulariosController = {
                 return res.status(400).json({ error: 'ID de visitante es requerido' });
             }
 
-            // 🔹 Obtener información del evento
+            // Obtener información del evento
             const evento = await formulariosModel.obtenerEventoPorId(id_evento);
             if (!evento) {
                 return res.status(404).json({ error: 'Evento no encontrado' });
             }
 
-            // 🔹 Crear carpeta del evento
+            // Crear carpeta del evento
             const nombreCarpeta = evento.nombre.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 50);
             const carpetaEvento = path.join(__dirname, '../docs_eventos', `${evento.id}_${nombreCarpeta}`);
             
@@ -28,7 +28,7 @@ const formulariosController = {
                 fs.mkdirSync(carpetaEvento, { recursive: true });
             }
 
-            // 🔹 Mover archivos de temp a la carpeta del evento
+            // 🔹 Mover archivos de temp a la carpeta del evento y guardar rutas
             const archivosGuardados = [];
             if (req.files && req.files.length > 0) {
                 for (const archivo of req.files) {
@@ -41,20 +41,18 @@ const formulariosController = {
                     // Extraer el campo_id
                     const campoId = archivo.fieldname.replace('archivos_', '');
                     
+                    // Guardar solo la ruta HTTP
+                    const rutaHTTP = `http://localhost:3001/docs_eventos/${evento.id}_${nombreCarpeta}/${nuevoNombre}`;
+                    
                     const archivoInfo = {
                         campo_id: campoId,
-                        nombre_original: archivo.originalname,
-                        nombre_guardado: nuevoNombre,
-                        ruta: nuevaRuta,
-                        ruta_relativa: `docs_eventos/${evento.id}_${nombreCarpeta}/${nuevoNombre}`,
-                        tamaño: archivo.size,
-                        tipo: archivo.mimetype
+                        ruta_archivo: rutaHTTP
                     };
                     archivosGuardados.push(archivoInfo);
                 }
             }
 
-            // 🔹 Insertar formulario en la base de datos
+            // Insertar formulario en la base de datos
             const idFormulario = await formulariosModel.insertarFormulario({
                 id_visitante,
                 id_evento,
@@ -64,12 +62,12 @@ const formulariosController = {
                 num_ninos
             });
 
-            // Guardar archivos en BD
+            // CAMBIO: Guardar archivos en BD (solo rutas)
             if (archivosGuardados.length > 0) {
                 await formulariosModel.guardarArchivosFormulario(idFormulario, archivosGuardados);
             }
 
-            // 🔹 Generar código QR
+            // Generar código QR
             const qrData = JSON.stringify({
                 ID: idFormulario,
                 Type: "Reservation",
@@ -138,7 +136,8 @@ const formulariosController = {
                 id: idFormulario,
                 codigo_qr: qrRelativePath,
                 archivos_guardados: archivosGuardados.length,
-                carpeta_evento: `docs_eventos/${evento.id}_${nombreCarpeta}`
+                carpeta_evento: `docs_eventos/${evento.id}_${nombreCarpeta}`,
+                archivos: archivosGuardados // 🔹 Incluir las rutas HTTP en la respuesta
             });
 
         } catch (err) {

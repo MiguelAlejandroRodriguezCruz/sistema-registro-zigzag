@@ -18,38 +18,31 @@ const formulariosModel = {
         await db.promise().execute(sql, [qrRelativePath, idFormulario]);
     },
 
-    // 🔹 NUEVO: Obtener información del evento
     async obtenerEventoPorId(idEvento) {
         const sql = `SELECT id, nombre FROM evento WHERE id = ?`;
         const [result] = await db.promise().execute(sql, [idEvento]);
         return result[0] || null;
     },
 
-    // 🔹 NUEVO: Método para guardar archivos
     async guardarArchivosFormulario(idFormulario, archivos) {
         const sql = `
             INSERT INTO archivos_formulario 
-            (id_formulario, campo_id, nombre_original, nombre_guardado, ruta, ruta_relativa, tamaño, tipo)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            (id_formulario, campo_id, ruta_archivo)
+            VALUES (?, ?, ?)
         `;
         
         for (const archivo of archivos) {
             await db.promise().execute(sql, [
                 idFormulario,
                 archivo.campo_id,
-                archivo.nombre_original,
-                archivo.nombre_guardado,
-                archivo.ruta,
-                archivo.ruta_relativa,
-                archivo.tamaño,
-                archivo.tipo
+                archivo.ruta_archivo
             ]);
         }
     },
 
-    // 🔹 NUEVO: Obtener archivos de un formulario
+    // 🔹 CAMBIO: Obtener archivos de un formulario (solo rutas HTTP)
     async obtenerArchivosPorFormulario(idFormulario) {
-        const sql = `SELECT * FROM archivos_formulario WHERE id_formulario = ?`;
+        const sql = `SELECT id, campo_id, ruta_archivo, created_at FROM archivos_formulario WHERE id_formulario = ?`;
         const [result] = await db.promise().execute(sql, [idFormulario]);
         return result;
     }

@@ -57,6 +57,8 @@ app.use((req, res, next) => {
 
 // Hacer accesible la carpeta /uploads de forma pública
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Servir archivos estáticos de docs_eventos
+app.use('/docs_eventos', express.static(path.join(__dirname, 'docs_eventos')));
 
 // Rutas
 app.use('/visitantes', visitantesRoutes);

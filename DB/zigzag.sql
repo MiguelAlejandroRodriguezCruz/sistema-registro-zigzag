@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-10-2025 a las 18:02:31
+-- Tiempo de generación: 07-10-2025 a las 19:21:43
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -31,12 +31,7 @@ CREATE TABLE `archivos_formulario` (
   `id` int(11) NOT NULL,
   `id_formulario` int(11) NOT NULL,
   `campo_id` varchar(100) NOT NULL,
-  `nombre_original` varchar(255) NOT NULL,
-  `nombre_guardado` varchar(255) NOT NULL,
-  `ruta` varchar(500) NOT NULL,
-  `ruta_relativa` varchar(500) NOT NULL,
-  `tamaño` int(11) NOT NULL,
-  `tipo` varchar(100) NOT NULL,
+  `ruta_archivo` varchar(500) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -44,9 +39,9 @@ CREATE TABLE `archivos_formulario` (
 -- Volcado de datos para la tabla `archivos_formulario`
 --
 
-INSERT INTO `archivos_formulario` (`id`, `id_formulario`, `campo_id`, `nombre_original`, `nombre_guardado`, `ruta`, `ruta_relativa`, `tamaño`, `tipo`, `created_at`) VALUES
-(1, 21, '1759417824388', 'BRWBCF4D40386AB_000015.pdf', 'doc_1759420428300_791915253_BRWBCF4D40386AB_000015.pdf', 'C:\\Users\\Lenovo\\Documents\\servicio\\sistema-registro-zigzag\\DB\\docs_eventos\\19_Evento1\\doc_1759420428300_791915253_BRWBCF4D40386AB_000015.pdf', 'docs_eventos/19_Evento1/doc_1759420428300_791915253_BRWBCF4D40386AB_000015.pdf', 3062921, 'application/pdf', '2025-10-02 15:53:48'),
-(2, 21, '1759417836942', 'BRWBCF4D40386AB_000040.pdf', 'doc_1759420428303_129725105_BRWBCF4D40386AB_000040.pdf', 'C:\\Users\\Lenovo\\Documents\\servicio\\sistema-registro-zigzag\\DB\\docs_eventos\\19_Evento1\\doc_1759420428303_129725105_BRWBCF4D40386AB_000040.pdf', 'docs_eventos/19_Evento1/doc_1759420428303_129725105_BRWBCF4D40386AB_000040.pdf', 394968, 'application/pdf', '2025-10-02 15:53:48');
+INSERT INTO `archivos_formulario` (`id`, `id_formulario`, `campo_id`, `ruta_archivo`, `created_at`) VALUES
+(1, 23, '1759417824388', 'http://localhost:3001/docs_eventos/19_Evento1/doc_1759857320498_314550548_Comandos bÃ¡sicos de consola.pdf', '2025-10-07 17:15:20'),
+(2, 23, '1759417836942', 'http://localhost:3001/docs_eventos/19_Evento1/doc_1759857320500_853967029_Comandos bÃ¡sicos de consola.pdf', '2025-10-07 17:15:20');
 
 -- --------------------------------------------------------
 
@@ -134,8 +129,7 @@ CREATE TABLE `formularios` (
 
 INSERT INTO `formularios` (`id`, `id_visitante`, `id_evento`, `formulario`, `fecha_evento`, `num_adultos`, `num_ninos`, `codigo_qr`) VALUES
 (20, 9, 21, '{\"1752712868390\":\"q\"}', '2025-07-16', 12, 12, 'uploads\\qrcode-20-1757005854442.png'),
-(21, 10, 19, '{\"1759417824388\":\"BRWBCF4D40386AB_000015.pdf\",\"1759417836942\":\"BRWBCF4D40386AB_000040.pdf\"}', '2025-07-06', 3, 9, 'uploads\\qrcode-21-1759420428317.png'),
-(22, 10, 21, '{\"1752712868390\":\"hola\"}', '2025-07-18', 1, 1, 'uploads\\qrcode-22-1759420823879.png');
+(23, 10, 19, '{\"1759417824388\":\"Comandos básicos de consola.pdf\",\"1759417836942\":\"Comandos básicos de consola.pdf\"}', '2025-07-05', 1, 10, 'uploads\\qrcode-23-1759857320514.png');
 
 -- --------------------------------------------------------
 
@@ -379,7 +373,7 @@ ALTER TABLE `evento`
 -- AUTO_INCREMENT de la tabla `formularios`
 --
 ALTER TABLE `formularios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes`
