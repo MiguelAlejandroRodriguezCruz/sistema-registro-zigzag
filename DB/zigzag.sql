@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-10-2025 a las 19:21:43
+-- Tiempo de generación: 08-10-2025 a las 23:22:00
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -40,8 +40,8 @@ CREATE TABLE `archivos_formulario` (
 --
 
 INSERT INTO `archivos_formulario` (`id`, `id_formulario`, `campo_id`, `ruta_archivo`, `created_at`) VALUES
-(1, 23, '1759417824388', 'http://localhost:3001/docs_eventos/19_Evento1/doc_1759857320498_314550548_Comandos bÃ¡sicos de consola.pdf', '2025-10-07 17:15:20'),
-(2, 23, '1759417836942', 'http://localhost:3001/docs_eventos/19_Evento1/doc_1759857320500_853967029_Comandos bÃ¡sicos de consola.pdf', '2025-10-07 17:15:20');
+(14, 32, '1759956942581', 'http://localhost:3001/docs_eventos/25_Campamento/doc_1759957397917_590003685_boletos.pdf', '2025-10-08 21:03:17'),
+(15, 33, '1759956942581', 'http://localhost:3001/docs_eventos/25_Campamento/doc_1759957485733_254586077_boletos (1).pdf', '2025-10-08 21:04:45');
 
 -- --------------------------------------------------------
 
@@ -92,7 +92,7 @@ CREATE TABLE `evento` (
   `fechaFinal` date NOT NULL,
   `lugar` varchar(50) NOT NULL,
   `descripcion` varchar(500) NOT NULL,
-  `formulario` varchar(500) NOT NULL,
+  `formulario` varchar(2000) NOT NULL,
   `baner` varchar(100) NOT NULL,
   `maxPersonas` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -102,9 +102,9 @@ CREATE TABLE `evento` (
 --
 
 INSERT INTO `evento` (`id`, `nombre`, `fechaInicio`, `fechaFinal`, `lugar`, `descripcion`, `formulario`, `baner`, `maxPersonas`) VALUES
-(19, 'Evento1', '2025-07-05', '2025-07-06', 'casa del pana', 'ejemplo de descripcion larga y yo, hvdeioufhdwibd cdhwilbdhb bhiqobnobc vjefiqpfhvu jn[w hdj9pqinvdjb vunjiqepbvdb vfejipbqvjdfbvp vjiqpvbnjefi vbrejipqvnjfd bvujefipbvndfjk bvfejipvbjndk bvufejipanfv vnefjipvnjcdsip bvfejipabvdjks bvjefipandsjkvn bvjciepanjvpn vjefipahfjenav[ nvre[aovdjocnjao[ uvjoeapvnjoanv vrjeorahfieoasnv fhcrioaj[sfdjcns hfreai[fjosadn hfio[awhfnerjna fjeario[fjcrjevn[ hvreioa[hfreaojfnfhrh hreo[ahv hfroeaphf freaofhreohf[or   fhro[eahfiahf frhio[eahf fheao[hfrjh[f hofa', '[{\"id\":1759417824388,\"type\":\"file\",\"label\":\"CURP\",\"required\":true,\"options\":null,\"acceptedTypes\":\".pdf\"},{\"id\":1759417836942,\"type\":\"file\",\"label\":\"Acta de nacimiento\",\"required\":true,\"options\":null,\"acceptedTypes\":\".pdf\"}]', 'http://localhost:3001/uploads/baner-1751503655418-6343986.jpeg', 10),
-(20, 'Evento2', '2025-07-07', '2025-07-09', 'casa del pana', 'evento aca super genial bien jelou chido mega padre del zigzag', '[{\"id\":1751503719685,\"type\":\"checkbox\",\"label\":\"si marcas esta casilla es porque aceptas que asisitiras baniado y arreglado y no como te despertaste hoy por la maniana todo crudo y desvelado\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1751503762806-80455044.jpeg', 20),
-(21, 'Fiesta', '2025-07-14', '2025-07-18', 'No se ', 'Hola', '[{\"id\":1752712868390,\"type\":\"text\",\"label\":\"Hola\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1752712874894-549289001.png', NULL);
+(24, 'Semana Cientifica', '2025-10-14', '2025-10-23', 'Area de ciencias', '¡Celebra con nosotros la Semana Científica y descubre cómo la ciencia transforma el mundo! Durante siete días, el museo se llenará de experimentos, demostraciones, talleres, conferencias y actividades interactivas diseñadas para despertar la curiosidad y fomentar el aprendizaje en todas las edades.\r\n\r\nCada día estará dedicado a una rama diferente del conocimiento: desde la astronomía y la biología, hasta la robótica, la energía y la tecnología del futuro. ', '[{\"id\":1759956650029,\"type\":\"text\",\"label\":\"Nombre\",\"required\":true,\"options\":null},{\"id\":1759956655822,\"type\":\"number\",\"label\":\"Edad\",\"required\":true,\"options\":null},{\"id\":1759956662062,\"type\":\"checkbox\",\"label\":\"Traeras bata de laboratorio?\",\"required\":true,\"options\":null}]', 'http://localhost:3001/uploads/baner-1759956686687-214253732.png', 50),
+(25, 'Campamento', '2025-10-13', '2025-10-23', 'Area designada', '¡La ciencia se vive, se toca y se experimenta! En nuestro Campamento Científico, los participantes se convertirán en jóvenes exploradores del conocimiento, experimentando con la física, la biología, la robótica, la astronomía y muchas otras áreas de la ciencia de forma divertida, dinámica e interactiva.', '[{\"id\":1759956913068,\"type\":\"text\",\"label\":\"Nombre\",\"required\":true,\"options\":null},{\"id\":1759956918773,\"type\":\"number\",\"label\":\"Edad\",\"required\":true,\"options\":null},{\"id\":1759956925732,\"type\":\"number\",\"label\":\"Num. Emergencia\",\"required\":true,\"options\":null},{\"id\":1759956942581,\"type\":\"file\",\"label\":\"Certificado Medico\",\"required\":true,\"options\":null,\"acceptedTypes\":\".pdf\"}]', 'http://localhost:3001/uploads/baner-1759956960752-694498326.webp', 50),
+(26, 'Semana Arqueologica', '2025-10-20', '2025-10-24', 'Area de Arqueologica ', '¡Acompáñanos en una semana llena de descubrimientos, ciencia y aventura! En la Semana de la Arqueología, exploraremos cómo la tecnología moderna nos ayuda a revelar los secretos del pasado. A través de talleres interactivos, exhibiciones, charlas y actividades prácticas, los visitantes podrán convertirse en arqueólogos por un día, desenterrando piezas, analizando hallazgos y comprendiendo la historia de las civilizaciones antiguas.', '[]', 'http://localhost:3001/uploads/baner-1759957200265-477874851.jpg', 100);
 
 -- --------------------------------------------------------
 
@@ -116,7 +116,7 @@ CREATE TABLE `formularios` (
   `id` int(11) NOT NULL,
   `id_visitante` int(11) NOT NULL,
   `id_evento` int(11) NOT NULL,
-  `formulario` varchar(500) NOT NULL,
+  `formulario` varchar(2000) NOT NULL,
   `fecha_evento` date NOT NULL,
   `num_adultos` int(11) NOT NULL,
   `num_ninos` int(11) NOT NULL,
@@ -128,8 +128,8 @@ CREATE TABLE `formularios` (
 --
 
 INSERT INTO `formularios` (`id`, `id_visitante`, `id_evento`, `formulario`, `fecha_evento`, `num_adultos`, `num_ninos`, `codigo_qr`) VALUES
-(20, 9, 21, '{\"1752712868390\":\"q\"}', '2025-07-16', 12, 12, 'uploads\\qrcode-20-1757005854442.png'),
-(23, 10, 19, '{\"1759417824388\":\"Comandos básicos de consola.pdf\",\"1759417836942\":\"Comandos básicos de consola.pdf\"}', '2025-07-05', 1, 10, 'uploads\\qrcode-23-1759857320514.png');
+(32, 11, 25, '{\"1759956913068\":\"Miguel\",\"1759956918773\":\"22\",\"1759956925732\":\"2447854632\",\"1759956942581\":\"boletos.pdf\"}', '2025-10-14', 1, 0, 'uploads\\qrcode-32-1759957397933.png'),
+(33, 10, 25, '{\"1759956913068\":\"Axel\",\"1759956918773\":\"21\",\"1759956925732\":\"4921234567\",\"1759956942581\":\"boletos (1).pdf\"}', '2025-10-17', 1, 1, 'uploads\\qrcode-33-1759957485745.png');
 
 -- --------------------------------------------------------
 
@@ -148,14 +148,11 @@ CREATE TABLE `imagenes` (
 --
 
 INSERT INTO `imagenes` (`id`, `evento_id`, `ruta_imagen`) VALUES
-(17, 19, 'http://localhost:3001/uploads/imagenes-1751503655437-754359859.jpeg'),
-(18, 20, 'http://localhost:3001/uploads/imagenes-1751503762827-620082890.jpeg'),
-(20, 21, 'http://localhost:3001/uploads/imagenes-1752715773153-240889153.png'),
-(25, 20, 'http://localhost:3001/uploads/imagenes-1754414896885-683748217.jpg'),
-(29, 20, 'http://localhost:3001/uploads/imagenes-1754502447298-690484407.png'),
-(30, 20, 'http://localhost:3001/uploads/imagenes-1754502447300-795737231.png'),
-(31, 20, 'http://localhost:3001/uploads/imagenes-1754502447301-268149763.png'),
-(32, 20, 'http://localhost:3001/uploads/imagenes-1754502447303-341909390.png');
+(34, 24, 'http://localhost:3001/uploads/imagenes-1759956686716-800811033.jpg'),
+(35, 24, 'http://localhost:3001/uploads/imagenes-1759956686717-289542162.jpg'),
+(36, 25, 'http://localhost:3001/uploads/imagenes-1759956960791-301702465.jpg'),
+(37, 25, 'http://localhost:3001/uploads/imagenes-1759956960808-984508872.jpg'),
+(38, 26, 'http://localhost:3001/uploads/imagenes-1759957200301-541476136.jpeg');
 
 -- --------------------------------------------------------
 
@@ -240,8 +237,8 @@ CREATE TABLE `visitanteseventos` (
 --
 
 INSERT INTO `visitanteseventos` (`id`, `nombre`, `correo`, `edad`, `contrasena`) VALUES
-(9, 'Miguel Alejandro', 'miguel.ale.rodri.cruz@gmail.com', 22, '$2b$10$dsMalG1rV7m9pJcMj/7HM.rSxFbdWOho6Kd9ZyZPH2fxZ6U2YllFK'),
-(10, 'axel', 'axelojedahernandez64@gmail.com', 22, '$2b$10$1H8ge3O42si7eRuzmZMM3.196tCfHzl233/7EUdUaeZ091mgUhozS');
+(10, 'axel', 'axelojedahernandez64@gmail.com', 22, '$2b$10$1H8ge3O42si7eRuzmZMM3.196tCfHzl233/7EUdUaeZ091mgUhozS'),
+(11, 'Alejandro', 'papu20066@gmail.com', 21, '$2b$10$lpZ7aDPzERTFXCopafSEMuu3s9Q9yWumWUE6UyiLq8DDRMyMNIV9u');
 
 -- --------------------------------------------------------
 
@@ -278,12 +275,9 @@ CREATE TABLE `visitantesinstitucion` (
 --
 
 INSERT INTO `visitantesinstitucion` (`id`, `nombreSoli`, `nombreOrg`, `noVisitantesA`, `noVisitantesD`, `telefono`, `direccion`, `colonia`, `municipio`, `autobus`, `correo`, `tipoRecorrido`, `gradoEscolar`, `autorizaFotos`, `fecha`, `horario`, `medioEnterado`, `comentarios`, `precioEntrada`, `estatus`, `descuento`) VALUES
-(1, 'Juan Pérez', 'Escuela Primaria XYZ', 25, 5, '1234567890', 'Calle Falsa 123', 'Centro', 'Ciudad Ejemplo', 'Sí', 'juan.perez@example.com', 'Educativo', 'Primaria', 'Sí', '2025-04-17', '10:00 AM', 'Redes Sociales', 'Grupo de alumnos de primaria.', 50.00, 'aprobadas', 0),
-(2, 'a', 'a', 1, 2, '2447854632', '4 norte', 'a', 'a', 'Si', 'miguel.ale.rodri.cruz@gmail.com', 'Virtual', 'aa', 'Si', '2025-04-29', '01:00', 'Amigos', 'a', 50.00, 'aprobadas', 0),
-(3, 'a', 'a', 12, 12, '2447854632', '4 norte', 'q', 'a', 'No', 'miguel.ale.rodri.cruz@gmail.com', 'Virtual', 'a', 'Si', '2025-04-29', '01:00', 'Amigos', '', 50.00, 'aprobadas', 0),
-(4, 'axel jo', 'IPN UPIIZ', 100, 5, '5 5555 5555', 'ejemplo', 'ejemplo', 'ejemplo', 'Si', 'ejemplo@ejemplo.com', 'Presencial', 'primaria', 'Si', '2025-07-16', '01:00', 'Amigos', 'vamos a loquear con ciencia', 50.00, 'aprobadas', 25),
-(5, 'q', 'q', 12, 12, '1234567890', 'q', 'q', 'q', 'Si', 'miguel.ale.rodri.cruz@gmail.com', 'Presencial', 'q', 'Si', '2025-08-14', '01:00', 'Amigos', 'q', 50.00, 'aprobadas', 0),
-(6, 'a', 'a', 12, 12, '1234567890', 'De Rayo', 's', 'asd', 'Si', 'miguel.ale.rodri.cruz@gmail.com', 'Presencial', '12', 'Si', '2025-09-10', '01:00', 'Amigos', 's', 50.00, 'aprobadas', 0);
+(7, 'Miguel', 'Cbtis ', 50, 4, '2447854632', 'De Rayo', 'Florez Magon', 'Zacatecas Centro', 'Si', 'miguel.ale.rodri.cruz@gmail.com', 'Presencial', '5to', 'Si', '2025-10-15', '01:00', 'Amigos', '', 50.00, 'aprobadas', NULL),
+(8, 'Axel', 'Marcelino Gonzalez', 60, 5, '1234567890', 'Calle Loma Dorada', 'La loma', 'Zacatecas Centro', 'No', 'marcelino@gmail.com', 'Presencial', '6to', 'Si', '2025-10-11', '03:00', 'Redes Sociales', 'No se', 50.00, 'aprobadas', NULL),
+(9, 'Omar', 'Tecnica ', 40, 3, '1234567890', 'Frezno ', 'Santa Maria La Rivera', 'Cuautemoc', 'Si', 'Omar@gmail.com', 'Presencial', '2do', 'Si', '2025-10-17', '01:00', 'Amigos', '', 50.00, 'rechazadas', NULL);
 
 --
 -- Índices para tablas volcadas
@@ -355,7 +349,7 @@ ALTER TABLE `visitantesinstitucion`
 -- AUTO_INCREMENT de la tabla `archivos_formulario`
 --
 ALTER TABLE `archivos_formulario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `codigos_recuperacion`
@@ -367,19 +361,19 @@ ALTER TABLE `codigos_recuperacion`
 -- AUTO_INCREMENT de la tabla `evento`
 --
 ALTER TABLE `evento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `formularios`
 --
 ALTER TABLE `formularios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT de la tabla `imagenes`
 --
 ALTER TABLE `imagenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT de la tabla `registrovisitas`
@@ -397,13 +391,13 @@ ALTER TABLE `usuariosadmin`
 -- AUTO_INCREMENT de la tabla `visitanteseventos`
 --
 ALTER TABLE `visitanteseventos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `visitantesinstitucion`
 --
 ALTER TABLE `visitantesinstitucion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas

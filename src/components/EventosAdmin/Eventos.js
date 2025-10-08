@@ -313,6 +313,45 @@ export default function CrearEvento() {
     }
   };
 
+const handleDownloadExcel = async () => {
+  setIsLoading(true);
+  try {
+    const token = localStorage.getItem("tokenAdmin");
+    const response = await fetch(`${API_BASE_URL}/formulario/excel/${id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al descargar el archivo Excel");
+    }
+
+    // 📥 Convertir la respuesta en un blob (archivo binario)
+    const blob = await response.blob();
+
+    // 🧩 Crear un enlace temporal de descarga
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `formulario_evento_${id}.xlsx`; // nombre del archivo
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    // Liberar memoria
+    window.URL.revokeObjectURL(url);
+
+  } catch (err) {
+    console.error("Error:", err);
+    setError(err.message || "Ocurrió un error al descargar el archivo");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
   // Funciones para el formulario dinámico
   const addFormField = (type) => {
     const newField = {
@@ -758,6 +797,18 @@ export default function CrearEvento() {
                 {isLoading ? 'Eliminando...' : 'Eliminar Evento'}
               </button>
             )}
+
+            {isEditing && (
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={handleDownloadExcel}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Descargando...' : 'Descargar Excel'}
+              </button>
+            )}
+
 
             <button
               type="button"

@@ -4,6 +4,7 @@ const transporter = require('../config/mailer');
 const QRCode = require('qrcode');
 const path = require('path');
 const fs = require('fs');
+const ExcelJS = require('exceljs');
 
 const formulariosController = {
     guardarFormulario: async (req, res) => {
@@ -154,6 +155,100 @@ const formulariosController = {
             
             return res.status(500).json({ error: 'Error al guardar formulario' });
         }
+    },
+
+    obtenerFormulario: async (req, res) => {
+        try {
+    const { idEvento } = req.params; // se espera /api/formularios/excel/:idEvento
+
+    // 1️⃣ Obtener los datos desde tu modelo
+    const datos = await formulariosModel.obtenerFormularioConArchivos(idEvento);
+
+    if (!datos.length) {
+      return res.status(404).json({ error: 'No se encontraron registros.' });
+    }
+
+    // 2️⃣ Agrupar por id_visitante (para evitar duplicados)
+    const agrupados = {};
+    for (const fila of datos) {
+      const idVisitante = fila.id_visitante;
+
+      if (!agrupados[idVisitante]) {
+        agrupados[idVisitante] = {
+          id_visitante: fila.id_visitante,
+          id_evento: fila.id_evento,
+          formulario: JSON.parse(fila.formulario),
+          formulario_even: JSON.parse(fila.formulario_even),
+          archivos: [],
+        };
+      }
+
+      // Guardar rutas de archivos (para los type: file)
+      agrupados[idVisitante].archivos.push({
+        campo_id: fila.campo_id,
+        ruta_archivo: fila.ruta_archivo,
+      });
+    }
+
+    // 3️⃣ Determinar columnas dinámicas (basadas en los labels del primer registro)
+    const primerRegistro = Object.values(agrupados)[0];
+    const labels = primerRegistro.formulario_even.map(item => item.label);
+
+    // 4️⃣ Crear el archivo Excel
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Formularios');
+
+    // Encabezados dinámicos
+    worksheet.columns = [
+      { header: 'id_visitante', key: 'id_visitante', width: 15 },
+      { header: 'id_evento', key: 'id_evento', width: 15 },
+      ...labels.map(label => ({
+        header: label,
+        key: label,
+        width: 25
+      })),
+    ];
+
+    // 5️⃣ Llenar el Excel fila por fila
+    for (const visitante of Object.values(agrupados)) {
+      const fila = {
+        id_visitante: visitante.id_visitante,
+        id_evento: visitante.id_evento,
+      };
+
+      for (const campo of visitante.formulario_even) {
+        const valorCampo = visitante.formulario[campo.id];
+        if (campo.type === 'file') {
+            // Buscar la ruta del archivo correspondiente (forzando tipo string para comparar)
+            const archivo = visitante.archivos.find(a => String(a.campo_id) === String(campo.id));
+            fila[campo.label] = archivo ? archivo.ruta_archivo : '';
+        } else {
+            fila[campo.label] = valorCampo ?? '';
+        }
+
+      }
+
+      worksheet.addRow(fila);
+    }
+
+    // 6️⃣ Configurar cabeceras HTTP para descarga automática
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename="formularios_evento.xlsx"'
+    );
+
+    // 7️⃣ Enviar el archivo directamente como descarga
+    await workbook.xlsx.write(res);
+    res.end();
+
+  } catch (error) {
+    console.error('❌ Error al generar el Excel:', error);
+    res.status(500).json({ error: 'Error al generar el archivo Excel' });
+  }
     }
 };
 

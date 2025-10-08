@@ -40,9 +40,22 @@ const formulariosModel = {
         }
     },
 
-    // 🔹 CAMBIO: Obtener archivos de un formulario (solo rutas HTTP)
     async obtenerArchivosPorFormulario(idFormulario) {
         const sql = `SELECT id, campo_id, ruta_archivo, created_at FROM archivos_formulario WHERE id_formulario = ?`;
+        const [result] = await db.promise().execute(sql, [idFormulario]);
+        return result;
+    },
+
+    async obtenerFormularioConArchivos(idFormulario) {
+        const sql = `
+            SELECT f.*,e.formulario AS formulario_even, a.id AS id_archivo, a.campo_id, a.ruta_archivo, a.created_at AS archivo_creado
+            FROM formularios AS f
+            INNER JOIN archivos_formulario AS a
+                ON f.id = a.id_formulario
+            INNER JOIN evento AS e
+            	ON e.id = f.id_evento
+            WHERE f.id_evento = ?
+        `;
         const [result] = await db.promise().execute(sql, [idFormulario]);
         return result;
     }
