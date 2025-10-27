@@ -27,6 +27,7 @@ export default function CrearEvento() {
   const [imageFiles, setImageFiles] = useState([]); // Archivos de imágenes adicionales
   const [imagePreviews, setImagePreviews] = useState([]); // Previews de imágenes
   const [eventImages, setEventImages] = useState([]); // Imágenes ya guardadas
+  const [excelAvailable, setExcelAvailable] = useState(false);
 
   // Cargar datos del evento si estamos editando
   useEffect(() => {
@@ -87,6 +88,29 @@ export default function CrearEvento() {
         }
       };
       fetchEventImages();
+
+      // Comprobar si existe Excel disponible para este evento
+      const checkExcel = async () => {
+        try {
+          const token = localStorage.getItem('tokenAdmin');
+          const resp = await fetch(`${API_BASE_URL}/formulario/exists/${id}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          if (!resp.ok) {
+            setExcelAvailable(false);
+            return;
+          }
+          const json = await resp.json();
+          setExcelAvailable(!!json.exists);
+        } catch (err) {
+          console.error('Error comprobando existencia de Excel:', err);
+          setExcelAvailable(false);
+        }
+      };
+      checkExcel();
     }
   }, [id]);
 
@@ -798,7 +822,7 @@ const handleDownloadExcel = async () => {
               </button>
             )}
 
-            {isEditing && (
+            {isEditing && excelAvailable && (
               <button
                 type="button"
                 className="btn btn-success"

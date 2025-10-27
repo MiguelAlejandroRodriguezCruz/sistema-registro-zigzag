@@ -39,6 +39,7 @@ const uploadEventos = require('../middlewares/uploadEventos'); // 🔹 Nuevo mid
 // 🔹 CAMBIO: Usar el nuevo middleware para eventos
 router.post('/guardar', auth, uploadEventos, formulariosController.guardarFormulario);
 
+router.get('/exists/:idEvento', auth, formulariosController.checkExistenciaFormulario);
 router.get('/excel/:idEvento', auth, uploadEventos, formulariosController.obtenerFormulario);
 
 module.exports = router;

@@ -167,7 +167,6 @@ const formulariosController = {
     if (!datos.length) {
       return res.status(404).json({ error: 'No se encontraron registros.' });
     }
-
     // 2️⃣ Agrupar por id_visitante (para evitar duplicados)
     const agrupados = {};
     for (const fila of datos) {
@@ -249,7 +248,21 @@ const formulariosController = {
     console.error('❌ Error al generar el Excel:', error);
     res.status(500).json({ error: 'Error al generar el archivo Excel' });
   }
-    }
+        }
+
+        ,
+        // Comprueba si existen registros para un evento (usado por frontend para mostrar el botón de descarga)
+        checkExistenciaFormulario: async (req, res) => {
+                try {
+                        const { idEvento } = req.params;
+                        const datos = await formulariosModel.obtenerFormularioConArchivos(idEvento);
+                        const exists = Array.isArray(datos) && datos.length > 0;
+                        return res.status(200).json({ exists });
+                } catch (error) {
+                        console.error('Error comprobando existencia de formulario:', error);
+                        return res.status(500).json({ error: 'Error comprobando existencia' });
+                }
+        }
 };
 
 module.exports = formulariosController;
