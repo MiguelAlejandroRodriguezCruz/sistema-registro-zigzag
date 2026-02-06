@@ -15,6 +15,7 @@ import SolicitarCodigo from '../components/Login/SolicitarCodigo';
 import VerificarCodigo from '../components/Login/VerificarCodigo';
 import PrivateRouteUsuario from '../components/PrivateRoutes/PrivateRouteUsuario';
 import PrivateRouteAdmin from '../components/PrivateRoutes/PrivateRouteAdmin';
+import AcercaDe from '../components/Comp/AcercaDe';
 
 const AppRoutes = () => {
 
@@ -37,6 +38,7 @@ const AppRoutes = () => {
                 <Route path='/nueva-contrasena' element={<NuevaContrasena />} />
                 <Route path='/solicitar-codigo' element={<SolicitarCodigo />} />
                 <Route path='/verificar-codigo' element={<VerificarCodigo />} />
+                <Route path='/acerca-de' element={<AcercaDe />} />
             </Routes>
         </Router>
     );

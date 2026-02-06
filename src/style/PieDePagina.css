@@ -1,96 +1,86 @@
-/* Pie de pagina */
-
 .pie-pagina {
-  background-color: #f8f9fa;
-  color: #212529;
-  /* Texto oscuro */
-  padding: 16px 24px;
-  width: 100%;
-  border-top: 1px solid #dee2e6;
-  font-size: 0.9rem;
+  background-color: #f9f9f9;
+  padding: 2rem 1.5rem;
+  border-top: 1px solid #e0e0e0;
 }
 
 .pie-contenido {
-  max-width: 1200px; /* evita que quede estirado en pantallas muy grandes */
-  margin: 0 auto; /* centra el contenido */
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr auto; /* antes era 1.5fr 1fr 2fr auto */
+  gap: 2rem;
   align-items: center;
-  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
+
 
 .pie-logo-texto {
   display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  text-align: center;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .pie-logo {
-  height: 40px;
-  margin-right: 10px;
+  max-width: 140px;
 }
 
 .pie-derechos {
-  font-size: 1rem;
+  font-size: 0.85rem;
+  color: #555;
 }
 
 .pie-enlaces {
   display: flex;
   gap: 16px;
-  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
 }
 
 .pie-enlaces a {
+  color: #1d4d72;
   text-decoration: none;
-  color: #212529;
-  transition: color 0.3s;
+  font-size: 0.9rem;
 }
 
 .pie-enlaces a:hover {
-  color: #0d6efd;
-  /* Azul Bootstrap */
+  text-decoration: underline;
 }
 
-.pie-equipo {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-align: center;
-}
+
 .pie-equipo h4 {
-  margin: 0;
-  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
 }
 
-.pie-equipo ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.pie-equipo a {
+  display: block;
+  font-size: 0.85rem;
+  color: #1d4d72;
+  text-decoration: none;
+  margin-bottom: 0.3rem;
 }
 
-.pie-equipo li {
-  font-size: 1rem;
+.pie-equipo a:hover {
+  text-decoration: underline;
 }
 
-/* Responsivo en pantallas medianas y grandes */
-@media (min-width: 768px) {
+.pie-logo-gpl {
+  max-width: 90px;
+}
+
+/* 📱 Responsive */
+@media (max-width: 900px) {
   .pie-contenido {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
+    grid-template-columns: 1fr;
+    text-align: center;
   }
 
-  .pie-logo-texto {
-    margin-bottom: 0;
-  }
-
-  .pie-enlaces {
-    justify-content: flex-end;
-  }
+  .pie-logo-texto,
   .pie-equipo {
-    text-align: left;
+    align-items: center;
+  }
+
+  .pie-gpl {
+    margin-top: 1rem;
   }
 }
