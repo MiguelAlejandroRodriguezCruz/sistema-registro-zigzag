@@ -3,6 +3,9 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const port = 3001;
+const cors = require('cors');
+
+const whitelist = ['http://localhost:3000', 'http://192.168.1.140'];
 
 // Swagger
 const swaggerUi = require('swagger-ui-express');
@@ -49,12 +52,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // CORS
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000, http://192.168.1.140');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-});
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Bloqueado por CORS'));
+    }
+  }
+}));
 
 // Hacer accesible la carpeta /uploads de forma pública
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
