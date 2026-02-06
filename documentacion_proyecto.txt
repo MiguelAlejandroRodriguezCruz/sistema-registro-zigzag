@@ -1,0 +1,357 @@
+DOCUMENTACIÓN DEL SISTEMA DE REGISTRO ZIGZAG
+===========================================
+
+1. ESTRUCTURA DEL PROYECTO
+-------------------------
+El proyecto está dividido en dos partes principales:
+- Frontend (React)
+- Backend (Node.js/Express)
+
+2. TECNOLOGÍAS UTILIZADAS
+-------------------------
+Frontend:
+- React.js (Framework principal)
+- Bootstrap (Framework CSS)
+- React Router (Enrutamiento)
+- Axios (Cliente HTTP)
+
+Backend:
+- Node.js
+- Express.js
+- MySQL (Base de datos)
+- JWT (JSON Web Tokens para autenticación)
+- Multer (Manejo de archivos)
+- ExcelJS (Generación de archivos Excel)
+- Nodemailer (Envío de correos)
+
+3. ESTRUCTURA DE ARCHIVOS
+-------------------------
+Frontend (/src):
+- /components: Componentes React
+- /routes: Configuración de rutas
+- /style: Estilos CSS
+- /config: Configuración de la aplicación
+- /images: Recursos gráficos
+
+Backend (/DB):
+- /config: Configuraciones (DB, JWT, mailer)
+- /controllers: Lógica de negocio
+- /models: Modelos de datos
+- /routes: Rutas de la API
+- /middlewares: Middleware personalizado
+- /uploads: Almacenamiento de archivos subidos
+- /docs_eventos: Documentación de eventos
+
+4. VISTAS PRINCIPALES Y SUS FUNCIONES
+-------------------------
+1. Área Pública:
+
+   a) Inicio (Landing Page):
+      - Muestra los eventos activos y próximos
+      - Permite la navegación a las diferentes secciones
+      - Presenta información general del sistema
+      - Acceso al formulario de registro de visitantes
+
+   b) Registro de Visitantes:
+      - Formulario para registrar nuevos visitantes
+      - Campos: nombre, correo, teléfono, etc.
+      - Validación en tiempo real de los datos
+      - Confirmación automática por correo
+
+   c) Formularios de Eventos:
+      - Formularios personalizados por evento
+      - Campos dinámicos según configuración
+      - Validación específica por tipo de campo
+      - Confirmación de registro exitoso
+      - Límite de registros por capacidad del evento
+
+   d) Información de Eventos:
+      - Detalles completos del evento
+      - Galería de imágenes
+      - Ubicación y fecha
+      - Requisitos de participación
+      - Estado de cupo disponible
+
+2. Área Administrativa:
+
+   a) Panel de Administración (Dashboard):
+      - Resumen general de eventos activos
+      - Estadísticas de registros
+      - Notificaciones importantes
+      - Accesos rápidos a funciones principales
+
+   b) Gestión de Eventos:
+      - Creación de nuevos eventos
+      - Edición de eventos existentes
+      - Configuración de formularios personalizados
+      - Gestión de imágenes y documentos
+      - Control de fechas y capacidad
+      - Activación/desactivación de eventos
+
+   c) Gestión de Usuarios:
+      - Administración de usuarios del sistema
+      - Creación de nuevos administradores
+      - Asignación de roles y permisos
+      - Reseteo de contraseñas
+      - Historial de actividades
+
+   d) Visualización de Registros:
+      - Lista de todos los registros por evento
+      - Filtros avanzados de búsqueda
+      - Visualización de detalles por registro
+      - Marcado de asistencia
+      - Gestión de estados de registro
+
+   e) Reportes y Descargas:
+      - Generación de reportes en Excel
+      - Filtros personalizados para reportes
+      - Estadísticas detalladas
+      - Exportación de datos específicos
+      - Historial de descargas
+
+   f) Configuración del Sistema:
+      - Ajustes generales del sistema
+      - Configuración de correos
+      - Personalización de formularios
+      - Gestión de archivos
+      - Parámetros de seguridad
+
+5. FUNCIONALIDADES DEL BACKEND
+-------------------------
+1. Gestión de Usuarios:
+   - Registro de usuarios administrativos
+   - Autenticación mediante JWT
+   - Recuperación de contraseñas
+   - Gestión de permisos
+
+2. Gestión de Eventos:
+   - Creación y edición de eventos
+   - Subida de imágenes y banners
+   - Configuración de formularios personalizados
+   - Gestión de fechas y capacidad
+
+3. Gestión de Visitantes:
+   - Registro de visitantes
+   - Asignación a eventos
+   - Validación de datos
+   - Generación de reportes
+
+4. Gestión de Formularios:
+   - Creación de formularios dinámicos
+   - Validación de campos
+   - Exportación a Excel
+   - Almacenamiento de respuestas
+
+6. SEGURIDAD
+-------------------------
+1. Autenticación:
+   - JSON Web Tokens (JWT)
+   - Middleware de autenticación
+   - Roles y permisos
+   - Protección de rutas
+
+2. Seguridad de Datos:
+   - Encriptación de contraseñas
+   - Validación de datos
+   - Sanitización de entradas
+   - Protección contra XSS y CSRF
+
+3. Manejo de Archivos:
+   - Validación de tipos de archivo
+   - Límites de tamaño
+   - Almacenamiento seguro
+   - Nombres de archivo únicos
+
+7. CARACTERÍSTICAS ADICIONALES
+-------------------------
+1. Sistema de Correos:
+   - Notificaciones automáticas
+   - Recuperación de contraseña
+   - Confirmación de registro
+   - Recordatorios de eventos
+
+2. Generación de Reportes:
+   - Exportación a Excel
+   - Filtros personalizados
+   - Estadísticas de eventos
+   - Reportes de asistencia
+
+3. Gestión de Archivos:
+   - Subida de imágenes
+   - Almacenamiento de documentos
+   - Organización por eventos
+   - Validación de formatos
+
+8. FLUJOS DE TRABAJO
+-------------------------
+1. Registro de Eventos:
+   a. Administrador crea evento
+   b. Configura formulario personalizado
+   c. Sube imágenes y documentación
+   d. Establece fechas y capacidad
+
+2. Registro de Visitantes:
+   a. Visitante accede al formulario
+   b. Completa información requerida
+   c. Sistema valida datos
+   d. Confirmación por correo
+
+3. Gestión Administrativa:
+   a. Monitoreo de registros
+   b. Generación de reportes
+   c. Gestión de usuarios
+   d. Control de acceso
+
+9. MANTENIMIENTO Y ESCALABILIDAD
+-------------------------
+1. Estructura Modular:
+   - Componentes reutilizables
+   - Separación de responsabilidades
+   - Código mantenible
+   - Fácil extensibilidad
+
+2. Base de Datos:
+   - Esquema relacional optimizado
+   - Índices para mejor rendimiento
+   - Respaldos automatizados
+   - Gestión de conexiones
+
+10. RECOMENDACIONES DE USO
+-------------------------
+1. Mantenimiento Regular:
+   - Limpieza de archivos temporales
+   - Actualización de dependencias
+   - Monitoreo de logs
+   - Respaldo de base de datos
+
+2. Buenas Prácticas:
+   - Documentar cambios
+   - Seguir estándares de código
+   - Realizar pruebas antes de desplegar
+   - Mantener copias de seguridad
+
+11. REQUISITOS DEL SISTEMA
+-------------------------
+- Node.js v14 o superior
+- MySQL 5.7 o superior
+- Espacio en disco para archivos
+- Configuración de correo SMTP
+- Certificados SSL para producción
+
+12. FUNCIONAMIENTO DETALLADO DEL SISTEMA
+-------------------------
+
+1. Sistema de Autenticación:
+   - El acceso administrativo utiliza JWT (JSON Web Tokens)
+   - Proceso:
+     a. Usuario ingresa credenciales
+     b. Backend valida en base de datos
+     c. Genera token JWT si es válido
+     d. Token se almacena en localStorage
+     e. Se incluye en cabeceras de peticiones
+   - Middleware auth.js verifica token en cada petición protegida
+   - Expiración de tokens configurable en jwt.js
+
+2. Gestión de Eventos:
+   - Proceso de Creación:
+     a. Administrador completa formulario de nuevo evento
+     b. Se suben imágenes mediante Multer
+     c. Se procesan y validan en uploadEventos.js
+     d. Se almacenan en /uploads con nombres únicos
+     e. Se crea registro en base de datos
+   - Actualización:
+     a. Interfaz de edición carga datos existentes
+     b. Permite modificar todos los campos
+     c. Mantiene imágenes existentes u opción de reemplazo
+     d. Actualiza timestamp de modificación
+
+3. Sistema de Formularios:
+   - Creación:
+     a. Administrador define campos en panel
+     b. Se guardan en tabla de configuración
+     c. Se generan formularios dinámicos
+   - Funcionamiento:
+     a. Frontend renderiza campos según configuración
+     b. Validación en tiempo real con JavaScript
+     c. Envío de datos mediante API REST
+     d. Backend valida y procesa en formulariosController.js
+
+4. Gestión de Visitantes:
+   - Registro:
+     a. Visitante completa formulario público
+     b. Sistema valida datos en tiempo real
+     c. Se verifica disponibilidad de cupo
+     d. Se crea registro en base de datos
+     e. Se envía correo de confirmación
+   - Administración:
+     a. Panel muestra lista de registros
+     b. Permite filtrar y buscar
+     c. Opciones de gestión por registro
+     d. Exportación a Excel mediante ExcelJS
+
+5. Sistema de Notificaciones:
+   - Correos automáticos usando Nodemailer
+   - Tipos de notificaciones:
+     a. Confirmación de registro
+     b. Recordatorios de eventos
+     c. Recuperación de contraseña
+     d. Notificaciones administrativas
+   - Configuración en mailer.js
+
+6. Exportación de Datos:
+   - Generación de Excel:
+     a. Sistema recopila datos solicitados
+     b. ExcelJS crea documento nuevo
+     c. Se formatean datos según plantilla
+     d. Se genera archivo temporal
+     e. Se sirve para descarga
+   - Filtros disponibles:
+     a. Por fecha
+     b. Por evento
+     c. Por estado de registro
+     d. Personalizados
+
+7. Gestión de Archivos:
+   - Subida de Imágenes:
+     a. Multer procesa archivos multipart
+     b. Se validan tipo y tamaño
+     c. Se generan nombres únicos
+     d. Se almacenan en directorio específico
+   - Documentos de Eventos:
+     a. Sistema organiza por carpetas de evento
+     b. Mantiene estructura consistente
+     c. Permite acceso controlado
+
+8. Base de Datos:
+   - Conexión mediante pool de MySQL
+   - Estructura:
+     a. Tablas relacionales optimizadas
+     b. Índices para búsquedas frecuentes
+     c. Claves foráneas para integridad
+     d. Triggers para actualizaciones automáticas
+   - Operaciones:
+     a. Queries preparados para seguridad
+     b. Transacciones para operaciones complejas
+     c. Manejo de concurrencia
+
+9. Seguridad Implementada:
+   - Protección contra inyección SQL:
+     a. Uso de consultas preparadas
+     b. Sanitización de entradas
+   - XSS Prevention:
+     a. Escape de datos en frontend
+     b. Headers de seguridad
+   - CSRF Protection:
+     a. Tokens en formularios
+     b. Validación de origen
+
+10. Sistema de Logs:
+    - Registro de Actividades:
+      a. Accesos al sistema
+      b. Cambios en eventos
+      c. Registros de visitantes
+      d. Exportaciones de datos
+    - Almacenamiento:
+      a. Archivos rotativos
+      b. Niveles de severidad
+      c. Información detallada para debugging

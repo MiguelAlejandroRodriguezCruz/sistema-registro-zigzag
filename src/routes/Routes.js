@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Inicio from '../components/Inicio'
 import ReservasGenerales  from '../components/ReservasAdmin/ReservasGenerales';
 import Taquilla from '../components/Taquilla/Taquilla';
 import Visitas from '../components/Visitas/Visitas';
@@ -22,11 +21,10 @@ const AppRoutes = () => {
     return (
         <Router>
             <Routes>
-                <Route path="/inicio" element={<Inicio />} />
                 <Route path="/ReservasGenerales" element={<PrivateRouteAdmin><ReservasGenerales /></PrivateRouteAdmin>} />
                 <Route path='/taquilla' element={<Taquilla />} />
-                <Route path="/" element={<Inicio />} />
-                <Route path="*" element={<Navigate to="/inicio" />} />
+                <Route path="/" element={<Login />} />
+                <Route path="*" element={<Navigate to="/" />} />
                 <Route path="/visitas" element={<Visitas />} />
                 <Route path="/eventos" element={<PrivateRouteAdmin><Eventos /></PrivateRouteAdmin>} />
                 <Route path="/eventos/:id" element={<PrivateRouteAdmin><Eventos /></PrivateRouteAdmin>} />
