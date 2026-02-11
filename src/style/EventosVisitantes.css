@@ -71,3 +71,124 @@
   margin-top: 10px;
   font-size: 13px;
 }
+/* ---------------------------------- Sin Eventos Card ---------------------------------- */
+.sin-eventos-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 20px;
+  padding: 60px 40px;
+  margin: 40px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  border: 2px solid #dee2e6;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sin-eventos-content {
+  text-align: center;
+  max-width: 500px;
+}
+
+.sin-eventos-icon {
+  font-size: 80px;
+  color: #adb5bd;
+  margin-bottom: 20px;
+  animation: bounceIcon 2s infinite ease-in-out;
+}
+
+@keyframes bounceIcon {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+.sin-eventos-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #f1f1f1;
+  margin-bottom: 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sin-eventos-description {
+  font-size: 16px;
+  color: #5a6c7d;
+  margin-bottom: 10px;
+  line-height: 1.6;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.sin-eventos-subtitle {
+  font-size: 14px;
+  color: #8b95a5;
+  margin-bottom: 30px;
+  font-style: italic;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+/* ---------------------------------- Responsive ---------------------------------- */
+@media (max-width: 768px) {
+  .sin-eventos-card {
+    padding: 40px 20px;
+    min-height: 400px;
+  }
+
+  .sin-eventos-icon {
+    font-size: 60px;
+  }
+
+  .sin-eventos-title {
+    font-size: 24px;
+  }
+
+  .sin-eventos-description {
+    font-size: 15px;
+  }
+
+  .btn-volver-inicio {
+    padding: 12px 30px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sin-eventos-card {
+    padding: 30px 15px;
+    min-height: 350px;
+    margin: 20px 10px;
+  }
+
+  .sin-eventos-icon {
+    font-size: 50px;
+  }
+
+  .sin-eventos-title {
+    font-size: 20px;
+  }
+
+  .sin-eventos-description {
+    font-size: 14px;
+  }
+
+  .btn-volver-inicio {
+    padding: 11px 25px;
+    font-size: 13px;
+  }
+}

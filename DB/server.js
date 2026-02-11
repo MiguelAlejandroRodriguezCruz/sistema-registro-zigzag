@@ -1,8 +1,10 @@
-require('dotenv').config();
+require('dotenv').config({
+    path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env'
+});
 const express = require('express');
 const path = require('path');
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 const cors = require('cors');
 
 const whitelist = ['http://localhost:3000', 'http://192.168.1.140'];

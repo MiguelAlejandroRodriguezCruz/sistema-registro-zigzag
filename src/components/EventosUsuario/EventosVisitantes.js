@@ -114,10 +114,33 @@ const EventosSeleccionar = () => {
 
   if (eventos.length === 0) {
     return (
-      <div className="sin-eventos">
-        <div className="alert alert-info" role="alert">
-          No hay eventos disponibles en este momento
+      <div className='eventos-seleccionar-container'>
+        <Comp_encabezado />
+
+        <header className="eventos-header azul">
+          <h1 className="text-white m-0">
+            {usuario ? `Eventos Disponibles para ${usuario.nombre}` : 'Eventos Disponibles'}
+          </h1>
+        </header>
+
+        <div className="eventos-container">
+          <div className="sin-eventos-card">
+            <div className="sin-eventos-content">
+              <div className="sin-eventos-icon">
+                <i className="bi bi-calendar-x"></i>
+              </div>
+              <h2 className="sin-eventos-title">No hay eventos disponibles</h2>
+              <p className="sin-eventos-description">
+                En este momento no hay eventos disponibles para tu participación.
+              </p>
+              <p className="sin-eventos-subtitle">
+                Por favor, vuelve más tarde para ver los nuevos eventos.
+              </p>
+            </div>
+          </div>
         </div>
+
+        <Comp_Pie_pagina />
       </div>
     );
   }
