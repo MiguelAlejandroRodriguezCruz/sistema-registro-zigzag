@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import { ReservasTabs } from './ReservasTabs';
+import { useNavigate } from "react-router-dom";
+
 import { ReservasLista } from './ReservasLista';
 import { Comp_encabezado } from '../Comp/Comp_encabezado';
 import { Comp_Pie_pagina } from '../Comp/Comp_Pie_pagina';
 import { API_BASE_URL } from "../../config/api";
 
 function ReservasGenerales() {
+    const navigate = useNavigate();
+
     const [reservas, setReservas] = useState([]);
     const [pestanaActiva, setPestanaActiva] = useState("nuevo");
 
@@ -103,10 +107,11 @@ function ReservasGenerales() {
             </div>
             <button
                 className="btn btn-danger my-3"
-                onClick={resetearReservas}
+                onClick={() => navigate("/taquilla")}
             >
-                🗑 Resetear todas las reservas
+                Taquilla
             </button>
+
             <Comp_Pie_pagina/>
         </div>
     );

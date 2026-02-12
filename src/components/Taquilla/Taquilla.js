@@ -16,18 +16,32 @@ const Taquilla = () => {
   const [reloadCounter, setReloadCounter] = useState(0);
 
   useEffect(() => {
-    // Hacer la solicitud GET para obtener los registros de la API
-    fetch(`${API_BASE_URL}/visitantes`) // Ajusta la URL de la API si es necesario
-      .then((response) => response.json())
-      .then((data) => {
-        // Filtrar los registros donde el estatus es "aprobadas"
-        const aprobadas = data.filter((registro) => registro.estatus === "aprobadas");
-        setRecords(aprobadas); // Actualizar el estado con los registros filtrados
-      })
-      .catch((error) => {
-        console.error("Error al cargar los registros:", error);
-      });
-  }, [reloadCounter]);
+  const token = localStorage.getItem("tokenAdmin");
+
+  fetch(`${API_BASE_URL}/visitantes`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    }
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("No autorizado o error en la API");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      const aprobadas = data.filter(
+        (registro) => registro.estatus === "aprobadas"
+      );
+      setRecords(aprobadas);
+    })
+    .catch((error) => {
+      console.error("Error al cargar los registros:", error);
+    });
+}, [reloadCounter]);
+
 
   const handleRowClick = (record) => {
   setRegistroSeleccionado(record.id);
