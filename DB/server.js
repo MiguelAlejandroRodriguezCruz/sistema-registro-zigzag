@@ -87,5 +87,7 @@ app.get('/', (req, res) => {
 
 // Iniciar server
 app.listen(port, () => {
-    console.log(`API corriendo en http://localhost:${port}`);
+    const environment = process.env.NODE_ENV || 'desarrollo';
+    const host = process.env.HOST || 'localhost';
+    console.log(`✓ API corriendo en ${environment.toUpperCase()} - http://${host}:${port}`);
 });
