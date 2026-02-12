@@ -12,7 +12,12 @@ const app = express();
 const port = process.env.PORT || 3001;
 const cors = require('cors');
 
-const whitelist = ['http://localhost:3000', 'http://192.168.1.140:3001', 'http://reservaciones.zigzag.gob.mx:3001'];
+const whitelist = [
+    'http://localhost:3000', 
+    'http://192.168.1.140', 
+    'http://reservaciones.zigzag.gob.mx', 
+    'http://reservaciones.zigzag.gob.mx:3001' 
+];
 
 // Swagger
 const swaggerUi = require('swagger-ui-express');
