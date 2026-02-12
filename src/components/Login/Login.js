@@ -27,7 +27,7 @@ const LoginForm = () => {
     setError(null);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/visitantes-eventos/login`, {
+      const response = await fetch('/visitantes-eventos/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
