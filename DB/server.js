@@ -1,8 +1,13 @@
+const fs = require('fs');
+const path = require('path');
+// Detectar entorno: preferir .env.production cuando NODE_ENV=production
+// o cuando se ejecuta bajo PM2 y existe el archivo .env.production
+const useProductionEnv = (process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() === 'production')
+    || (process.env.PM2_HOME && fs.existsSync(path.join(__dirname, '.env.production')));
 require('dotenv').config({
-    path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env'
+    path: useProductionEnv ? '.env.production' : '.env'
 });
 const express = require('express');
-const path = require('path');
 const app = express();
 const port = process.env.PORT || 3001;
 const cors = require('cors');
