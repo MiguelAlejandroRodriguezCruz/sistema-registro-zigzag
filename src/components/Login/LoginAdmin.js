@@ -34,7 +34,6 @@ const LoginFormAdmin = () => {
         },
         body: JSON.stringify(formData)
       });
-      console.log(API_BASE_URL);
 
 
       const data = await response.json();
