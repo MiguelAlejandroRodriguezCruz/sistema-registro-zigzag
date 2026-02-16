@@ -60,30 +60,6 @@ function ReservasGenerales() {
         };
 
 
-        const resetearReservas = () => {
-        const token = localStorage.getItem("tokenAdmin");
-
-        fetch(`${API_BASE_URL}/visitantes`, {
-            method: "PUT",
-            headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({ estatus: "nuevo" })
-        })
-            .then(response => {
-            if (!response.ok) {
-                throw new Error("Error al actualizar el estatus de todas las reservas");
-            }
-            setReservas(prev =>
-                prev.map(reserva => ({ ...reserva, estatus: "nuevo" }))
-            );
-            })
-            .catch(error => {
-            console.error("Error en resetearReservas:", error);
-            });
-        };
-
 
     const reservasFiltradas = reservas.filter(r => r.estatus === pestanaActiva);
 
@@ -92,9 +68,22 @@ function ReservasGenerales() {
         <div className='flex-column min-vh-100 bg-light mt-4'>
             <Comp_encabezado/>
             <div className="mt-4">
-                    <header className="eventos-header bg-danger">
+                    <header className="eventos-header bg-danger reservas-header">
                         <h1 className="text-white m-0">Solicitud de Reservas</h1>
-                        <a href="/lista-eventos" className="reservas-link">Eventos</a>
+                        <div className="header-actions">
+                            <button 
+                                className="btn-header-nav btn-nav"
+                                onClick={() => navigate("/lista-eventos")}
+                            >
+                                Eventos
+                            </button>
+                            <button 
+                                className="btn-header-nav btn-nav"
+                                onClick={() => navigate("/taquilla")}
+                            >
+                                Taquilla
+                            </button>
+                        </div>
                     </header>
             </div>
             <div className="p-2">
@@ -105,12 +94,6 @@ function ReservasGenerales() {
                     actualizarEstadoReserva={actualizarEstadoReserva}
                 />
             </div>
-            <button
-                className="btn btn-danger my-3"
-                onClick={() => navigate("/taquilla")}
-            >
-                Taquilla
-            </button>
 
             <Comp_Pie_pagina/>
         </div>

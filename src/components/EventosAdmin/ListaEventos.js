@@ -79,10 +79,19 @@ const Eventos = () => {
   return (
     <div className='mt-4'>
       <Comp_encabezado />
-      <header className="eventos-header">
-        <h1><strong>Eventos</strong></h1>
-        <a href="/ReservasGenerales" className="reservas-link">Reservas</a>
-      </header>
+      <div className="mt-4">
+          <header className="eventos-header bg-success reservas-header">
+              <h1 className="text-white m-0">Eventos</h1>
+              <div className="header-actions">
+                  <button 
+                      className="btn-header-nav btn-nav"
+                      onClick={() => navigate("/ReservasGenerales")}
+                  >
+                      Reservas
+                  </button>
+              </div>
+          </header>
+      </div>
       <div className="eventos-container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
         <ToastContainer />
 

@@ -98,6 +98,14 @@
   font-size: 13px;
 }
 
+.btn-nav {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
+}
+
+.btn-nav:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+}
+
 /* Responsivo */
 @media (max-width: 768px) {
   .eventos-header {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../style/App.css";
 import EntradasConfirmadas from "./EntradasConfirmadas";
 import FormularioDatos from "./FormularioDatos";
@@ -8,6 +9,7 @@ import { Comp_Pie_pagina } from "../Comp/Comp_Pie_pagina";
 import { API_BASE_URL } from "../../config/api";
 
 const Taquilla = () => {
+  const navigate = useNavigate();
   const [showEntradasConfirmadas, setEntradasConfirmadas] = useState(false);
   const [showFormulario, setShowFormulario] = useState(false);
   const [showDatosGuardados, setShowDatosGuardados] = useState(false);
@@ -68,10 +70,18 @@ const Taquilla = () => {
     <div className="mt-4">
       <Comp_encabezado/>
       
-      <div className="row">
-          <div className="col text-center bg-danger py-2">
+      <div className="mt-4">
+          <header className="eventos-header bg-danger reservas-header">
               <h1 className="text-white m-0">Registros de visita</h1>
-          </div>
+              <div className="header-actions">
+                  <button 
+                      className="btn-header-nav btn-nav"
+                      onClick={() => navigate("/ReservasGenerales")}
+                  >
+                      Reservaciones
+                  </button>
+              </div>
+          </header>
       </div>
 
       <div className="container p-4">
