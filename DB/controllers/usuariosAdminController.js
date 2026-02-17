@@ -21,7 +21,6 @@ exports.loginUsuariosAdmin = (req, res) => {
         }
 
         const payload = {
-            id: usuario.id,
             nombre: usuario.nombre
         };
 

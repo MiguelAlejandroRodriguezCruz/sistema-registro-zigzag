@@ -50,7 +50,6 @@ exports.loginVisitanteEvento = (req, res) => {
         }
 
         const payload = {
-            id: usuario.id,
             correo: usuario.correo
         };
 
