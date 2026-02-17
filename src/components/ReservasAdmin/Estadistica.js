@@ -1,106 +1,138 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
-import "../../style/Estadisticas.css"
-import React from 'react';
+import "../../style/Estadisticas.css";
+import React from "react";
 import { API_BASE_URL } from "../../config/api";
 
 export default function Estadistica({ reservas }) {
-    const [fecha, setFecha] = useState(new Date());
-    const [agrupacion, setAgrupacion] = useState('dia');
-    const [registros, setRegistros] = useState([]);
-    const [estadisticas, setEstadisticas] = useState([]);
-    const [detalles, setDetalles] = useState(null);
-    const [totalGeneral, setTotalGeneral] = useState(0);
-    const [vistaCalendario, setVistaCalendario] = useState('month');
+  const [fecha, setFecha] = useState(new Date());
+  const [agrupacion, setAgrupacion] = useState("dia");
+  const [registros, setRegistros] = useState([]);
+  const [estadisticas, setEstadisticas] = useState([]);
+  const [detalles, setDetalles] = useState(null);
+  const [totalGeneral, setTotalGeneral] = useState(0);
+  const [vistaCalendario, setVistaCalendario] = useState("month");
 
-    // Obtener registros de la API
-    useEffect(() => {
-        const obtenerRegistros = async () => {
-        try {
-            const token = localStorage.getItem("tokenAdmin");
-            const response = await fetch(`${API_BASE_URL}/registro`, {
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-              }
-            });
-            const data = await response.json();
-            setRegistros(data);
-        } catch (error) {
-            console.error('Error al obtener registros:', error);
-        }
-        };
-        obtenerRegistros();
-    }, []);
-
-    // Calcular estadísticas cuando cambian los registros, fecha o agrupación
-    useEffect(() => {
-        if (registros.length === 0) return;
-
-        // Filtrar registros según la fecha seleccionada
-        const registrosFiltrados = registros.filter(reg => {
-        const regDate = new Date(reg.fecha_registro);
-        const selectedDate = new Date(fecha);
-        
-        if (agrupacion === 'dia') {
-            return regDate.toDateString() === selectedDate.toDateString();
-        } else if (agrupacion === 'mes') {
-            return regDate.getMonth() === selectedDate.getMonth() && 
-                regDate.getFullYear() === selectedDate.getFullYear();
-        } else if (agrupacion === 'ano') {
-            return regDate.getFullYear() === selectedDate.getFullYear();
-        }
-        return false;
+  // Obtener registros de la API
+  useEffect(() => {
+    const obtenerRegistros = async () => {
+      try {
+        const token = localStorage.getItem("tokenAdmin");
+        const response = await fetch(`${API_BASE_URL}/registro`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         });
-
-      
-        // Calcular total general
-        const total = registrosFiltrados.reduce((sum, reg) => sum + parseInt(reg.cantidad), 0);
-        setTotalGeneral(total);
-
-        // Agrupar por tipo de asistente
-        const tipos = ['Niño', 'Niña', 'Hombre', 'Mujer', 'Maestro'];
-        const stats = tipos.map(tipo => {
-        const registrosTipo = registrosFiltrados.filter(reg => reg.tipo === tipo);
-        const totalTipo = registrosTipo.reduce((sum, reg) => sum + parseInt(reg.cantidad), 0);
-        
-        // Calcular porcentaje
-        const porcentaje = total > 0 ? ((totalTipo / total) * 100).toFixed(2) : 0;
-        
-        return {
-            tipo,
-            total: totalTipo,
-            porcentaje,
-            registros: registrosTipo
-        };
-        });
-
-        setEstadisticas(stats);
-    }, [registros, fecha, agrupacion]);
-
-    useEffect(() => {
-          if (agrupacion === 'dia') {
-            setVistaCalendario('month'); // muestra días del mes
-          } else if (agrupacion === 'mes') {
-            setVistaCalendario('year'); // muestra los 12 meses
-          } else if (agrupacion === 'ano') {
-            setVistaCalendario('decade'); // muestra los años por década
-          }
-        }, [agrupacion]);
-
-   // Formatear fecha según la agrupación
-    const formatoFecha = () => {
-        if (agrupacion === 'dia') {
-        return fecha.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        } else if (agrupacion === 'mes') {
-        return fecha.toLocaleDateString('es-ES', { year: 'numeric', month: 'long' });
-        } else if (agrupacion === 'ano') {
-        return fecha.getFullYear().toString();
-        }
-        return '';
+        const data = await response.json();
+        setRegistros(data);
+      } catch (error) {
+        console.error("Error al obtener registros:", error);
+      }
     };
+    obtenerRegistros();
+  }, []);
 
-    return (
+  // Calcular estadísticas cuando cambian los registros, fecha o agrupación
+  useEffect(() => {
+    if (registros.length === 0) return;
+
+    // Filtrar registros según la fecha seleccionada
+    const registrosFiltrados = registros.filter((reg) => {
+      const regDate = new Date(reg.fecha_registro);
+      const selectedDate = new Date(fecha);
+
+      if (agrupacion === "dia") {
+        return regDate.toDateString() === selectedDate.toDateString();
+      } else if (agrupacion === "mes") {
+        return (
+          regDate.getMonth() === selectedDate.getMonth() &&
+          regDate.getFullYear() === selectedDate.getFullYear()
+        );
+      } else if (agrupacion === "ano") {
+        return regDate.getFullYear() === selectedDate.getFullYear();
+      }
+      return false;
+    });
+
+    // Calcular total general
+    const total = registrosFiltrados.reduce(
+      (sum, reg) => sum + parseInt(reg.cantidad),
+      0,
+    );
+    setTotalGeneral(total);
+
+    // Agrupar por tipo de asistente
+    const tipos = ["Niño", "Niña", "Hombre", "Mujer", "Maestro"];
+    const stats = tipos.map((tipo) => {
+      const registrosTipo = registrosFiltrados.filter(
+        (reg) => reg.tipo === tipo,
+      );
+      const agrupadosPorRango = Object.values(
+        registrosTipo.reduce((acc, reg) => {
+          if (!acc[reg.rango]) {
+            acc[reg.rango] = {
+              ...reg,
+              cantidad: parseInt(reg.cantidad),
+            };
+          } else {
+            acc[reg.rango].cantidad += parseInt(reg.cantidad);
+          }
+
+          return acc;
+        }, {}),
+      );
+
+      const totalTipo = registrosTipo.reduce(
+        (sum, reg) => sum + parseInt(reg.cantidad),
+        0,
+      );
+
+      // Calcular porcentaje
+      const porcentaje = total > 0 ? ((totalTipo / total) * 100).toFixed(2) : 0;
+
+      return {
+        tipo,
+        total: totalTipo,
+        porcentaje,
+        registros: agrupadosPorRango,
+      };
+    });
+
+    setEstadisticas(stats);
+  }, [registros, fecha, agrupacion]);
+
+  useEffect(() => {
+    if (agrupacion === "dia") {
+      setVistaCalendario("month"); // muestra días del mes
+    } else if (agrupacion === "mes") {
+      setVistaCalendario("year"); // muestra los 12 meses
+    } else if (agrupacion === "ano") {
+      setVistaCalendario("decade"); // muestra los años por década
+    }
+  }, [agrupacion]);
+
+  // Formatear fecha según la agrupación
+  const formatoFecha = () => {
+    if (agrupacion === "dia") {
+      return fecha.toLocaleDateString("es-ES", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } else if (agrupacion === "mes") {
+      return fecha.toLocaleDateString("es-ES", {
+        year: "numeric",
+        month: "long",
+      });
+    } else if (agrupacion === "ano") {
+      return fecha.getFullYear().toString();
+    }
+    return "";
+  };
+
+  return (
     <div className="container mt-4 p-4 estadistica-box rounded">
       <div className="row mb-3">
         <div className="col-md-6">
@@ -119,43 +151,43 @@ export default function Estadistica({ reservas }) {
               setFecha(value);
             }}
             onClickMonth={(value) => {
-              if (agrupacion === 'mes') setFecha(value);
+              if (agrupacion === "mes") setFecha(value);
             }}
             onClickYear={(value) => {
-              if (agrupacion === 'ano') setFecha(value);
+              if (agrupacion === "ano") setFecha(value);
             }}
             value={fecha}
             locale="es-ES"
             view={vistaCalendario}
             maxDetail={
-              agrupacion === 'dia'
-              ? 'month'
-              : agrupacion === 'mes'
-              ? 'year'
-              : 'decade'
+              agrupacion === "dia"
+                ? "month"
+                : agrupacion === "mes"
+                  ? "year"
+                  : "decade"
             }
             className="border rounded p-2"
             tileClassName={({ date, view }) => {
-                if (view === 'month') {
-                  const dia = date.getDay();
-                  if (dia === 0 || dia === 6) {
-                    return 'fin-de-semana'; // Aplica clase para sábado y domingo
-                  }
+              if (view === "month") {
+                const dia = date.getDay();
+                if (dia === 0 || dia === 6) {
+                  return "fin-de-semana"; // Aplica clase para sábado y domingo
                 }
-                return null;
-              }}
+              }
+              return null;
+            }}
           />
         </div>
 
         <div className="col-md-6">
           <h4 className="mb-4">Estadísticas para {formatoFecha()}</h4>
-          
+
           {estadisticas.length > 0 ? (
             <>
               <div className="alert alert-info">
                 <strong>Total de asistentes:</strong> {totalGeneral}
               </div>
-              
+
               <div className="table-responsive">
                 <table className="table table-striped">
                   <thead>
@@ -174,15 +206,17 @@ export default function Estadistica({ reservas }) {
                           <td>{est.total}</td>
                           <td>{est.porcentaje}%</td>
                           <td>
-                            <button 
+                            <button
                               className="btn btn-sm btn-info"
-                              onClick={() => setDetalles(detalles === index ? null : index)}
+                              onClick={() =>
+                                setDetalles(detalles === index ? null : index)
+                              }
                             >
-                              {detalles === index ? 'Ocultar' : 'Ver'} detalles
+                              {detalles === index ? "Ocultar" : "Ver"} detalles
                             </button>
                           </td>
                         </tr>
-                        
+
                         {detalles === index && (
                           <tr>
                             <td colSpan="4">
@@ -202,9 +236,12 @@ export default function Estadistica({ reservas }) {
                                         <td>{reg.rango}</td>
                                         <td>{reg.cantidad}</td>
                                         <td>
-                                          {est.total > 0 
-                                            ? ((reg.cantidad / est.total) * 100).toFixed(2) + '%' 
-                                            : '0%'}
+                                          {est.total > 0
+                                            ? (
+                                                (reg.cantidad / est.total) *
+                                                100
+                                              ).toFixed(2) + "%"
+                                            : "0%"}
                                         </td>
                                       </tr>
                                     ))}

@@ -88,7 +88,7 @@ const CalendarioVisitas = ({ onFechaFijada }) => {
     <div className="container-fluid my-5 px-4 py-4 rounded ">
       <div className="row align-items-start mb-4">
         <div className="col-md-6">
-          <p style={{ fontSize: "24px" }}>
+          <p style={{ fontSize: "24px", maxWidth: "400px" }}>
             ¡Agenda tu próxima visita al museo! <br />
             Selecciona en el calendario la fecha tentativa de tu visita.
           </p>
