@@ -16,6 +16,7 @@ const whitelist = [
     'http://localhost:3000', 
     'http://192.168.1.140', 
     'http://reservaciones.zigzag.gob.mx', 
+    'https://reservaciones.zigzag.gob.mx',
     'http://reservaciones.zigzag.gob.mx:3001' 
 ];
 
@@ -56,9 +57,8 @@ const upload = require('./middlewares/upload');
 
 require('./config/db'); // solo para que se conecte
 
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Ruta de documentación Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
