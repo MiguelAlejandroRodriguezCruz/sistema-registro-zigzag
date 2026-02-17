@@ -16,6 +16,7 @@ const whitelist = [
     'http://localhost:3000', 
     'http://192.168.1.140', 
     'http://reservaciones.zigzag.gob.mx', 
+    'https://reservaciones.zigzag.gob.mx',
     'http://reservaciones.zigzag.gob.mx:3001' 
 ];
 
