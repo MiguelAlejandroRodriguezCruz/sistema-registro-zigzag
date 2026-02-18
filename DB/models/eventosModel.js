@@ -13,13 +13,14 @@ const eventosModel = {
 
     obtenerNoRegistradosPorVisitante: async (idVisitante) => {
         const query = `
-            SELECT e.* 
+            SELECT e.*
             FROM evento e
             WHERE e.id NOT IN (
-                SELECT f.id_evento 
-                FROM formularios f 
+                SELECT f.id_evento
+                FROM formularios f
                 WHERE f.id_visitante = ?
             )
+            AND e.fechaFinal >= CURRENT_DATE;
         `;
         const [rows] = await db.promise().query(query, [idVisitante]);
         return rows;
