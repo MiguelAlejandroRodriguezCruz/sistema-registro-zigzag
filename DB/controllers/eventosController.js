@@ -46,7 +46,7 @@ const eventosController = {
                 return res.status(400).json({ message: 'Debe subir un banner para el evento' });
             }
 
-            const urlBaner = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+            const urlBaner = `/uploads/${req.file.filename}`;
             const formulario = datos.formulario || '[]';
 
             const idInsertado = await eventosModel.insertar({
@@ -87,7 +87,7 @@ const eventosController = {
             // Determinar el banner a usar: el nuevo (si viene archivo), o el actual
             let bannerFinal = rows[0].baner;
             if (req.file) {
-                bannerFinal = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+                bannerFinal = `/uploads/${req.file.filename}`;
             }
 
             // Usar formulario si viene; si no, por defecto un arreglo vacío
@@ -162,7 +162,7 @@ const eventosController = {
 
             const imagenes = [];
             for (const file of req.files) {
-                const ruta = `${req.protocol}://${req.get('host')}/uploads/${file.filename}`;
+                const ruta = `/uploads/${file.filename}`;
                 await eventosModel.insertarImagen(idEvento, ruta);
                 imagenes.push({ ruta });
             }

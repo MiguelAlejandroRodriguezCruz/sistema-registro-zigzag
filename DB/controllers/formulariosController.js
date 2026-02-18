@@ -42,8 +42,8 @@ const formulariosController = {
                     // Extraer el campo_id
                     const campoId = archivo.fieldname.replace('archivos_', '');
                     
-                    // Guardar solo la ruta HTTP
-                    const rutaHTTP = `http://localhost:3001/docs_eventos/${evento.id}_${nombreCarpeta}/${nuevoNombre}`;
+                    // Guardar ruta relativa (usar mismo esquema/protocolo que el front)
+                    const rutaHTTP = `/docs_eventos/${evento.id}_${nombreCarpeta}/${nuevoNombre}`;
                     
                     const archivoInfo = {
                         campo_id: campoId,
