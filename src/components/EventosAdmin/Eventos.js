@@ -4,6 +4,19 @@ import { Comp_encabezado } from "../Comp/Comp_encabezado";
 import { Comp_Pie_pagina } from "../Comp/Comp_Pie_pagina"
 import { API_BASE_URL } from "../../config/api";
 
+// Función para resolver URLs de imágenes correctamente
+const resolveImageUrl = (url) => {
+  if (!url) return null;
+  // Si es una data URL (base64), devolverla tal cual
+  if (url.startsWith('data:')) return url;
+  // Si es una URL de uploads relativa, agregarle la base URL del API
+  if (url.startsWith('/uploads')) return `${API_BASE_URL}${url}`;
+  // Si ya tiene protocolo, devolverla tal cual
+  if (url.startsWith('http')) return url;
+  // Si es cualquier otra ruta, agregarle la base URL
+  return `${API_BASE_URL}${url}`;
+};
+
 export default function CrearEvento() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -572,7 +585,7 @@ const handleDownloadExcel = async () => {
                   {bannerPreview ? (
                     <div className="mb-3" style={{ textAlign: 'center' }}>
                       <img
-                        src={bannerPreview}
+                        src={resolveImageUrl(bannerPreview)}
                         alt="Vista previa del banner"
                         style={{
                           maxWidth: '100%',
@@ -645,7 +658,7 @@ const handleDownloadExcel = async () => {
                         {eventImages.map(img => (
                           <div key={img.id} className="position-relative" style={{ width: '100px', height: '100px' }}>
                             <img
-                              src={img.ruta_imagen}
+                              src={resolveImageUrl(img.ruta_imagen)}
                               alt={`Evento ${img.id}`}
                               className="img-thumbnail"
                               style={{ width: '100%', height: '100%', objectFit: 'cover' }}

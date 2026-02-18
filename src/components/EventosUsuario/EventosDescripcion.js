@@ -7,6 +7,19 @@ import "../../style/EventosDescripcion.css"
 import { API_BASE_URL } from "../../config/api";
 import { useNavigate } from "react-router-dom";
 
+// Función para resolver URLs de imágenes correctamente
+const resolveImageUrl = (url) => {
+  if (!url) return null;
+  // Si es una data URL (base64), devolverla tal cual
+  if (url.startsWith('data:')) return url;
+  // Si es una URL de uploads relativa, agregarle la base URL del API
+  if (url.startsWith('/uploads')) return `${API_BASE_URL}${url}`;
+  // Si ya tiene protocolo, devolverla tal cual
+  if (url.startsWith('http')) return url;
+  // Si es cualquier otra ruta, agregarle la base URL
+  return `${API_BASE_URL}${url}`;
+};
+
 const EventosDescripcion = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -270,7 +283,7 @@ const EventosDescripcion = () => {
               {/* Banner principal */}
               <div className="banner-grande">
                 <img
-                  src={evento.baner || "/placeholder.png"}
+                  src={resolveImageUrl(evento.baner) || "/placeholder.png"}
                   alt={`Banner de ${evento.nombre}`}
                   className="img-banner"
                 />
@@ -282,7 +295,7 @@ const EventosDescripcion = () => {
                   <div className="carrusel-contenedor">
                     <div className="img-small-container" onClick={() => setImagenExpandida(true)} style={{ cursor: 'pointer' }}>
                       <img
-                        src={imagenes[indiceImagenActual].ruta_imagen}
+                        src={resolveImageUrl(imagenes[indiceImagenActual].ruta_imagen)}
                         alt={`Imagen ${indiceImagenActual + 1} de ${evento.nombre}`}
                         className="img-small"
                       />
@@ -527,7 +540,7 @@ const EventosDescripcion = () => {
             <div className="modal-expandida" onClick={() => setImagenExpandida(false)}>
               <div className="modal-contenido" onClick={(e) => e.stopPropagation()}>
                 <img
-                  src={imagenes[indiceImagenActual].ruta_imagen}
+                  src={resolveImageUrl(imagenes[indiceImagenActual].ruta_imagen)}
                   alt={`Imagen ampliada ${indiceImagenActual + 1}`}
                   className="imagen-ampliada"
                 />

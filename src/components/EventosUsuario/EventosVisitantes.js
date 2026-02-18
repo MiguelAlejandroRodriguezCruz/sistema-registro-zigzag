@@ -4,6 +4,19 @@ import { Comp_encabezado } from '../Comp/Comp_encabezado';
 import { Comp_Pie_pagina } from '../Comp/Comp_Pie_pagina';
 import { API_BASE_URL } from "../../config/api";
 
+// Función para resolver URLs de imágenes correctamente
+const resolveImageUrl = (url) => {
+  if (!url) return null;
+  // Si es una data URL (base64), devolverla tal cual
+  if (url.startsWith('data:')) return url;
+  // Si es una URL de uploads relativa, agregarle la base URL del API
+  if (url.startsWith('/uploads')) return `${API_BASE_URL}${url}`;
+  // Si ya tiene protocolo, devolverla tal cual
+  if (url.startsWith('http')) return url;
+  // Si es cualquier otra ruta, agregarle la base URL
+  return `${API_BASE_URL}${url}`;
+};
+
 const EventosSeleccionar = () => {
   const [eventos, setEventos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -165,7 +178,7 @@ const EventosSeleccionar = () => {
               </p>
               <div className="imagenes-banner">
                 <img
-                  src={evento.baner || "/placeholder.png"}
+                  src={resolveImageUrl(evento.baner) || "/placeholder.png"}
                   alt={`Banner de ${evento.nombre}`}
                   className="img-banner"
                 />
