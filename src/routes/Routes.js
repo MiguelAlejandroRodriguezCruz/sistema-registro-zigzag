@@ -11,6 +11,7 @@ import Visitas from "../components/Visitas/Visitas";
 import Eventos from "../components/EventosAdmin/Eventos";
 import ListaEventos from "../components/EventosAdmin/ListaEventos";
 import EventosVisitantes from "../components/EventosUsuario/EventosVisitantes";
+import EventosRegistrados from "../components/EventosUsuario/EventosRegistrados";
 import EventosDescripcion from "../components/EventosUsuario/EventosDescripcion";
 import Login from "../components/Login/Login";
 import LoginAdmin from "../components/Login/LoginAdmin";
@@ -82,6 +83,14 @@ const AppRoutes = () => {
           element={
             <PrivateRouteUsuario>
               <EventosVisitantes />
+            </PrivateRouteUsuario>
+          }
+        />
+        <Route
+          path="/eventos-registrados"
+          element={
+            <PrivateRouteUsuario>
+              <EventosRegistrados />
             </PrivateRouteUsuario>
           }
         />

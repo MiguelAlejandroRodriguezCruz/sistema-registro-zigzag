@@ -18,7 +18,7 @@ const resolveImageUrl = (url) => {
   return `${API_BASE_URL}${url}`;
 };
 
-const EventosSeleccionar = () => {
+const EventosRegistrados = () => {
   const [eventos, setEventos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -31,18 +31,18 @@ const EventosSeleccionar = () => {
     if (userData) {
       const parsedUser = JSON.parse(userData);
       setUsuario(parsedUser);
-      obtenerEventosDisponibles(parsedUser.id);
+      obtenerEventosRegistrados(parsedUser.id);
     } else {
       setCargando(false);
       setError("Usuario no identificado. Por favor inicia sesión.");
     }
   }, []);
 
-  const obtenerEventosDisponibles = async (idVisitante) => {
+  const obtenerEventosRegistrados = async (idVisitante) => {
     try {
       const token = localStorage.getItem("tokenUsuario");
       const respuesta = await fetch(
-        `${API_BASE_URL}/eventos/disponibles/${idVisitante}`,
+        `${API_BASE_URL}/eventos/registrados/${idVisitante}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -53,13 +53,7 @@ const EventosSeleccionar = () => {
 
       if (!respuesta.ok) {
         // Si hay un error en la respuesta, intentar obtener todos los eventos
-        if (respuesta.status === 404) {
-          console.warn(
-            "Endpoint específico no disponible, usando endpoint general",
-          );
-          return await obtenerTodosEventos();
-        }
-        throw new Error("Error al obtener eventos disponibles");
+        throw new Error("Error al obtener eventos registrados");
       }
 
       const datos = await respuesta.json();
@@ -69,24 +63,6 @@ const EventosSeleccionar = () => {
       setError(err.message);
     } finally {
       setCargando(false);
-    }
-  };
-
-  const obtenerTodosEventos = async () => {
-    try {
-      const token = localStorage.getItem("tokenUsuario");
-      const respuesta = await fetch(`${API_BASE_URL}/eventos`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!respuesta.ok) {
-        throw new Error("Error al obtener eventos");
-      }
-      return await respuesta.json();
-    } catch (err) {
-      throw err;
     }
   };
 
@@ -140,15 +116,15 @@ const EventosSeleccionar = () => {
         <header className="eventos-header azul">
           <h1 className="text-white m-0">
             {usuario
-              ? `Eventos Disponibles para ${usuario.nombre}`
-              : "Eventos Disponibles"}
+              ? `Eventos Registrados de ${usuario.nombre}`
+              : "Eventos Registrados"}
           </h1>
           <div className="header-actions">
             <button
               className="btn-header-nav btn-nav"
-              onClick={() => navigate("/eventos-registrados")}
+              onClick={() => navigate("/eventos-visitantes")}
             >
-              Eventos Registrados
+              Eventos Disponibles
             </button>
           </div>
         </header>
@@ -159,13 +135,12 @@ const EventosSeleccionar = () => {
               <div className="sin-eventos-icon">
                 <i className="bi bi-calendar-x"></i>
               </div>
-              <h2 className="sin-eventos-title">No hay eventos disponibles</h2>
+              <h2 className="sin-eventos-title">No hay eventos registrados</h2>
               <p className="sin-eventos-description">
-                En este momento no hay eventos disponibles para tu
-                participación.
+                En este momento no te has registrado a ningún evento disponible.
               </p>
               <p className="sin-eventos-subtitle">
-                Por favor, vuelve más tarde para ver los nuevos eventos.
+                Por favor, vuelve más tarde para ver los eventos.
               </p>
             </div>
           </div>
@@ -183,15 +158,15 @@ const EventosSeleccionar = () => {
       <header className="eventos-header azul">
         <h1 className="text-white m-0">
           {usuario
-            ? `Eventos Disponibles para ${usuario.nombre}`
-            : "Eventos Disponibles"}
+            ? `Eventos Registrados para ${usuario.nombre}`
+            : "Eventos Registrados"}
         </h1>
         <div className="header-actions">
           <button
             className="btn-header-nav btn-nav"
-            onClick={() => navigate("/eventos-registrados")}
+            onClick={() => navigate("/eventos-visitantes")}
           >
-            Eventos Registrados
+            Eventos Disponibles
           </button>
         </div>
       </header>
@@ -241,7 +216,7 @@ const EventosSeleccionar = () => {
                 </div>
               </div>
             </div>
-
+            {/* 
             <div className="seleccionar-evento">
               <Link
                 to={{
@@ -253,6 +228,7 @@ const EventosSeleccionar = () => {
                 <i className="bi bi-calendar-plus"></i> Seleccionar evento
               </Link>
             </div>
+            */}
           </div>
         ))}
       </div>
@@ -262,4 +238,4 @@ const EventosSeleccionar = () => {
   );
 };
 
-export default EventosSeleccionar;
+export default EventosRegistrados;

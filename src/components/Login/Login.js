@@ -8,16 +8,16 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     correo: "",
-    contrasena: ""
+    contrasena: "",
   });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -28,30 +28,28 @@ const LoginForm = () => {
 
     try {
       const response = await fetch(`${API_BASE_URL}/visitantes-eventos/login`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.mensaje || 'Error en el login');
+        throw new Error(data.mensaje || "Error en el login");
       }
 
       // Guardar información del usuario en localStorage
-      localStorage.setItem('user', JSON.stringify(data.visitante));
-      localStorage.setItem('tokenUsuario', data.token); // ← Guarda el token
+      localStorage.setItem("user", JSON.stringify(data.visitante));
+      localStorage.setItem("tokenUsuario", data.token); // ← Guarda el token
 
-      
       // Redirigir a la página de eventos
       navigate("/eventos-visitantes");
-      
     } catch (err) {
-      console.error('Error al iniciar sesión:', err);
-      setError(err.message || 'Ocurrió un error al iniciar sesión');
+      console.error("Error al iniciar sesión:", err);
+      setError(err.message || "Ocurrió un error al iniciar sesión");
     } finally {
       setIsLoading(false);
     }
@@ -64,9 +62,9 @@ const LoginForm = () => {
 
   return (
     <div className="d-flex flex-column min-vh-100 bg-light">
-      <Comp_encabezado/>  
-      <div className='login-header'/>
-      
+      <Comp_encabezado />
+      <div className="login-header" />
+
       <form onSubmit={handleLogin} className="login-box bg-white">
         <h1 className="login-title text-center mb-4">Iniciar sesión</h1>
 
@@ -74,11 +72,11 @@ const LoginForm = () => {
 
         <div className="mb-3">
           <label className="login-label">Correo</label>
-          <input 
-            type="email" 
+          <input
+            type="email"
             name="correo"
-            placeholder="correo@ejemplo.com" 
-            className="uniforme" 
+            placeholder="correo@ejemplo.com"
+            className="uniforme"
             value={formData.correo}
             onChange={handleChange}
             required
@@ -87,11 +85,11 @@ const LoginForm = () => {
 
         <div className="mb-3">
           <label className="login-label">Contraseña</label>
-          <input 
-            type="password" 
+          <input
+            type="password"
             name="contrasena"
-            placeholder="*******" 
-            className="uniforme" 
+            placeholder="*******"
+            className="uniforme"
             value={formData.contrasena}
             onChange={handleChange}
             required
@@ -100,25 +98,36 @@ const LoginForm = () => {
         </div>
 
         <div className="login-links mb-3">
-          <a href="" onClick={(e) => {
-            e.preventDefault();
-            navigate("/solicitar-codigo");
-          }} style={{ cursor: "pointer" }}>
+          <a
+            href=""
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/solicitar-codigo");
+            }}
+            style={{ cursor: "pointer" }}
+          >
             ¿Olvidaste tu contraseña?
           </a>
-          <a href="" onClick={handleCreateAccount} style={{ cursor: "pointer" }}>Crear una cuenta</a>
+          <br></br>
+          <a
+            href=""
+            onClick={handleCreateAccount}
+            style={{ cursor: "pointer" }}
+          >
+            Crear una cuenta
+          </a>
         </div>
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="login-button btn btn-primary w-100"
           disabled={isLoading}
         >
-          {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+          {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
         </button>
       </form>
 
-      <Comp_Pie_pagina/>
+      <Comp_Pie_pagina />
     </div>
   );
 };
