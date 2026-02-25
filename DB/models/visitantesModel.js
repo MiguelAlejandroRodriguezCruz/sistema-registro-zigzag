@@ -2,6 +2,13 @@
 const db = require("../config/db");
 
 const Visitantes = {
+  getReservasAprovadas: (callback) => {
+    db.query(
+      'SELECT * FROM visitantesinstitucion WHERE estatus = "aprobadas"',
+      callback,
+    );
+  },
+
   getByMes: (mes, anio, callback) => {
     const sql = `
         SELECT * 

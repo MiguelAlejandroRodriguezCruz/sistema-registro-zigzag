@@ -1,9 +1,9 @@
 // /routes/visitantesRoutes.js
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const visitantesController = require('../controllers/visitantesController');
-const auth = require('../middlewares/auth');
+const visitantesController = require("../controllers/visitantesController");
+const auth = require("../middlewares/auth");
 
 /**
  * @swagger
@@ -15,7 +15,7 @@ const auth = require('../middlewares/auth');
  *       200:
  *         description: Lista de visitantes
  */
-router.get('/',auth, visitantesController.getVisitantes);
+router.get("/", auth, visitantesController.getVisitantes);
 
 /**
  * @swagger
@@ -27,7 +27,19 @@ router.get('/',auth, visitantesController.getVisitantes);
  *       200:
  *         description: Lista de fechas ocupadas
  */
-router.get('/fechasOcupadas', visitantesController.getVisitantesFechasOcupadas);
+router.get("/fechasOcupadas", visitantesController.getVisitantesFechasOcupadas);
+
+/**
+ * @swagger
+ * /visitantes:
+ *   get:
+ *     summary: Obtener todos los visitantes aprovados
+ *     tags: [Visitantes]
+ *     responses:
+ *       200:
+ *         description: Lista visitantes aprovados
+ */
+router.get("/taquilla", auth, visitantesController.getVisitantesAprovados);
 
 /**
  * @swagger
@@ -45,7 +57,7 @@ router.get('/fechasOcupadas', visitantesController.getVisitantesFechasOcupadas);
  *       201:
  *         description: Visitante creado
  */
-router.post('/', visitantesController.createVisitante);
+router.post("/", visitantesController.createVisitante);
 
 /**
  * @swagger
@@ -69,7 +81,7 @@ router.post('/', visitantesController.createVisitante);
  *       200:
  *         description: Visitante actualizado
  */
-router.put('/:id',auth, visitantesController.updateVisitante);
+router.put("/:id", auth, visitantesController.updateVisitante);
 
 /**
  * @swagger
@@ -81,7 +93,7 @@ router.put('/:id',auth, visitantesController.updateVisitante);
  *       200:
  *         description: Estados actualizados
  */
-router.put('/',auth, visitantesController.updateAllStatus);
+router.put("/", auth, visitantesController.updateAllStatus);
 
 /**
  * @swagger
@@ -99,6 +111,6 @@ router.put('/',auth, visitantesController.updateAllStatus);
  *       200:
  *         description: Visitante eliminado
  */
-router.delete('/:id',auth, visitantesController.deleteVisitante);
+router.delete("/:id", auth, visitantesController.deleteVisitante);
 
 module.exports = router;

@@ -16,6 +16,13 @@ exports.getVisitantes = (req, res) => {
   });
 };
 
+exports.getVisitantesAprovados = (req, res) => {
+  Visitantes.getReservasAprovadas((err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+};
+
 exports.getVisitantesFechasOcupadas = (req, res) => {
   Visitantes.getAllFechasOcupadas((err, results) => {
     if (err) return res.status(500).json({ error: err.message });

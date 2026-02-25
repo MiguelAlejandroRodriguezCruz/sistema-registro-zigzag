@@ -10,7 +10,6 @@ import { API_BASE_URL } from "../../config/api";
 
 const Taquilla = () => {
   const navigate = useNavigate();
-  const [showEntradasConfirmadas, setEntradasConfirmadas] = useState(false);
   const [showFormulario, setShowFormulario] = useState(false);
   const [showDatosGuardados, setShowDatosGuardados] = useState(false);
   const [records, setRecords] = useState([]); // State para almacenar las reservas filtradas
@@ -18,40 +17,31 @@ const Taquilla = () => {
   const [reloadCounter, setReloadCounter] = useState(0);
 
   useEffect(() => {
-  const token = localStorage.getItem("tokenAdmin");
+    const token = localStorage.getItem("tokenAdmin");
 
-  fetch(`${API_BASE_URL}/visitantes`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    }
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("No autorizado o error en la API");
-      }
-      return response.json();
+    fetch(`${API_BASE_URL}/visitantes/taquilla`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .then((data) => {
-      const aprobadas = data.filter(
-        (registro) => registro.estatus === "aprobadas"
-      );
-      setRecords(aprobadas);
-    })
-    .catch((error) => {
-      console.error("Error al cargar los registros:", error);
-    });
-}, [reloadCounter]);
-
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("No autorizado o error en la API");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRecords(data);
+      })
+      .catch((error) => {
+        console.error("Error al cargar los registros:", error);
+      });
+  }, [reloadCounter]);
 
   const handleRowClick = (record) => {
-  setRegistroSeleccionado(record.id);
-  setShowFormulario(true);
-};
-
-  const handleProcesarEntradas = () => {
-    setEntradasConfirmadas(false);
+    setRegistroSeleccionado(record.id);
     setShowFormulario(true);
   };
 
@@ -63,25 +53,25 @@ const Taquilla = () => {
   // Función para recargar los datos cuando se cierra el modal
   const handleCerrarDatosGuardados = () => {
     setShowDatosGuardados(false);
-    setReloadCounter(prev => prev + 1); // Incrementa el contador para forzar recarga
+    setReloadCounter((prev) => prev + 1); // Incrementa el contador para forzar recarga
   };
 
   return (
     <div className="mt-4">
-      <Comp_encabezado/>
-      
+      <Comp_encabezado />
+
       <div className="mt-4">
-          <header className="eventos-header bg-danger reservas-header">
-              <h1 className="text-white m-0">Registros de visita</h1>
-              <div className="header-actions">
-                  <button 
-                      className="btn-header-nav btn-nav"
-                      onClick={() => navigate("/ReservasGenerales")}
-                  >
-                      Reservaciones
-                  </button>
-              </div>
-          </header>
+        <header className="eventos-header bg-danger reservas-header">
+          <h1 className="text-white m-0">Registros de visita</h1>
+          <div className="header-actions">
+            <button
+              className="btn-header-nav btn-nav"
+              onClick={() => navigate("/ReservasGenerales")}
+            >
+              Reservaciones
+            </button>
+          </div>
+        </header>
       </div>
 
       <div className="container p-4">
@@ -100,8 +90,18 @@ const Taquilla = () => {
           </thead>
           <tbody>
             {records.map((record, index) => (
-              <tr key={index} style={{ cursor: "pointer" }} onClick={() => handleRowClick(record)}>
-                <td>{new Date(record.fecha).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</td>
+              <tr
+                key={index}
+                style={{ cursor: "pointer" }}
+                onClick={() => handleRowClick(record)}
+              >
+                <td>
+                  {new Date(record.fecha).toLocaleDateString("es-ES", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </td>
                 <td>{record.horario}</td>
                 <td>{record.nombreOrg}</td>
                 <td>{record.nombreSoli}</td>
@@ -118,38 +118,29 @@ const Taquilla = () => {
         </div>*/}
       </div>
 
-      {/* Modal: EntradasConfirmadas */}
-      {/*showEntradasConfirmadas && (
-        <div className="modal-overlay d-flex justify-content-center align-items-center">
-          <div className="modal-content-custom p-4 bg-white rounded shadow">
-            <EntradasConfirmadas onClose={() => setEntradasConfirmadas(false)} onProcesar={handleProcesarEntradas} />
-          </div>
-        </div>
-      )*/}
-
       {/* Modal: FormularioDatos */}
       {showFormulario && (
-      <div className="modal-overlay d-flex justify-content-center align-items-center">
-        <div className="modal-content-custom">
-          <FormularioDatos
-            idRegistro={registroSeleccionado} // Solo el ID numérico
-            onClose={() => setShowFormulario(false)}
-            onShowDatosGuardados={handleGuardarFormulario}
-          />
+        <div className="modal-overlay d-flex justify-content-center align-items-center">
+          <div className="modal-content-custom">
+            <FormularioDatos
+              idRegistro={registroSeleccionado} // Solo el ID numérico
+              onClose={() => setShowFormulario(false)}
+              onShowDatosGuardados={handleGuardarFormulario}
+            />
+          </div>
         </div>
-      </div>
       )}
 
       {/* Modal: DatosGuardados*/}
       {showDatosGuardados && (
         <div className="modal-overlay">
           <div className="modal-content-custom">
-            <DatosGuardados onClose={(handleCerrarDatosGuardados)} />
+            <DatosGuardados onClose={handleCerrarDatosGuardados} />
           </div>
         </div>
       )}
 
-      <Comp_Pie_pagina/>
+      <Comp_Pie_pagina />
     </div>
   );
 };
