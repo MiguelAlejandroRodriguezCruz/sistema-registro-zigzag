@@ -10,6 +10,10 @@ import { API_BASE_URL } from "../../config/api";
 function ReservasGenerales() {
   const navigate = useNavigate();
 
+  const hoy = new Date();
+  const [mesActual, setMesActual] = useState(hoy.getMonth() + 1);
+  const [anioActual, setAnioActual] = useState(hoy.getFullYear());
+
   const [reservas, setReservas] = useState([]);
   const [pestanaActiva, setPestanaActiva] = useState("nuevo");
 
@@ -17,7 +21,7 @@ function ReservasGenerales() {
   useEffect(() => {
     const token = localStorage.getItem("tokenAdmin");
 
-    fetch(`${API_BASE_URL}/visitantes`, {
+    fetch(`${API_BASE_URL}/visitantes?mes=${mesActual}&anio=${anioActual}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -30,7 +34,7 @@ function ReservasGenerales() {
       .catch((error) => {
         console.error("Error al cargar reservas:", error);
       });
-  }, [pestanaActiva]);
+  }, [pestanaActiva, mesActual, anioActual]);
 
   const actualizarEstadoReserva = (id, nuevoEstado) => {
     const token = localStorage.getItem("tokenAdmin");
@@ -91,6 +95,8 @@ function ReservasGenerales() {
           reservas={reservas}
           pestanaActiva={pestanaActiva}
           actualizarEstadoReserva={actualizarEstadoReserva}
+          setMesActual={setMesActual}
+          setAnioActual={setAnioActual}
         />
       </div>
 

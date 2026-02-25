@@ -10,7 +10,14 @@ import Estadistica from "./Estadistica";
  * - actualizarEstadoReserva: function(id, estado) -> puede ser async
  * - onReservaUpdated (opcional): function(updated) -> callback para notificar al padre
  */
-export function ReservasLista({ reservas = [], pestanaActiva, actualizarEstadoReserva, onReservaUpdated }) {
+export function ReservasLista({
+  reservas = [],
+  pestanaActiva,
+  actualizarEstadoReserva,
+  onReservaUpdated,
+  setMesActual,
+  setAnioActual,
+}) {
   // Mantener una copia local para actualizaciones parciales (sin refetchar toda la lista)
   const [localReservas, setLocalReservas] = useState(reservas);
 
@@ -23,16 +30,20 @@ export function ReservasLista({ reservas = [], pestanaActiva, actualizarEstadoRe
   const handleSaved = (updated) => {
     if (!updated || !updated.id) return;
 
-    setLocalReservas(prev => {
+    setLocalReservas((prev) => {
       // Reemplaza elemento si existe, si no existe lo añade al principio
-      const found = prev.some(r => r.id === updated.id);
-      if (found) return prev.map(r => (r.id === updated.id ? updated : r));
+      const found = prev.some((r) => r.id === updated.id);
+      if (found) return prev.map((r) => (r.id === updated.id ? updated : r));
       return [updated, ...prev];
     });
 
     // Notifica al padre si quiere manejar el cambio (ej. persistir en contexto global)
     if (typeof onReservaUpdated === "function") {
-      try { onReservaUpdated(updated); } catch (err) { console.error("onReservaUpdated error:", err); }
+      try {
+        onReservaUpdated(updated);
+      } catch (err) {
+        console.error("onReservaUpdated error:", err);
+      }
     }
   };
 
@@ -40,10 +51,14 @@ export function ReservasLista({ reservas = [], pestanaActiva, actualizarEstadoRe
   const handleActualizarEstadoReserva = async (id, estado) => {
     try {
       // Si la función original devuelve una promesa, esperar su resolución.
-      const result = actualizarEstadoReserva ? await actualizarEstadoReserva(id, estado) : null;
+      const result = actualizarEstadoReserva
+        ? await actualizarEstadoReserva(id, estado)
+        : null;
 
       // Actualiza localmente el estatus (optimista). Si tu función original hace fetch completo, esto no perjudica.
-      setLocalReservas(prev => prev.map(r => (r.id === id ? { ...r, estatus: estado } : r)));
+      setLocalReservas((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, estatus: estado } : r)),
+      );
 
       return result;
     } catch (err) {
@@ -54,9 +69,12 @@ export function ReservasLista({ reservas = [], pestanaActiva, actualizarEstadoRe
   };
 
   // Filtrado basado en la pestaña activa (usa la copia local)
-  const reservasFiltradas = pestanaActiva !== "estadistica"
-    ? (localReservas || []).filter(reserva => reserva.estatus === pestanaActiva)
-    : [];
+  const reservasFiltradas =
+    pestanaActiva !== "estadistica"
+      ? (localReservas || []).filter(
+          (reserva) => reserva.estatus === pestanaActiva,
+        )
+      : [];
 
   // Si la pestaña es estadística, mostrar solo el componente de estadísticas
   if (pestanaActiva === "estadistica") {
@@ -70,21 +88,25 @@ export function ReservasLista({ reservas = [], pestanaActiva, actualizarEstadoRe
 
   return (
     <>
-      {/* Mostrar calendario solo si estamos en las aprobadas */}
-      {pestanaActiva === "aprobadas" && (
+      {/* Mostrar calendario solo si no estamos en estidisticas */}
+      {pestanaActiva !== "estadistica" && (
         <div className="mt-4">
-          <h4>Fechas ocupadas del calendario</h4>
-          <CalendarioFechasOcupadas />
+          <h4>Fechas {pestanaActiva} del calendario</h4>
+          <CalendarioFechasOcupadas
+            reservas={localReservas}
+            setMesActual={setMesActual}
+            setAnioActual={setAnioActual}
+          />
         </div>
       )}
 
       {reservasFiltradas.length > 0 ? (
-        reservasFiltradas.map(reserva => (
+        reservasFiltradas.map((reserva) => (
           <ReservaCard
             key={reserva.id}
             reserva={reserva}
             actualizarEstadoReserva={handleActualizarEstadoReserva}
-            onSaved={handleSaved}         // <-- aquí recibe la fila actualizada desde ReservaCard
+            onSaved={handleSaved} // <-- aquí recibe la fila actualizada desde ReservaCard
           />
         ))
       ) : (
