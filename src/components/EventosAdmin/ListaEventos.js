@@ -122,7 +122,18 @@ const Eventos = () => {
         </div>
 
         {eventos.length === 0 ? (
-          <div className="alert alert-info">No hay eventos registrados</div>
+          <div className="eventos-container">
+            <div className="sin-eventos-card">
+              <div className="sin-eventos-content">
+                <div className="sin-eventos-icon">
+                  <i className="bi bi-calendar-x"></i>
+                </div>
+                <h2 className="sin-eventos-title">No hay eventos registrados</h2>
+                <p className="sin-eventos-description">No se encontraron eventos en el sistema.</p>
+                <p className="sin-eventos-subtitle">Puedes crear uno usando el botón "+ Agregar evento".</p>
+              </div>
+            </div>
+          </div>
         ) : (
           eventos.map((evento) => (
             <div className="evento-card" key={evento.id} style={{

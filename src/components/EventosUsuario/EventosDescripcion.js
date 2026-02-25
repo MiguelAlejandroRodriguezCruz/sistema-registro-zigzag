@@ -27,6 +27,7 @@ const EventosDescripcion = () => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [imagenes, setImagenes] = useState([]);
+  const [estaRegistrado, setEstaRegistrado] = useState(false);
 
   // Estados para el formulario
   const [fechaEvento, setFechaEvento] = useState("");
@@ -95,6 +96,27 @@ const EventosDescripcion = () => {
         }
         const datos = await respuesta.json();
         setEvento(datos);
+
+        // Si hay usuario, verificar si ya está registrado a este evento
+        try {
+          const storedUser = localStorage.getItem('user');
+          if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            const registrosResp = await fetch(`${API_BASE_URL}/eventos/registrados/${parsedUser.id}`,{
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("tokenUsuario")}`
+              }
+            });
+            if (registrosResp.ok) {
+              const registros = await registrosResp.json();
+              const ya = registros.some(r => String(r.id) === String(datos.id) || String(r.id_evento) === String(datos.id));
+              setEstaRegistrado(ya);
+            }
+          }
+        } catch (e) {
+          console.warn('No se pudo comprobar registro previo:', e);
+        }
 
         // Cargar imágenes adicionales del evento
         const imagenesResponse = await fetch(`${API_BASE_URL}/eventos/${id}/imagenes`,{
@@ -234,29 +256,92 @@ const EventosDescripcion = () => {
       </div>
     );
   }
-
   if (error) {
     return (
-      <div className="error-container">
-        <div className="alert alert-danger" role="alert">
-          Error: {error}
+      <div className="mt-4">
+        <Comp_encabezado />
+        <header className="eventos-header azul">
+          <h1 className="text-white m-0">Evento</h1>
+        </header>
+
+        <div className="eventos-container">
+          <div className="sin-eventos-card">
+            <div className="sin-eventos-content">
+              <div className="sin-eventos-icon">
+                <i className="bi bi-exclamation-triangle"></i>
+              </div>
+              <h2 className="sin-eventos-title">No se pudo cargar el evento</h2>
+              <p className="sin-eventos-description">Ocurrió un problema al intentar cargar la información del evento.</p>
+              <p className="sin-eventos-subtitle">Es posible que la URL sea incorrecta o que el evento ya no exista.</p>
+              <div style={{ marginTop: 16 }}>
+                <button className="btn btn-primary me-2" onClick={() => window.location.reload()}>Reintentar</button>
+                <button className="btn btn-secondary" onClick={() => navigate('/eventos-visitantes')}>Ir a Eventos</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <button
-          className="btn btn-primary mt-3"
-          onClick={() => window.location.reload()}
-        >
-          Intentar de nuevo
-        </button>
+
+        <Comp_Pie_pagina />
       </div>
     );
   }
 
   if (!evento) {
     return (
-      <div className="sin-eventos">
-        <div className="alert alert-info" role="alert">
-          Evento no encontrado
+      <div className="mt-4">
+        <Comp_encabezado />
+        <header className="eventos-header azul">
+          <h1 className="text-white m-0">Evento no encontrado</h1>
+        </header>
+
+        <div className="eventos-container">
+          <div className="sin-eventos-card">
+            <div className="sin-eventos-content">
+              <div className="sin-eventos-icon">
+                <i className="bi bi-calendar-x"></i>
+              </div>
+              <h2 className="sin-eventos-title">Evento no encontrado</h2>
+              <p className="sin-eventos-description">El evento que buscas no existe o fue eliminado.</p>
+              <p className="sin-eventos-subtitle">Verifica la dirección o regresa a la lista de eventos para explorar otros.</p>
+              <div style={{ marginTop: 16 }}>
+                <button className="btn btn-primary me-2" onClick={() => navigate('/eventos-visitantes')}>Ver eventos</button>
+                <button className="btn btn-outline-secondary" onClick={() => navigate('/')}>Ir al inicio</button>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <Comp_Pie_pagina />
+      </div>
+    );
+  }
+
+  if (estaRegistrado) {
+    return (
+      <div className="mt-4">
+        <Comp_encabezado />
+        <header className="eventos-header azul">
+          <h1 className="text-white m-0">Acceso restringido</h1>
+        </header>
+
+        <div className="eventos-container">
+          <div className="sin-eventos-card">
+            <div className="sin-eventos-content">
+              <div className="sin-eventos-icon">
+                <i className="bi bi-lock-fill"></i>
+              </div>
+              <h2 className="sin-eventos-title">Ya estás registrado</h2>
+              <p className="sin-eventos-description">No puedes volver a registrarte en este evento desde esta página.</p>
+              <p className="sin-eventos-subtitle">Si necesitas modificar tu registro, ve a tus eventos registrados.</p>
+              <div style={{ marginTop: 16 }}>
+                <button className="btn btn-primary me-2" onClick={() => navigate('/eventos-registrados')}>Ver mis registros</button>
+                <button className="btn btn-outline-secondary" onClick={() => navigate('/eventos-visitantes')}>Explorar otros eventos</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Comp_Pie_pagina />
       </div>
     );
   }

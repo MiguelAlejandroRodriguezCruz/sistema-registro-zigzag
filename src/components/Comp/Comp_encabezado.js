@@ -9,6 +9,7 @@ export function Comp_encabezado() {
   const tokenAdmin = localStorage.getItem("tokenAdmin");
 
   const haySesion = tokenUsuario || tokenAdmin;
+  const esAdmin = !!tokenAdmin;
 
   // rutas donde NO debe mostrarse el botón
   const rutasLogin = [
@@ -32,17 +33,20 @@ export function Comp_encabezado() {
 
   return (
     <header className="comp_encabezado d-flex justify-content-between align-items-center px-3">
-      <a
-        href="https://zigzag.gob.mx/"
-        target="_blank"
-        rel="noopener noreferrer"
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() =>
+          navigate(esAdmin ? "/reservasGenerales" : "/eventos-visitantes")
+        }
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ")
+            navigate(esAdmin ? "/reservasGenerales" : "/eventos-visitantes");
+        }}
+        className="logo-clickable"
       >
-        <img
-          src={logo}
-          alt="Logo Zig Zag"
-          className="encabezado__logo logo-left"
-        />
-      </a>
+        <img src={logo} alt="Logo Zig Zag" className="encabezado__logo logo-left" />
+      </div>
 
       {mostrarLogout && (
         <button onClick={cerrarSesion} className="btn btn-outline-danger">
